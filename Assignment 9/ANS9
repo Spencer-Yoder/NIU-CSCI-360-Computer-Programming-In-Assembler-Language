@@ -1,0 +1,70 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010000
+//STEP1   EXEC  PGM=ASSIST,PARM='MACRO=F'                               00020000
+//STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                     00030000
+//SYSPRINT  DD  SYSOUT=*                                                00040000
+//SYSIN     DD  *                                                       00050000
+**********************************************                          00050108
+* PROGRAM: ASSIGNMENT 9                                                 00050208
+* NAME: STRCPY                                                          00050308
+* PROGRAMMER: SPENCER YODER                                             00050408
+*                                                                       00050508
+* FUNCTION: COPY THE SOURCE STRING INTO THE                             00050608
+*    DEST STRING. IT LOOKS FOR '00', TO END                             00050708
+*    COPY.                                                              00050808
+*                                                                       00050908
+* REG USED:                                                             00051008
+*   4  PTR TO SOURCE                                                    00051108
+*   5  PTR TO DEST                                                      00051208
+**********************************************                          00051301
+         MACRO                                                          00051408
+         STRCPY  &SOURCE,&DEST                                          00052001
+         AIF     ('&SOURCE' EQ '').ERROR       CHECK FOR PARM ERROR     00053002
+         AIF     ('&DEST' EQ '').ERROR         CHECK FOR PARM ERROR     00054002
+         LA      4,&SOURCE                     SAVE PTR TO SOURCE       00054608
+         LA      5,&DEST                       SAVE PTR TO DEST         00054708
+TOP&SYSNDX     DS    0H                        TOP OF LOOP              00054808
+         MVC     0(1,5),0(4)                   COPY CHAR                00055508
+         CLI     0(5),X'00'                    CHECK TO SEE IF '00'     00055608
+         BE      END&SYSNDX                    IF 00 END LOOP           00055708
+         A       4,=F'1'                       MOVE PTR 1 CHAR          00055808
+         A       5,=F'1'                       MOVE PTR 1 CHAR          00055908
+         B       TOP&SYSNDX                    GOTO TOP LOOP            00056008
+END&SYSNDX     DS    0H                                                 00056508
+         MEXIT                                 EXIT MACRO               00056608
+.ERROR   MNOTE 'INVALID PARAMETER!!!'          ERRROR MISSING ARUGUMN   00056708
+         MEND                                  END                      00056808
+**********************************************                          00056901
+* NAME: SEARCH                                                          00057008
+*                                                                       00057108
+* FUCTION: SEARCHES TO SEE IF STR WAS ANYPART                           00057208
+*    IN THE LIST THAT WAS PASSED IN.                                    00057308
+**********************************************                          00057408
+         MACRO                                                          00057501
+&LABE1   SEARCH  &STR,&LEN,&TABLE,&LIST                                 00057601
+         LCLA    &N,&I                                                  00057702
+         LCLA    &E                                                     00057802
+         AIF     ('&STR' EQ '').ERROR          CHECK FOR PARM ERROR     00057902
+         AIF     ('&LEN' EQ '').ERROR                                   00058002
+         AIF     ('&TABLE' EQ '').ERROR                                 00058102
+         AIF     ('&LIST' EQ '').ERROR                                  00058202
+&N       SETA    N'&LIST                       GET LENGTH OF LIST       00058302
+&I       SETA    1                             SET COUNTER TO 1         00058404
+&E       SETA    &SYSLIST(4,1)                 GET FIRST CHAR, LIST     00058502
+         AIF     ('&E' EQ '0').EMPTY           IF LIST EMPTY            00058602
+         XC      &TABLE,&TABLE                                          00058707
+.TOP     AIF     (&I GT &N).END                IF END OF LIST           00058802
+         MVI     &TABLE+&SYSLIST(4,&I),X'FF'                            00058904
+&I       SETA    &I+1                          ADD 1 TO COUNTER         00059002
+         AGO     .TOP                          GOTO LIST                00059102
+.END     ORG                                                            00059202
+         TRT     &STR.(&LEN.),&TABLE           TRANSLATE AND TEST       00059302
+         MEXIT                                                          00059402
+.ERROR   MNOTE 'INVALID PARAMETER!!!'                                   00059502
+         MEXIT                                                          00059602
+.EMPTY   MNOTE 'THE LIST IS EMPTY!!!'                                   00059702
+         MEND                                                           00059801
+**********************************************                          00060001
+//          DD DSN=KC02314.SPRING18.CSCI360.HW9.DRIVER,DISP=SHR         00100000
+//FT05F001  DD DUMMY                                                    00110000
+//FT06F001  DD SYSOUT=*                                                 00120000
+//                                                                      00130000

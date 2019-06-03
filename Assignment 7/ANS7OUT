@@ -1,0 +1,460 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 18.03.57 JOB07846 ---- THURSDAY,  12 APR 2018 ----
+ 18.03.57 JOB07846  IRR010I  USERID KC03P70  IS ASSIGNED TO THIS JOB.
+ 18.03.57 JOB07846  ICH70001I KC03P70  LAST ACCESS AT 18:03:26 ON THURSDAY, APRIL 12, 2018
+ 18.03.57 JOB07846  $HASP373 KC03P70A STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 18.03.57 JOB07846  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 18.03.57 JOB07846  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 18.03.57 JOB07846  -KC03P70A                      00    101 ******    .00     .0    268   0      0      0      0     0
+ 18.03.57 JOB07846  -KC03P70A ENDED.  NAME-Spencer Yoder        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 18.03.57 JOB07846  $HASP395 KC03P70A ENDED
+0------ JES2 JOB STATISTICS ------
+-  12 APR 2018 JOB EXECUTION DATE
+-          339 CARDS READ
+-          460 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           51 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              JOB07846
+         2 //STEP1 EXEC PGM=ASSIST                                                 00020000
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+         4 //SYSPRINT DD SYSOUT=*                                                  00040000
+         5 //SYSIN DD *                                                            00050000
+         6 //FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW7DATA,DISP=SHR           00101001
+ ICH70001I KC03P70  LAST ACCESS AT 18:03:26 ON THURSDAY, APRIL 12, 2018
+ IEF236I ALLOC. FOR KC03P70A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF142I KC03P70A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03P70.KC03P70A.JOB07846.D0000102.?         SYSOUT        
+ IEF285I   KC03P70.KC03P70A.JOB07846.D0000101.?         SYSIN         
+ IGD104I KC02314.SPRING18.CSCI360.HW7DATA             RETAINED,  DDNAME=FT05F001
+ IEF373I STEP/STEP1   /START 2018102.1803
+ IEF032I STEP/STEP1   /STOP  2018102.1803 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        4K  SYS:    12172K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03P70A/START 2018102.1803
+ IEF033I  JOB/KC03P70A/STOP  2018102.1803 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ***********************************************************             00060011         
+                                       2 * PROGRAM: ASSIGNMENT 7                                                 00060111         
+                                       3 * PROGRAMMER: SPENCER YODER                                             00060211         
+                                       4 *                                                                       00060311         
+                                       5 * NAME: MAIN                                                            00060411         
+                                       6 *                                                                       00060511         
+                                       7 * FUNCTION:                                                             00060611         
+                                       8 *   CALLS THE BUILD FUNCTION TO ADD ALL THE CARDS INTO THE              00060711         
+                                       9 *   TABLE. IT THEN CALLS THE PRINT FUNCTION TO PRINT ALL                00060811         
+                                      10 *   THE ENTRIES IN THE TABLE.                                           00060911         
+                                      11 *                                                                       00061011         
+                                      12 * REGUSTORS USED:                                                       00061111         
+                                      13 *   1  PRAMATER LIST                                                    00061211         
+                                      14 *   14 ADDRESS TO NEXT INSTRUCTION                                      00061311         
+                                      15 *   15 ADDRESS TO THE ROUTING                                           00061411         
+                                      16 ***********************************************************             00061511         
+ 000000                               17 MAIN     CSECT                                                          00061600         
+ 000000 90EC D00C            0000C    18          STM   14,12,12(13)             ENTRY LINKAGE                   00061700         
+ 000004 18CF                          19          LR    12,15                                                    00061800         
+ 000000                               20          USING MAIN,12                                                  00061900         
+ 000006 41E0 C040            00040    21          LA    14,MSAVE                                                 00062000         
+ 00000A 50D0 E004            00004    22          ST    13,4(0,14)                                               00062100         
+ 00000E 50E0 D008            00008    23          ST    14,8(0,13)                                               00062200         
+ 000012 18DE                          24          LR    13,14                                                    00062300         
+                                      25 *        *                                                              00062400         
+ 000014 4110 C694            00694    26          LA    1,BPARM                  LOAD THE PARM LIST              00062511         
+ 000018 58F0 C038            00038    27          L     15,=V(BUILD)             SAVE BUILD INTO REG15           00062600         
+ 00001C 05EF                          28          BALR  14,15                    GOTO BUILD                      00062700         
+                                      29 *        *                                                              00062800         
+ 00001E 4110 C69C            0069C    30          LA    1,PPARM                  LOAD THE PARM LIST              00062911         
+ 000022 58F0 C03C            0003C    31          L     15,=V(PRINT)             SAVE PRINT INTO REG15           00063004         
+ 000026 05EF                          32          BALR  14,15                    GOTO BUILD                      00063104         
+                                      33 *        *                                                              00063200         
+ 000028 58D0 D004            00004    34          L     13,4(0,13)               EXIT LINKAGE                    00063300         
+ 00002C 98EC D00C            0000C    35          LM    14,12,12(13)                                             00063400         
+ 000030 07FE                          36          BR    14                                                       00063500         
+                                      37          LTORG                                                          00063600         
+ 000038 000006B0                      38                =V(BUILD)                                                                 
+ 00003C 00000CB0                      39                =V(PRINT)                                                                 
+                                      40 ***MAIN VARABLES*******************************************             00063711         
+ 000040                               41 MSAVE    DS    18F                      MAIN SAVE AREA                  00063800         
+                                      42 ***PARM VARABLE********************************************             00064011         
+ 0000A0                               43          ORG MAIN+((*-MAIN+31)/32)*32                                   00065000         
+ 0000A0                               44 TABLE    DS    45CL32                   MAIN TABLE SAVE AREA            00066006         
+ 000640 000000A0                      45 EOT      DC    A(TABLE)                 EOT POINTER                     00067006         
+ 000644 00000001                      46 PAGE     DC    F'1'                     PAGE COUNTER                    00067109         
+ 000648 F1                            47 HEADING  DC    C'1'                     PAGE HEADING                    00067200         
+ 000649 4040404040404040              48          DC    CL22' '                                                  00067300         
+ 00065F C79985859240D4A8              49          DC    CL24'Greek Myth:  Player Data'                           00067400         
+ 000677 4040404040404040              50          DC    CL22' '                                                  00067500         
+ 00068D D7818785                      51          DC    CL4'Page'                                                00067600         
+ 000694 000000A000000640              52 BPARM    DC    A(TABLE,EOT)             BUILD PARMS LIST                00067711         
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00069C 000000A000000640              53 PPARM    DC    A(TABLE,EOT,HEADING,PAGE) PRINT PARMS LIST               00067811         
+                                      54 ***********************************************************             00069411         
+                                      55 * NAME: BUILD                                                           00069511         
+                                      56 *                                                                       00069611         
+                                      57 * FUNCTION:                                                             00069711         
+                                      58 *   READS ALL THE CARDS AND STORES THEM INTO A TABLE. IT                00069811         
+                                      59 *   WILL CONVERT THE TEXT INTO THE CORRECT FORMAT BEFORE                00069911         
+                                      60 *   SAVEING IT.                                                         00070011         
+                                      61 *                                                                       00070111         
+                                      62 * REGISTORS USED:                                                       00070211         
+                                      63 *   1  ADDRESS OF THE BUFFER                                            00070311         
+                                      64 *   4  ADDRESS OF FIRST CHAR IN NAME                                    00070411         
+                                      65 *   5  ADDRESS OF LAST CHAR IN NAME                                     00070511         
+                                      66 *   6  ADDRESS OF THE TABLE                                             00070611         
+                                      67 *   7  ADDRESS OF THE FIRST EMPTY ENTRY                                 00070711         
+                                      68 ***********************************************************             00070811         
+ 0006B0                               69 BUILD    CSECT                                                          00070900         
+ 0006B0 90EC D00C            0000C    70          STM   14,12,12(13)             ENTRY LINKAGE                   00071000         
+ 0006B4 18CF                          71          LR    12,15                                                    00071100         
+ 0006B0                               72          USING BUILD,12                                                 00071200         
+ 0006B6 41E0 C130            007E0    73          LA    14,BSAVE                                                 00071300         
+ 0006BA 50D0 E004            00004    74          ST    13,4(0,14)                                               00071400         
+ 0006BE 50E0 D008            00008    75          ST    14,8(0,13)                                               00071500         
+ 0006C2 18DE                          76          LR    13,14                                                    00071600         
+                                      77 *        *                                                              00071700         
+ 0006C4 9867 1000            00000    78          LM    6,7,0(1)                 LOAD THE PARM LIST              00071800         
+ 000000                               79          USING $ENTRY,6                 USE A TABLE DSECT               00071911         
+ 0006C8 E000 C178 0050 00828          80 LOOP1    XREAD BUFFER,80                READ THE CARD                   00072011         
+ 0006CE 4740 C110            007C0    81          BC    B'0100',END1             IF END OF FILE EXIT             00072111         
+ 0006D2 4110 C178            00828    82          LA    1,BUFFER                 LOAD THE FIRST POS IN BUFFER    00072211         
+                                      83 *ID NUM                                                                 00072300         
+ 0006D6 DD4F 1000 C1C9 00000 00879    84          TRT   0(80,1),SPACES           MOVE TO THE FIRST SPACES        00073011         
+ 0006DC F277 C3D8 C178 00A88 00828    85          PACK  TEMPD,BUFFER(8)          PACK THE ID INTO TEMP D WORD    00073311         
+ 0006E2 4F50 C3D8            00A88    86          CVB   5,TEMPD                  CONVERT TO BINARY               00073411         
+ 0006E6 5050 6000            00000    87          ST    5,$ID                    STORE ID IN TABLE               00073511         
+                                      88 *FIRST NAME                                                             00073700         
+ 0006EA DD4F 1000 C2C9 00000 00979    89          TRT   0(80,1),DIGITS           FIND FIRST CHAR OF FNAME        00073811         
+ 0006F0 4780 C10C            007BC    90          BC    B'1000',END2             IF NOT FOUND EXIT               00073911         
+ 0006F4 1841                          91          LR    4,1                      SAVE POS IN REG 4               00074011         
+ 0006F6 DD4F 1000 C1C9 00000 00879    92          TRT   0(80,1),SPACES           FIND THE NEXT SET OF SPACES     00074111         
+ 0006FC 1851                          93          LR    5,1                      SAVE THE POS IN REG 5           00074211         
+ 0006FE 1B54                          94          SR    5,4                      GET THE LENGTH OF FNAME         00074411         
+ 000700 0650                          95          BCTR  5,0                      SUBTRACT 1                      00074511         
+ 000702 4450 C3FA            00AAA    96          EX    5,MYMVC                  USE EXCUTE WITH LENGHT          00075211         
+ 000706 D209 6010 C3EE 00010 00A9E    97          MVC   $FNAME(10),TEMPC         SAVE INTO THE TABLE             00075311         
+ 00070C DC00 6010 C400 00010 00AB0    98          TR    $FNAME(1),UPPER          CONVERT FIRST CHAR TO UPPER     00075411         
+ 000712 DC08 6011 C500 00011 00BB0    99          TR    $FNAME+1(9),LOWER        CONVERT ALL OTHER TO LOWER      00075511         
+ 000718 D20B C3EE C120 00A9E 007D0   100          MVC   TEMPC,=X'404040404040404040404040' CLEAR TEMPC           00075611         
+                                     101 *LAST NAME                                                              00075700         
+ 00071E DD4F 1000 C2C9 00000 00979   102          TRT   0(80,1),DIGITS           FIND FIRST CHAR OF LNAME        00075811         
+ 000724 4780 C10C            007BC   103          BC    B'1000',END2             IF AT END, EXIT                 00075911         
+ 000728 1841                         104          LR    4,1                      LOAD R4 WITH START POS          00076011         
+ 00072A DD4F 1000 C1C9 00000 00879   105          TRT   0(80,1),SPACES           FIND THE NEXT SPACE             00076111         
+ 000730 1851                         106          LR    5,1                      SAVE POS IN R5                  00076211         
+ 000732 1B54                         107          SR    5,4                      GET LENGHT OF LNAME             00076311         
+ 000734 0650                         108          BCTR  5,0                      SUBTRACT ONE                    00076411         
+ 000736 4450 C3FA            00AAA   109          EX    5,MYMVC                  USE EXCUTE WITH LENGHT          00076511         
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00073A D20B 6004 C3EE 00004 00A9E   110          MVC   $LNAME(12),TEMPC         SAVE INTO THE TABLE             00076611         
+ 000740 DC00 6004 C400 00004 00AB0   111          TR    $LNAME(1),UPPER          CONVERT FIRST CHAR TO UPPER     00076711         
+ 000746 DC0A 6005 C500 00005 00BB0   112          TR    $LNAME+1(11),LOWER       CONVERT ALL OTHER TO LOWER      00076811         
+ 00074C D20B C3EE C120 00A9E 007D0   113          MVC   TEMPC,=X'404040404040404040404040' CLEAR TEMPC           00076911         
+                                     114 *SCORE 1                                                                00077000         
+ 000752 DD4F 1000 C2C9 00000 00979   115          TRT   0(80,1),DIGITS           FIND FIRST CHAR OF SOCRE        00077111         
+ 000758 4780 C10C            007BC   116          BC    B'1000',END2             IF AT END EXIT                  00077211         
+ 00075C 1841                         117          LR    4,1                      SAVE POS IN R4                  00077311         
+ 00075E DD4F 1000 C1C9 00000 00879   118          TRT   0(80,1),SPACES           FIND FIRST SPACE AFTER SCORE    00077411         
+ 000764 1851                         119          LR    5,1                      SAVE POS IN R5                  00077511         
+ 000766 1B54                         120          SR    5,4                      CALCULATE THE LENGHT            00077611         
+ 000768 0650                         121          BCTR  5,0                      SUBTRACT 1 TO GET REAL LENGH    00077711         
+ 00076A 4450 C3E8            00A98   122          EX    5,MYPACK                 USE EXCUTE TO PACK              00077811         
+ 00076E D201 601A C3E6 0001A 00A96   123          MVC   $SCORE1,TEMPP            COPY INTO THE TABLE             00077911         
+                                     124 *SCORE 2                                                                00078000         
+ 000774 DD4F 1000 C2C9 00000 00979   125          TRT   0(80,1),DIGITS           FIND FIRST CHAR OF SOCRE        00078111         
+ 00077A 4780 C10C            007BC   126          BC    B'1000',END2             IF AT END EXIT                  00078211         
+ 00077E 1841                         127          LR    4,1                      SAVE POS IN R4                  00078311         
+ 000780 DD4F 1000 C1C9 00000 00879   128          TRT   0(80,1),SPACES           FIND FIRST SPACE AFTER SCORE    00078411         
+ 000786 1851                         129          LR    5,1                      SAVE POS IN R5                  00078511         
+ 000788 1B54                         130          SR    5,4                      CALCULATE THE LENGHT            00078611         
+ 00078A 0650                         131          BCTR  5,0                      SUBTRACT 1 TO GET REAL LENGH    00078711         
+ 00078C 4450 C3E8            00A98   132          EX    5,MYPACK                 USE EXCUTE TO PACK              00078811         
+ 000790 D201 601C C3E6 0001C 00A96   133          MVC   $SCORE2,TEMPP            COPY INTO THE TABLE             00078911         
+                                     134 *SCORE 3                                                                00079000         
+ 000796 DD4F 1000 C2C9 00000 00979   135          TRT   0(80,1),DIGITS           FIND FIRST CHAR OF SOCRE        00079111         
+ 00079C 4780 C10C            007BC   136          BC    B'1000',END2             IF AT END EXIT                  00079211         
+ 0007A0 1841                         137          LR    4,1                      SAVE POS IN R4                  00079311         
+ 0007A2 DD4F 1000 C1C9 00000 00879   138          TRT   0(80,1),SPACES           FIND FIRST SPACE AFTER SCORE    00079411         
+ 0007A8 1851                         139          LR    5,1                      SAVE POS IN R5                  00079511         
+ 0007AA 1B54                         140          SR    5,4                      CALCULATE THE LENGHT            00079611         
+ 0007AC 0650                         141          BCTR  5,0                      SUBTRACT 1 TO GET REAL LENGH    00079711         
+ 0007AE 4450 C3E8            00A98   142          EX    5,MYPACK                 USE EXCUTE TO PACK              00079811         
+ 0007B2 D201 601E C3E6 0001E 00A96   143          MVC   $SCORE3,TEMPP            COPY INTO THE TABLE             00079911         
+                                     144 ****                                                                    00080000         
+ 0007B8 5A60 C12C            007DC   145          A     6,=F'32'                 MOVE THE TABLE PTR              00080111         
+ 0007BC                              146 END2     DS    0H                       END OF LINE                     00080211         
+ 0007BC 47F0 C018            006C8   147          BC    B'1111',LOOP1            LOOP TO NEXT CARD               00080311         
+ 0007C0                              148 END1     DS    0H                       END OF READING CARDS            00080411         
+ 0007C0 5870 6000            00000   149          L     7,0(0,6)                 SAVE FIRST EMPTY POS IN TABL    00080511         
+                                     150 *        *                              EXIT LINKAGE                    00080611         
+ 0007C4 58D0 D004            00004   151          L     13,4(0,13)               LOAD THE CALLING SAVE AREA      00080711         
+ 0007C8 98EC D00C            0000C   152          LM    14,12,12(13)             REALL THE REGISTORS             00080811         
+ 0007CC 07FE                         153          BR    14                       GO HOME                         00080911         
+                                     154          LTORG                                                          00081000         
+ 0007D0 4040404040404040             155                =X'404040404040404040404040'                                              
+ 0007DC 00000020                     156                =F'32'                                                                    
+                                     157 ************************************************************            00081112         
+ 0007E0                              158 BSAVE    DS    18F                      BUILD SAVE AREA                 00081211         
+ 000828 4040404040404040             159 BUFFER   DC    81C' '                   INPUT LINE BUFFER               00081311         
+                                     160 *                                                                       00081400         
+ 000879 0000000000000000             161 SPACES   DC    256X'00'                 SEARCH TABLE FOR SPACES         00082011         
+ 0008B9                              162          ORG   SPACES+C' '                                              00082101         
+ 0008B9 FF                           163          DC    X'FF'                                                    00082201         
+ 000979                              164          ORG                                                            00082300         
+                                     165 *                                                                       00082400         
+ 000979 FFFFFFFFFFFFFFFF             166 DIGITS   DC    256X'FF'                 SEARCH TABLE FOR ANY CHARS      00082511         
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0009B9                              167          ORG   DIGITS+C' '                                              00082600         
+ 0009B9 00                           168          DC    X'00'                                                    00082701         
+ 000A79                              169          ORG                                                            00082800         
+                                     170 *                                                                       00082907         
+ 000A79                              171 LONGPL   DS    PL10                     LONG PACKED FOR ID NUME         00083011         
+ 000A88                              172 TEMPD    DS    D                        DOUBLE WORD FOR CVB             00083111         
+ 000A90 F270 C3D8 4000 00A88 00000   173 IDPACK   PACK  TEMPD,0(0,4)             EXCUTE INSTRUCTON FOR ID NUM    00083211         
+                                     174 *                                                                       00083307         
+ 000A96                              175 TEMPP    DS    PL2                      TEMP VAR FOR SCORE              00083411         
+ 000A98 F210 C3E6 4000 00A96 00000   176 MYPACK   PACK  TEMPP,0(0,4)             EXCUTE INSTRUCTON FOR SOCRE     00083512         
+                                     177 *                                                                       00083607         
+ 000A9E 4040404040404040             178 TEMPC    DC    CL12' '                  TEMP VAR FOR NAME               00083912         
+ 000AAA D200 C3EE 4000 00A9E 00000   179 MYMVC    MVC   TEMPC(0),0(4)            EXCUTE INSTRUCTON FOR NAMES     00084012         
+                                     180 *                                                                       00084109         
+                                     181 *                               LOOP UP TABLE TO CONVERT TO UPPER       00084212         
+ 000AB0 0001020304050607             182 UPPER    DC    X'000102030405060708090A0B0C0D0E0F'                      00084309         
+ 000AC0 1011121314151617             183          DC    X'101112131415161718191A1B1C1D1E1F'                      00084409         
+ 000AD0 2021222324252627             184          DC    X'202122232425262728292A2B2C2D2E2F'                      00084509         
+ 000AE0 3031323334353637             185          DC    X'303132333435363738393A3B3C3D3E3F'                      00084609         
+ 000AF0 4041424344454647             186          DC    X'404142434445464748494A4B4C4D4E4F'                      00084709         
+ 000B00 5051525354555657             187          DC    X'505152535455565758595A5B5C5D5E5F'                      00084809         
+ 000B10 6061626364656667             188          DC    X'606162636465666768696A6B6C6D6E6F'                      00084909         
+ 000B20 7071727374757677             189          DC    X'707172737475767778797A7B7C7D7E7F'                      00085009         
+ 000B30 80C1C2C3C4C5C6C7             190          DC    X'80C1C2C3C4C5C6C7C8C98A8B8C8D8E8F'                      00085109         
+ 000B40 90D1D2D3D4D5D6D7             191          DC    X'90D1D2D3D4D5D6D7D8D99A9B9C9D9E9F'                      00085209         
+ 000B50 A0A1E2E3E4E5E6E7             192          DC    X'A0A1E2E3E4E5E6E7E8E9AAABACADAEAF'                      00085309         
+ 000B60 B0B1B2B3B4B5B6B7             193          DC    X'B0B1B2B3B4B5B6B7B8B9BABBBCBDBEBF'                      00085409         
+ 000B70 C0C1C2C3C4C5C6C7             194          DC    X'C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF'                      00085509         
+ 000B80 D0D1D2D3D4D5D6D7             195          DC    X'D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF'                      00085609         
+ 000B90 E0E1E2E3E4E5E6E7             196          DC    X'E0E1E2E3E4E5E6E7E8E9EAEBECEDEEEF'                      00085709         
+ 000BA0 F0F1F2F3F4F5F6F7             197          DC    X'F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF'                      00085809         
+                                     198 *                                                                       00085909         
+                                     199 *                             LOOP UP TABLE TO CONVERRT TO LOWER        00086012         
+ 000BB0 0001020304050607             200 LOWER    DC    X'000102030405060708090A0B0C0D0E0F'                      00086109         
+ 000BC0 1011121314151617             201          DC    X'101112131415161718191A1B1C1D1E1F'                      00086209         
+ 000BD0 2021222324252627             202          DC    X'202122232425262728292A2B2C2D2E2F'                      00086309         
+ 000BE0 3031323334353637             203          DC    X'303132333435363738393A3B3C3D3E3F'                      00086409         
+ 000BF0 4041424344454647             204          DC    X'404142434445464748494A4B4C4D4E4F'                      00086509         
+ 000C00 5051525354555657             205          DC    X'505152535455565758595A5B5C5D5E5F'                      00086609         
+ 000C10 6061626364656667             206          DC    X'606162636465666768696A6B6C6D6E6F'                      00086709         
+ 000C20 7071727374757677             207          DC    X'707172737475767778797A7B7C7D7E7F'                      00086809         
+ 000C30 8081828384858687             208          DC    X'808182838485868788898A8B8C8D8E8F'                      00086909         
+ 000C40 9091929394959697             209          DC    X'909192939495969798999A9B9C9D9E9F'                      00087009         
+ 000C50 A0A1A2A3A4A5A6A7             210          DC    X'A0A1A2A3A4A5A6A7A8A9AAABACADAEAF'                      00087109         
+ 000C60 B0B1B2B3B4B5B6B7             211          DC    X'B0B1B2B3B4B5B6B7B8B9BABBBCBDBEBF'                      00087209         
+ 000C70 C081828384858687             212          DC    X'C0818283848586878889CACBCCCDCECF'                      00087309         
+ 000C80 D091929394959697             213          DC    X'D0919293949596979899DADBDCDDDEDF'                      00087409         
+ 000C90 E0A1A2A3A4A5A6A7             214          DC    X'E0A1A2A3A4A5A6A7A8A9EAEBECEDEEEF'                      00087509         
+ 000CA0 F0F1F2F3F4F5F6F7             215          DC    X'F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF'                      00087609         
+                                     216 ************************************************************            00087812         
+                                     217 * NAME: PRINT                                                           00087912         
+                                     218 *                                                                       00088012         
+                                     219 * FUNCTION:                                                             00088112         
+                                     220 *   USED TO PRINT ALL THE CONTENTS OF THE TABLE. IT ALSO                00088212         
+                                     221 *   KEEPS TRACK OF THE LINE COUNTER AND THE TOTAL PAGES.                00088312         
+                                     222 *                                                                       00088412         
+                                     223 * REGISTORES USED:                                                      00088512         
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     224 *   2   ADDRESS OF TABLE                                                00088601         
+                                     225 *   3   ADDRESS OF EOT                                                  00088701         
+                                     226 *   4   ADDRESS OF HEADER                                               00088801         
+                                     227 *   5   ADDRESS OF THE LINE                                             00088901         
+                                     228 *   6   LINE COUTNER                                                    00089001         
+                                     229 *   7   CONVERT TO DECIMAL                                              00089112         
+                                     230 *   8   TOTAL PAGE COUNTER                                              00089209         
+                                     231 ************************************************************            00089312         
+ 000CB0                              232 PRINT    CSECT                                                          00089400         
+ 000CB0 90EC D00C            0000C   233          STM   14,12,12(13)             ENTRY LINKAGE                   00089500         
+ 000CB4 18CF                         234          LR    12,15                                                    00089600         
+ 000CB0                              235          USING PRINT,12                                                 00089700         
+ 000CB6 41E0 C100            00DB0   236          LA    14,PSAVE                                                 00089800         
+ 000CBA 50D0 E004            00004   237          ST    13,4(0,14)                                               00089900         
+ 000CBE 50E0 D008            00008   238          ST    14,8(0,13)                                               00090000         
+ 000CC2 18DE                         239          LR    13,14                                                    00090100         
+                                     240 *        *                                                              00090200         
+ 000CC4 9824 1000            00000   241          LM    2,4,0(1)                 LOAD PARM LIST                  00090312         
+ 000CC8 5881 000C            0000C   242          L     8,12(1)                  LOAD THE PAGE COUNTER           00090412         
+ 000CCC 5888 0000            00000   243          L     8,0(8)                   LOAD THE PAGE COUNTER ADDRESS   00090512         
+ 000CD0 4150 C1A5            00E55   244          LA    5,LINE                   LOAD THE ADDRESSS TO THE LINE   00090712         
+ 000000                              245          USING #OUTPUT,5                USE DSECT FOR OUTPUT LINE       00090812         
+ 000000                              246          USING $ENTRY,2                 USE DSECT FOR THE TABLE         00090912         
+ 000CD4 5860 C0E0            00D90   247          L     6,=F'21'                 SET THE COUTNER HIGH            00091012         
+ 000CD8                              248 TOP      DS    0H                                                       00091101         
+ 000CD8 1923                         249          CR    2,3                      CHECK TO SEE END OF TABLE       00091212         
+ 000CDA 4780 C0CA            00D7A   250          BE    EXIT                     IF SO EXIT                      00091312         
+ 000CDE 5960 C0E4            00D94   251          C     6,=F'20'                 CHECK LINE COUNTER              00091412         
+ 000CE2 4740 C066            00D16   252          BL    SKIP                     IF LESS SKIP                    00091512         
+ 000CE6 D248 C148 4000 00DF8 00000   253          MVC   TOPLINE,0(4)             ELSE COPY HEADDER               00091612         
+ 000CEC 1878                         254          LR    7,8                                                      00091709         
+ 000CEE 4E70 C2B8            00F68   255          CVD   7,DWOUT                  CONVERT LINE COUNTER TO NUM     00091812         
+ 000CF2 D213 C191 C0D8 00E41 00D88   256          MVC   PAGENUM,=X'4020202020202120'  SET THE FORMAT             00091912         
+ 000CF8 DE09 C191 C2BC 00E41 00F6C   257          ED    PAGENUM(10),DWOUT+4      COPY TO THE LINE                00092012         
+ 000CFE E020 C148 0052 00DF8         258          XPRNT TOPLINE,82               PRING THE HEADDER               00092112         
+ 000D04 D284 C1A5 C22A 00E55 00EDA   259          MVC   LINE,COLUMNS             COPY THE COLUMN HEADERS         00092212         
+ 000D0A E020 C1A5 0084 00E55         260          XPRNT LINE,132                 PRINT                           00092312         
+ 000D10 1B66                         261          SR    6,6                      RESET THE LINE COUNTER          00092412         
+ 000D12 5A80 C0E8            00D98   262          A     8,=F'1'                  ADD ONE TO IT                   00092512         
+ 000D16                              263 SKIP     DS    0H                                                       00092701         
+ 000D16 9240 C1A6      00E56         264          MVI   LINE+1,C' '              SET FIRST CHAR AS SPACE         00092812         
+ 000D1A D282 C1A7 C1A6 00E57 00E56   265          MVC   LINE+2(131),LINE+1       CLEAR THE LINE                  00092912         
+ 000D20 92F0 C1A5      00E55         266          MVI   LINE,C'0'                SET THE CC CHAR                 00093012         
+                                     267 *IDNUM                                                                  00093107         
+ 000D24 5870 2000            00000   268          L     7,0(0,2)                 LOAD THE ID INTO A REG          00093212         
+ 000D28 4E70 C2B8            00F68   269          CVD   7,DWOUT                  CONVERT TO DECIMAL              00093312         
+ 000D2C D209 5001 C0F4 00001 00DA4   270          MVC   #ID,=X'40212020202020202020'   SET THE FORMATING         00093412         
+ 000D32 DE09 5001 C2BB 00001 00F6B   271          ED    #ID,DWOUT+3              COPY TO THE LINE                00093512         
+                                     272 *FNAME                                                                  00093609         
+ 000D38 D209 501C 2010 0001C 00010   273          MVC   #FNAME,16(2)             COPY THE FIRST NAME             00093712         
+                                     274 *LNAME                                                                  00093809         
+ 000D3E D20B 500D 2004 0000D 00004   275          MVC   #LNAME,4(2)              COPY THE LAST NAME              00093912         
+                                     276 *SCORE1                                                                 00094007         
+ 000D44 D203 502D C0EC 0002D 00D9C   277          MVC   #SCORE1,=X'40202120'     SET FORMATING FOR SCORE         00094112         
+ 000D4A DE03 502D 201A 0002D 0001A   278          ED    #SCORE1,26(2)            COPY TO LINE                    00094212         
+                                     279 *SCORE2                                                                 00094307         
+ 000D50 D203 5038 C0EC 00038 00D9C   280          MVC   #SCORE2,=X'40202120'     SET FORMATING FOR SCORE         00094412         
+1                                                                                                               PAGE    6         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000D56 DE03 5038 201C 00038 0001C   281          ED    #SCORE2,28(2)            COPY TO LINE                    00094512         
+                                     282 *SCORE3                                                                 00094607         
+ 000D5C D203 5043 C0EC 00043 00D9C   283          MVC   #SCORE3,=X'40202120'     SET FORMATING FOR SCORE         00094712         
+ 000D62 DE03 5043 201E 00043 0001E   284          ED    #SCORE3,30(2)            COPY TO LINE                    00094812         
+ 000D68 E020 C1A5 0085 00E55         285          XPRNT LINE,133                 PRINT THE WHOLE LINE            00094912         
+ 000D6E 5A20 C0F0            00DA0   286          A     2,=F'32'                 MOVE THE TABLE                  00095012         
+ 000D72 5A60 C0E8            00D98   287          A     6,=F'1'                  ADD ONE TO THE LINE COUTNER     00095112         
+ 000D76 47F0 C028            00CD8   288          B     TOP                      GO TO TOP                       00095212         
+ 000D7A                              289 EXIT     DS    0H                                                       00095301         
+                                     290 *        *                                                              00095400         
+ 000D7A 58D0 D004            00004   291          L     13,4(0,13)               EXIT LINKAGE                    00095500         
+ 000D7E 98EC D00C            0000C   292          LM    14,12,12(13)                                             00095600         
+ 000D82 07FE                         293          BR    14                                                       00095700         
+                                     294          LTORG                                                          00095800         
+ 000D88 4020202020202120             295                =X'4020202020202120'                                                      
+ 000D90 00000015                     296                =F'21'                                                                    
+ 000D94 00000014                     297                =F'20'                                                                    
+ 000D98 00000001                     298                =F'1'                                                                     
+ 000D9C 40202120                     299                =X'40202120'                                                              
+ 000DA0 00000020                     300                =F'32'                                                                    
+ 000DA4 4021202020202020             301                =X'40212020202020202020'                                                  
+                                     302 ************************************************************            00095912         
+ 000DB0                              303 PSAVE    DS    18F                      PRINT SAVE AREA                 00096012         
+ 000DF8                              304 TOPLINE  DS    CL73                     BUFFER FOR THE HEADING          00096112         
+ 000E41                              305 PAGENUM  DS    CL20                     SPACE FOR THE LINE NUM          00096212         
+ 000E55                              306 LINE     DS    CL133                    EMPTY LINE BUFFER               00096312         
+ 000EDA 60                           307 COLUMNS  DC    C'-'                     COLUMNS HEADING                 00096412         
+ 000EDB 40C9C440D5A49482             308          DC    CL10' ID Number'                                         00096501         
+ 000EE5 4040                         309          DC    CL2' '                                                   00096601         
+ 000EE7 D381A2A340D58194             310          DC    CL9'Last Name'                                           00096701         
+ 000EF0 404040404040                 311          DC    CL6' '                                                   00096801         
+ 000EF6 C68999A2A340D581             312          DC    CL10'First Name'                                         00096901         
+ 000F00 404040404040                 313          DC    CL6' '                                                   00097001         
+ 000F06 E28396998540F1               314          DC    CL7'Score 1'                                             00097101         
+ 000F0D 40404040                     315          DC    CL4' '                                                   00097201         
+ 000F11 E28396998540F2               316          DC    CL7'Score 2'                                             00097301         
+ 000F18 40404040                     317          DC    CL4' '                                                   00097401         
+ 000F1C E28396998540F3               318          DC    CL7'Score 3'                                             00097501         
+ 000F23 4040404040404040             319          DC    CL62' '                                                  00097601         
+ 000F68                              320 DWOUT    DS    D                        TEMP DOUBLE WORD FOR CVB        00097712         
+                                     321 ************************************************************            00097812         
+ 000000                              322 $ENTRY   DSECT                          DSECT FOR THE TABLE             00097912         
+ 000000                              323 $ID      DS    F                                                        00098002         
+ 000004                              324 $LNAME   DS    12C                                                      00098100         
+ 000010                              325 $FNAME   DS    10C                                                      00098200         
+ 00001A                              326 $SCORE1  DS    PL2                                                      00098300         
+ 00001C                              327 $SCORE2  DS    PL2                                                      00098400         
+ 00001E                              328 $SCORE3  DS    PL2                                                      00098500         
+                                     329 ************************************************************            00098612         
+ 000000                              330 #OUTPUT  DSECT                          DSECT FOR THE OUTPUT LINE       00098712         
+ 000000                              331          DS    C                                                        00098801         
+ 000001                              332 #ID      DS    CL10                                                     00098907         
+ 00000B                              333          DS    CL2                                                      00099006         
+ 00000D                              334 #LNAME   DS    CL12                                                     00099101         
+ 000019                              335          DS    CL3                                                      00099209         
+ 00001C                              336 #FNAME   DS    CL10                                                     00099301         
+ 000026                              337          DS    CL7                                                      00099409         
+1                                                                                                               PAGE    7         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00002D                              338 #SCORE1  DS    CL4                                                      00099505         
+ 000031                              339          DS    CL7                                                      00099607         
+ 000038                              340 #SCORE2  DS    CL4                                                      00099706         
+ 00003C                              341          DS    CL7                                                      00099807         
+ 000043                              342 #SCORE3  DS    CL4                                                      00099906         
+                                     343          END   MAIN                                                     00100000         
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   22180 HIGH:    1608 LEAVING:  469780 FREE BYTES. AVERAGE:       69 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.002 SECS,   172000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1                      Greek Myth:  Player Data                      Page       1                                                 
+- ID Number  Last Name      First Name      Score 1    Score 2    Score 3                                                         
+0  00418467  Adams          Sharon             41        467        334                                                           
+0  63346500  Allen          Ronald            724        478        358                                                           
+0  91695724  Baker          Brian             705        145        281                                                           
+0  14789358  Brown          Brian             491        995        942                                                           
+0  69624464  Campbell       George            391        604        902                                                           
+0  57058145  Carter         Susan             382        421        716                                                           
+0  32816827  Clark          Kevin             447        726        771                                                           
+0  99610491  Davis          Linda             912        667        299                                                           
+0  29951942  Edwards        Sarah             703        811        322                                                           
+0  48275436  Evans          Charles           664        141        711                                                           
+0  23914604  Garcia         Kimberly          547        644        662                                                           
+0  39020153  Gonzalez       Daniel            859        723        741                                                           
+0  02922382  Green          David             316         35        190                                                           
+0  74218716  Hall           Maria             106         40        942                                                           
+0  97189895  Harris         Jennifer          446        805        890                                                           
+0  54471726  Hernandez      Helen             350          6        101                                                           
+0  47711538  Hill           Sarah             629        623         84                                                           
+0  18699912  Jackson        Jeff              840        966        376                                                           
+0  56676299  Jones          Kimberly          944        439        626                                                           
+0  70359894  King           Richard           538        118         82                                                           
+1                      Greek Myth:  Player Data                      Page       2                                                 
+- ID Number  Last Name      First Name      Score 1    Score 2    Score 3                                                         
+0  87033811  Lee            Kevin             833        115        639                                                           
+0  13220333  Lewis          Daniel            930        977        306                                                           
+0  76734664  Martin         Elizabeth          21        745        924                                                           
+0  51417711  Martinez       Jennifer          829        777        573                                                           
+0  82536868  Miller         Thomas            986        290        161                                                           
+0  55477644  Mitchell       Brian             767        655        574                                                           
+0  26622757  Moore          Sharon            350        150        941                                                           
+0  00372859  Nelson         Daniel            430        107        191                                                           
+0  87239741  Parker         Kevin             457        287        753                                                           
+0  75290778  Perez          Sandra            909        209        758                                                           
+0  23163035  Phillips       Kenneth           422        946        506                                                           
+0  21901842  Roberts        Jason             168        900        591                                                           
+0  02880106  Robinson       Steven            410        359        624                                                           
+0  90408942  Rodriguez      Michelle          483        595         41                                                           
+0  92642648  Scott          Paul              291        836        374                                                           
+0  74463805  Smith          Jeff               21        348        199                                                           
+0  58906729  Taylor         George            281        734         53                                                           
+0  43705350  Thomas         Mark              938        900        788                                                           
+0  50061101  Thompson       Jason             728        893        648                                                           
+0  43933548  Turner         Donna             421        310        617                                                           
+1                      Greek Myth:  Player Data                      Page       3                                                 
+- ID Number  Last Name      First Name      Score 1    Score 2    Score 3                                                         
+0  96292623  Walker         Steven            309        616        935                                                           
+0  40849954  Williams       Ruth              249        519        556                                                           
+0  87561840  Wilson         Jeff              224          8        844                                                           
+0  49667376  Wright         Ruth              702        195        485                                                           
+0  39316308  Young          Mark              523        587        314                                                           
+0*** EXECUTION TIME =    0.003 SECS.      3809 INSTRUCTIONS EXECUTED -  1269666 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

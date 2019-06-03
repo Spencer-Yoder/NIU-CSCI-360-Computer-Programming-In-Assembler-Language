@@ -1,0 +1,270 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010000
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+********************************************************                00060000
+* PROGRAM: ASSIGNMENT 5                                                 00080018
+* PROGRAMMER: SPENCER YODER                                             00090000
+*                                                                       00100000
+* NAME: MAIN                                                            00100100
+*                                                                       00100200
+* FUNCTION:                                                             00101000
+*   IT WILL READ AN 'N' NUMBER OF CARDS AND SAVE THEM                   00102000
+*   INTO A TABLE. IT WILL THEN PRINT ALL THE NUMBER ON                  00103000
+*   A LINE.                                                             00104018
+*                                                                       00106000
+* REGISTERS USED:                                                       00110000
+*   1  PRAMATOR LIST                                                    00111000
+*   4  OUT PRAMATOR LINST                                               00119118
+*   6  STORAGE FOR DIV NUMBER                                           00119218
+*  14  ADDRESS TO NEXT INSTRUCTION                                      00119318
+*  15  ADDRESS TO ROUTINE                                               00119418
+********************************************************                00120000
+MAIN     CSECT                                                          00130000
+         STM   14,12,12(13)                                             00131020
+         LR    12,15                                                    00132020
+         USING MAIN,12                                                  00140020
+         LA    14,MSAVE                                                 00141020
+         ST    13,4(0,14)                                               00142020
+         ST    14,8(0,13)                                               00143020
+         LR    13,14                                                    00144020
+*        *                                                              00145020
+         LA    R1,PARMS              LOAD THE PRAMATER LIST             00150000
+         LA    R4,OUTPARM+8                                             00160018
+         L     15,=V(BUILD)          LOAD BUILD                         00160116
+         BALR  14,15                 CALL BUILD                         00160319
+*                                                                       00160518
+*        SR    15,15                 CLEAR R15                          00160620
+         XPRNT HEDDER1,16            PRINT HEDDER                       00160718
+         LA    R4,OUTPARM            LOAD OUT PRAMATER LIST             00160818
+         L     15,=V(PRNT)           LOAD PRINT ALL                     00160917
+         BALR  14,15                 CALL PRINT ALL                     00161019
+*                                                                       00161118
+*        SR    15,15                 CLEAR R15                          00161320
+         L     R6,D1                 LOAD DIV FOR HEDDER                00161418
+         XDECO R6,DIV                ADD TO HEDDER                      00161618
+         XPRNT HEDDER2,26            PRINT HEDDER                       00161718
+         LA    R4,OUTPARM+8          MOVE OPARM LIST 2FULLWORDS         00162018
+         L     15,=V(PRNT)           PRINT D1,H1                        00162117
+         BALR  14,15                                                    00162219
+*                                                                       00162318
+*        SR    15,15                 CLEAR R15                          00162420
+         L     R6,D2                 LOAD DIV FOR HEDDER                00162518
+         XDECO R6,DIV                ADD TO HEDDER                      00162618
+         XPRNT HEDDER2,26            PRINT HEDDER                       00162718
+         LA    R4,OUTPARM+16         MOVE OPARM TO D2,H2                00162818
+         L     15,=V(PRNT)           PRINT D2,H2                        00162917
+         BALR  14,15                                                    00163019
+*                                                                       00163118
+*        SR    15,15                 CLEAR R15                          00163220
+         L     R6,D3                 LOAD DIV FOR HEDDER                00163318
+         XDECO R6,DIV                ADD TO HEDDER                      00163418
+         XPRNT HEDDER2,26            PRINT HEDDER                       00163518
+         LA    R4,OUTPARM+24         MOVE OPARM TO D3,D3                00163618
+         L     15,=V(PRNT)           PRINT D3,H3                        00163717
+         BALR  14,15                                                    00163819
+*        *                                                              00163920
+         L     13,4(0,13)                                               00164020
+         LM    14,12,12(13)                                             00164120
+         BR    14                    EXIT                               00164407
+         LTORG                                                          00165000
+********************************************************                00165120
+MSAVE    DS    18F                MAIN SAVE AREA                        00166020
+***GLOABLE VARS*****************************************                00184618
+TABLE    DS    80F'-128'          TABLE WITH 80 FULLWORD                00184718
+EOT      DS    F                  END OF TABLE PTR                      00184900
+D0       DC    F'1'               DIV                                   00185018
+H0       DC    F'5'               HOW MANY NUMBER PER LINE              00185118
+D1       DS    F                                                        00185213
+H1       DS    F                                                        00185313
+D2       DS    F                                                        00185413
+H2       DS    F                                                        00185513
+D3       DS    F                                                        00185613
+H3       DS    F                                                        00185713
+***PRAMATER LISTS***************************************                00185818
+PARMS    DC    A(TABLE)           PRAMATER LIST                         00185900
+         DC    A(EOT)                                                   00186000
+OUTPARM  DC    A(D0)              PRAM LIST OF DIV AND HOW MANY         00186218
+         DC    A(H0)                                                    00186317
+         DC    A(D1)                                                    00186417
+         DC    A(H1)                                                    00186513
+         DC    A(D2)                                                    00186613
+         DC    A(H2)                                                    00186713
+         DC    A(D3)                                                    00186813
+         DC    A(H3)                                                    00186913
+***HEDDER LINES*****************************************                00187018
+HEDDER1  DC    C'1'                                                     00187118
+         DC    CL15'TABLE CONTENTS '                                    00187218
+HEDDER2  DC    C'1'                                                     00187318
+         DC    CL13'MULTIPLES OF '                                      00187418
+DIV      DS    CL12                                                     00187518
+***REGISTORS EQUATES************************************                00187600
+R0   EQU    0                                                           00187700
+R1   EQU    1                                                           00187800
+R2   EQU    2                                                           00187900
+R3   EQU    3                                                           00188000
+R4   EQU    4                                                           00188100
+R5   EQU    5                                                           00188200
+R6   EQU    6                                                           00188300
+R7   EQU    7                                                           00188400
+R8   EQU    8                                                           00188500
+R9   EQU    9                                                           00188600
+R10  EQU    10                                                          00188700
+R11  EQU    11                                                          00188800
+R12  EQU    12                                                          00188900
+R13  EQU    13                                                          00189000
+R14  EQU    14                                                          00189100
+R15  EQU    15                                                          00190000
+*///////////////////////////////////////////////////////                00191003
+*///////////////////////////////////////////////////////                00192003
+********************************************************                00192102
+* NAME: BUILD                                                           00192202
+*                                                                       00192302
+* FUNCTION:                                                             00192402
+*   THIS WILL READ ANY AMOUNT OF CARDS AND SAVE THE FIRST               00192502
+*   80 NUMBER INTO A TABLE.                                             00192618
+*                                                                       00192702
+* PRAMATERS:                                                            00192802
+*   IT WILL TAKE IN A PRAMATER LIST OF THE ADDRESS TO THE               00192902
+*   TABLE AND THE END OF TABLE VALUE.                                   00193002
+*   IT WILL ALSO HAVE A PRAMATER LIST FOR THE DIV AND H VALUE.          00193118
+*                                                                       00193202
+* REGISTORS USED:                                                       00193302
+*   1  XDECI ADDRESS TO NEXT NUBMER                                     00193402
+*   2  ADDRESS TO TABLE                                                 00193502
+*   3  ADDREST TO END OF TABLE                                          00193602
+*   4  SAVED VALUE FROM XDECI                                           00193702
+*   6  ADDRESS TO THE OUT PARM LIST                                     00193813
+************************************************************            00193902
+BUILD    CSECT                                                          00194003
+         STM   14,12,12(13)         SAVE THE REGISTORS                  00194118
+         LR    12,15                SET 12 AS BASE                      00194218
+         USING BUILD,12             USE BASE                            00194318
+         LA    14,BSAVE             POINT R14 TO SAVE AREA              00194418
+         ST    13,4(0,14)           SAVE FORWARD PTR                    00194518
+         ST    14,8(0,13)           SAVE BACKWARD PRT                   00194618
+         LR    13,14                POINT R13 TO SAVE AREA              00194718
+*        *                                                              00194803
+         LM    2,3,0(1)             LOAD THE PARM LIST                  00194918
+         L     6,0(4)               LOAD ADDRESS OF OPARM               00195018
+LLOOP    XREAD BUFFER,80            LINE LOOP/READ LINE                 00195218
+         BC    B'0100',LEND         IF END OF FILE, EXIT                00195318
+         XDECI R4,BUFFER            READ FIRST NUMBER                   00195618
+         BC    B'0001',LLOOP        IF NO NUMBER, NEXT LINE             00195718
+         C     R4,=F'-222222222'    CHECK TO SEE IF -2222222            00195813
+         BE    EODATA               IF = GOTO END OF DATA               00195918
+         ST    R4,0(2)              SAVE NUMBER IN TABLE                00196418
+         A     R2,=F'4'             MOVE THE TABLE PRT                  00196618
+CLOOP    XDECI R4,0(R1)            IF MORE NUMBER IN LINE               00196702
+         BC    B'0001',LLOOP        GO TO NEXT LINE                     00196818
+         ST    R4,0(2)             STORE INTO THE TABLE                 00197202
+         A     R2,=F'4'             MOVE THE TABLE PTR                  00197318
+         B     CLOOP                KEEP GOING ON THE LINE              00197418
+EODATA   ST    2,0(3)               SAVE END OF TABLE                   00197518
+         XREAD BUFFER,80            READ FIRST ROW                      00197618
+         XDECI R4,BUFFER            READ FIRST NUM                      00197718
+         ST    R4,0(6)              SAVE D1                             00197818
+         A     R6,=F'4'             MOVE OPRAM LIST 1 SPACE             00197918
+         XDECI R4,0(R1)             READ H1                             00198018
+         ST    R4,0(6)              SAVE                                00198118
+         A     R6,=F'4'             MOVE OPRAM LIST                     00198218
+         XREAD BUFFER,80            READ SECOND ROW                     00198313
+         XDECI R4,BUFFER            READ FIRST NUM                      00198418
+         ST    R4,0(6)              SAVE                                00198518
+         A     R6,=F'4'             MOVE PRT                            00198618
+         XDECI R4,0(R1)             READ SECOND NUMBER                  00198718
+         ST    R4,0(6)              SAVE                                00198818
+         A     R6,=F'4'             MOVE OPRAM PRT                      00198918
+         XREAD BUFFER,80            READ THIRD LINE                     00199013
+         XDECI R4,BUFFER            READ FIRST NUBMER                   00199118
+         ST    R4,0(6)              SAVE FIRST NUMBER                   00199218
+         A     R6,=F'4'             MOVE PRT                            00199318
+         XDECI R4,0(R1)             JUST LIKE THE LAST 2 TIMES          00199418
+         ST    R4,0(6)              SAVE SECOND NUMBER                  00199518
+LEND     DS    0H                                                       00199818
+*        *                                                              00200113
+         L     13,4(0,13)           POINT R13 TO CALLER SAVE AREA       00200218
+         LM    14,12,12(13)         RESTORE REGISTORS                   00200318
+         BR    14                   RETURN                              00200418
+         LTORG                                                          00200511
+***VARABLES FOR BUILD***********************************                00200602
+BUFFER   DS    80C                                                      00200702
+         DC    C'*'                                                     00200802
+********************************************************                00200902
+BSAVE    DS    18F                  SAVE AREA FOR BUILD                 00201018
+*///////////////////////////////////////////////////////                00201103
+*///////////////////////////////////////////////////////                00201203
+********************************************************                00202001
+* NAME: PRINT                                                           00210002
+*                                                                       00220001
+* FUNCTION:                                                             00230001
+*    THIS WILL PRINT THE VALUES ON A LINE DEPENDING OF                  00240018
+*    THE DIV AND HOWMANY NUMBERS.                                       00250018
+*                                                                       00260001
+* INPUT:                                                                00270001
+*   PRAMATER LIST OF TABLE AND END OF TABLE ADDRESS.                    00280018
+*   PRAMATER LIST OF THE DIV AND HOW MANY.                              00281018
+*                                                                       00290001
+* REGISTORS USED:                                                       00379401
+*   2  ADDRESS OF TABLE                                                 00379501
+*   3  END OF TABLE ADDRESS                                             00379601
+*   4  ADDRESS OF THE LINE                                              00379701
+*   6  USE IN DIVIDEING                                                 00379801
+*   7 VALUE IN THE TABLE AT THE ADDRESS                                 00380001
+*   8  COUNTER                                                          00388011
+*   9  DIVISON VALUE  (D)                                               00388115
+*   10 HOW MANY NUM ON LINE (H)                                         00388215
+********************************************************                00389001
+PRNT     CSECT                                                          00389117
+         STM   14,12,12(13)          ENTRY LINKAGE                      00389318
+         LR    12,15                                                    00389411
+         USING PRNT,12                                                  00389517
+         LA    14,PSAVE                                                 00389611
+         ST    13,4(0,14)                                               00389718
+         ST    14,8(0,13)                                               00389811
+         LR    13,14                                                    00389911
+*        *                                                              00390013
+         LM    9,10,0(4)             LOAD THE D AND H VALUE             00390517
+         LA    R4,BLINE+1            ADDRESS OF THE LINE                00390901
+         LM    2,3,0(1)              LOAD PRAM LIST                     00391101
+         S     3,=F'4'                                                  00391218
+         SR    R8,R8                ZERO COUNTER                        00391411
+LOOP2    CR    R3,R2                 LOOP UNITL END OF TABLE            00391501
+         BC    B'1100',ELOOP                                            00391717
+         C     R8,0(10)              IF MAX NUMBER ON LINE              00391918
+         BC    B'0100',KEEPGO                                           00392101
+         XPRNT BLINE,85              PRINT LINE                         00392201
+         MVI   BLINE+1,C' '          SET 2 CHAR TO BLANK                00393001
+         MVC   BLINE+2(83),BLINE+1   SET ALL OTHER TO SPACE             00394001
+         LA    R4,BLINE+1            RELOAD THE ADDRESS OF LINE         00395001
+         SR    R8,R8                 RESET COUNTER                      00396011
+KEEPGO   DS    0H                                                       00397001
+         L     R7,0(R2)              GET VALUE OF ADDRESS               00397101
+         M     R6,=F'1'              SET NEG OR POS IN TABLE            00397201
+         D     R6,0(9)                                                  00397618
+         C     R6,=F'0'              CHECK TO SEE IF R IS ZERO          00397715
+         BC    B'0110',NOTZERO                                          00397818
+         L     R7,0(R2)              RELOAD VALUE FROM TABLE            00397901
+         XDECO R7,0(4)               PRINT VALUE TO LINE                00398001
+         A     R4,=F'12'             ADVANCE LINE BY 12                 00398101
+         A     R8,=F'1'              ADD 1 TO THE COUNTER               00398211
+NOTZERO  DS    0H                                                       00398318
+         A     R2,=F'4'              MOVE TO NEXT TABLE POS             00398401
+         B     LOOP2                 GOTO LOOP2                         00398501
+ELOOP    XPRNT BLINE,85              PRINT THE LAST LINE                00398601
+         MVI   BLINE+1,C' '          CLEAR THE LINE                     00398718
+         MVC   BLINE+2(83),BLINE+1                                      00398818
+*        *                                                              00398913
+         L     13,4(0,13)            EXIT LINKAGE                       00399118
+         LM    14,12,12(13)                                             00399211
+         BR    14                                                       00399318
+         LTORG                                                          00399411
+***PRINT VARABLES***************************************                00399513
+BLINE    DC    C'0'               BLANK LINE FOR PRINTING..             00400102
+         DC    CL84' '               ALL OF THE NUMBERS                 00400218
+********************************************************                00400301
+PSAVE    DS    18F                   SAVE AREA FOR PRINT                00400418
+         END   MAIN                                                     00400603
+/*                                                                      00401001
+//FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW5DATA,DISP=SHR           00410011

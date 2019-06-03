@@ -1,0 +1,33 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010000
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+**************                                                          00051002
+* ASSIGMENT 1A                                                          00052007
+* NAME: SPENCER YODER                                                   00052107
+*                                                                       00052207
+* FUNCTION:                                                             00052307
+*     IT WILL TAKE THE VAR FIRST AND SUBTRACT IT FROM SECOND.           00052407
+*     THEN IT WILL ADD SECOND INTO FIRST. THEN DUMP THE DATA.           00052507
+*                                                                       00052607
+* REGISTERS USED:                                                       00052707
+*     1    FIRST VALUE '113'                                            00052807
+*     2    SECOND VALUE '52'                                            00052907
+* 3    FIRST VALUE '113'                                                00053007
+* 4    SECOND VALUE '52'                                                00053107
+**************                                                          00054002
+MAIN      CSECT                                                         00060000
+          USING MAIN,15                                                 00070000
+          L     1,FIRST                                                 00080000
+          L     2,SECOND                                                00090006
+          L     3,FIRST                                                 00100000
+          L     4,SECOND                                                00110006
+          SR    1,2                                                     00120000
+          AR    3,4                                                     00130000
+          XDUMP                                                         00140000
+FIRST     DC  F'113'                                                    00150005
+SECOND    DC  F'52'                                                     00160006
+          END   MAIN                                                    00170000
+*/                                                                      00180000
+//                                                                      00190000

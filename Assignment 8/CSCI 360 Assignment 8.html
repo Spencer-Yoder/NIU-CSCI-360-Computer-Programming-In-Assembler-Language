@@ -1,0 +1,178 @@
+
+    *
+
+    Assignment 8
+
+    *
+
+    *100 points *
+
+*Overview*
+
+This assignment deals with data about players in a game called On-Line
+Bowling. You will write a program that will read the file. The data will
+be processed a little and put in a table. You will then XDUMP the table.
+After that, you should print out the table contents in a report. Next,
+sort the table contents in descending order by High Score, and then
+reprint the table.
+
+The data is stored in a small number of bytes.
+
+------------------------------------------------------------------------
+
+*Input*
+
+The input to the program will be a file with an unknown number of
+records. Each record represents a single player and has the following
+format:
+
+     columns         description
+     -------         -----------
+      1 - 8          User Name (characters)
+      9 - 10         not used (spaces)             
+     11 - 19         ID Number (digits)
+     20 - 21         not used (spaces)
+     22 - 29         Date of High Score (8 digits:  Year, Month, Day)
+     30 - 31         not used (spaces)
+     32 - 34         High Score (3 digits) (between 000 and 300)
+     35 - 80         not used (spaces)
+
+Use the following JCL statement to specify the input file:
+
+//FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW8DATA,DISP=SHR
+
+------------------------------------------------------------------------
+
+*Processing Requirements*
+
+The main program will carry out the following steps:
+
+1. Call subroutine BUILD to read the file and store the data in a table.
+
+2. Use XDUMP to print the entire table in hex.
+
+3. Call subroutine PRINT to print the contents of the table using
+appropriate page and column headings.
+
+4. Call subroutine SORT to sort the table entries in descending order
+using High Score as the key.
+
+5. Call subroutine PRINT again.
+
+------------------------------------------------------------------------
+
+*BUILD subroutine*
+
+The parameters for BUILD are the address of the table and the address of
+a fullword containing the address of the first unused entry.
+
+We are going to store the ID numbers as 4-byte binary values. In the
+table, these may or may not be on fullword boundaries. You may need to
+use ICM and STCM.
+
+We are going to store the High Score as a 2-byte packed decimal number.
+
+We are going to store each date in 2 bytes (16 bits) in a compressed
+format:
+
+  * We will store the year using the first 7 bits as an offset from the
+    year 1990. For instance we will store 2012 as the value 22,
+    expressed in 7 bits.
+
+  * We will store the number of the month (1-12) using the next 4 bits.
+
+  * We will store the number of the day (1-31) using the last 5 bits. 
+
+To work with dates, you will presumably have to use PACK and CVB,
+followed by shift and bitwise instructions, and you may need to use STCM
+to put the value in the table and ICM to read the value from it.
+
+We will store the User Names in an encrypted form. Specifically, we will
+use the "XOR encryption" technique. It works like this: suppose we have
+a 4-byte binary number KEY and we want to encrypt a 4-byte variable
+called PHRASE. Then:
+
+     (encrypted form of PHRASE) = PHRASE XOR KEY
+
+We will do this using the ID number (as a 4-byte binary value) as the
+key. Each User Name is up to 8 bytes long, so we need to encrypt the
+first 4 bytes and then the last 4 bytes.
+
+The structure of a table entry is as follows, in this order:
+
+  * User Name (8 bytes)
+  * High Score (2 bytes, packed decimal)
+  * Date (2 bytes binary)
+  * ID Number (4 bytes, binary) 
+
+------------------------------------------------------------------------
+
+*PRINT subroutine*
+
+The parameters for PRINT are the address of the table, the address of a
+fullword containing the address of the first unused entry and the
+address of a 38-byte caption to use in the page heading.
+
+The first time we call PRINT, the caption should say "List of Players in
+On-Line Bowling", and the second time, the caption should say "List of
+Players In Order by High Score".
+
+When we extract the data from the table to print it, we will need to
+decrypt the password. This can be done by exactly the same method. If we
+have PHRASE and KEY as above:
+
+     (decrypted form of PHRASE) = (encrypted form of PHRASE) XOR KEY
+
+When we need to recover the date from its compressed form, we can do the
+following:
+
+  * use ICM to put the value in a register
+  * use SLL and SRL to get just one number (perhaps the month) in the
+    rightmost bits with the rest of the register full of 0 bits
+  * use CVD to get hold of the number in packed decimal form
+  * use MVC and ED to get the number in zoned decimal form
+  * move just the digits we want onto the print line 
+
+------------------------------------------------------------------------
+
+*SORT subroutine*
+
+The parameters for SORT are the address of the table and the address of
+a fullword containing the address of the first unused entry.
+
+Use the Selection Sort technique (which we previously used in Assignment
+7). When you need to swap two entries, use the XOR technique instead of
+a temporary variable.
+
+------------------------------------------------------------------------
+
+*Other Notes*
+
+ 1. You may assume that the table needs to hold no more than 25 entries,
+    16 bytes each.
+
+    ORG PROG8+((*-PROG8+15)/16)*16
+
+    where PROG8 is the name of the CSECT. This will align the table on a
+    16-byte boundary and make the XDUMP easier to read.
+
+ 2. You should use a DSECT to describe the table entries.
+
+ 3. The JCL for this assignment is the same as the JCL used in the
+    Assignment 6 except for the line given above to provide the data.
+
+ 4. When you print a date, print it in the format 04/07/2018, is,
+    DD/MM/YYYY. 
+
+------------------------------------------------------------------------
+
+*Output*
+
+Aside from the XDUMP, there will be about two pages of output.
+
+Each table listing should have a page heading, centered. You do not need
+to have a page number. There should be column headings, triple-spaced
+from the page header.
+
+The lines of player information should be triple-spaced.
+

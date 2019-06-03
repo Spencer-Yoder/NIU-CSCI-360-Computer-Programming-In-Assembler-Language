@@ -1,0 +1,347 @@
+
+    *Driver Program for Assignment 9*
+
+**********************************************************************
+*                                                                    * 
+*            Name:  DRIVER.                                          * 
+*                                                                    * 
+*        Function:  Test platform for macros.                        * 
+*                                                                    * 
+*           Input:  None.                                            * 
+*                                                                    * 
+*          Output:  Results of the tests.                            * 
+*                                                                    * 
+*     Entry Conds:  14 -- Return address to the operating            * 
+*                         system.                                    * 
+*                   15 -- Address of entry to the program.           * 
+*                                                                    * 
+*  Register Usage:   2 -- Used in addresses in macro tests.          * 
+*                   11 -- Second base register.                      * 
+*                   12 -- Base register.                             * 
+*                                                                    * 
+*      Exit Conds:  14 -- Return address to the operating            * 
+*                         system.                                    * 
+*                                                                    * 
+********************************************************************** 
+*                                                                      
+DRIVER   CSECT                         Beginning of the program.       
+*                                                                      
+         PRINT GEN                     Do expand macros.               
+*                                                                      
+*  Standard Entry linkage.                                             
+*                                                                      
+         STM   14,12,12(13)                                            
+         LR    12,15                                                   
+         USING DRIVER,12                                               
+         LA    14,DRIVSAV                                              
+         ST    13,4(14)                                                
+         ST    14,8(13)                                                
+         LR    13,14                                                   
+*                                                                      
+         XPRNT =C'1Results of testing macros',26   Print the title.    
+*                                                                      
+         XPRNT  =CL32'-First we test the STRCPY macro.',32
+         XPRNT  =CL38' In printing strings, the zero byte is',38
+         XPRNT  =CL18' represented by *.',18
+*
+* The first block of code deals with the STRCPY macro.
+*
+         XPRNT  =CL33'-1st test:  a string of length 0.',33
+         MVI    OLD,X'00'
+         MVC    OLD+1(14),=14C' '
+         MVC    NEW(15),=15C' '
+         STRCPY OLD,NEW
+         MVC    L1(4),=CL4'   0'
+         XPRNT  PLINE1,25
+         LA     1,=A(NEW,LENGTH)
+         BAL    10,STRLEN
+         MVC    L2(4),=X'40202120'
+         ED     L2(4),LENGTH
+         XPRNT  PLINE2,25
+         TR     OLD(15),TRTABLE
+         MVC    V3(15),OLD
+         XPRNT  PLINE3,36
+         TR     NEW(15),TRTABLE
+         MVC    V4(15),NEW
+         XPRNT  PLINE4,36
+*
+         XPRNT  =CL34'-2nd test:  a string of all 0s.',34
+         MVC    OLD(15),=15X'00'
+         MVC    NEW(15),=15C' '
+         STRCPY OLD,NEW
+         MVC    L1(4),=CL4'   0'
+         XPRNT  PLINE1,25
+         LA     1,=A(NEW,LENGTH)
+         BAL    10,STRLEN
+         MVC    L2(4),=X'40202120'
+         ED     L2(4),LENGTH
+         XPRNT  PLINE2,25
+         TR     OLD(15),TRTABLE
+         MVC    V3(15),OLD
+         XPRNT  PLINE3,36
+         TR     NEW(15),TRTABLE
+         MVC    V4(15),NEW
+         XPRNT  PLINE4,36
+*
+         XPRNT  =CL39'-3rd test:  a string of alternating 0s.',39
+         MVC    OLD(6),=XL6'C100C200C300'
+         MVC    OLD+6(9),=9C' '
+         MVC    NEW(15),=15C' '
+         STRCPY OLD,NEW
+         MVC    L1(4),=CL4'   1'
+         XPRNT  PLINE1,25
+         LA     1,=A(NEW,LENGTH)
+         BAL    10,STRLEN
+         MVC    L2(4),=X'40202120'
+         ED     L2(4),LENGTH
+         XPRNT  PLINE2,25
+         TR     OLD(15),TRTABLE
+         MVC    V3(15),OLD
+         XPRNT  PLINE3,36
+         TR     NEW(15),TRTABLE
+         MVC    V4(15),NEW
+         XPRNT  PLINE4,36
+*
+         XPRNT  =CL31'-4th test:  an ordinary string.',31
+         MVC    OLD(11),=CL11'Test 4 data'
+         MVC    OLD+11(4),=X'00404040'
+         STRCPY OLD,NEW
+         TR     OLD(15),TRTABLE
+         MVC    V3(15),OLD
+         MVC    L1(4),=CL4'  11'
+         XPRNT  PLINE1,25
+         LA     1,=A(NEW,LENGTH)
+         BAL    10,STRLEN
+         MVC    L2(4),=X'40202120'
+         ED     L2(4),LENGTH
+         TR     NEW(15),TRTABLE
+         MVC    V4(15),NEW
+         XPRNT  PLINE2,25
+         XPRNT  PLINE3,36
+         XPRNT  PLINE4,36
+*
+* The last three tests all have missing values.
+* We should have MNOTEs.
+*
+* 5th test:  Missing SOURCE
+         STRCPY ,NEW
+*
+* 6th test:  Missing DEST
+         STRCPY OLD
+*
+* 7th test:  Missing both arguments
+         STRCPY 
+*
+* The second block of code deals with the ____ macro.
+*
+         XPRNT =C'0',1                 Skip an extra 2 lines.
+         XPRNT =CL29'-Next we test the ____ macro.',29
+*                                      Print a heading.
+*
+* The next block of code deals with the SEARCH macro.
+*
+         XPRNT =C'0',1                 Skip an extra 2 lines.
+         XPRNT =CL31'-Next we test the SEARCH macro.',31
+*                                      Print a heading.
+         XPRNT =CL46'0Before the call, registers 1 and 2 contain 0',46
+*
+*
+* These first three calls to SEARCH have problems which should
+* result in MNOTEs.
+*
+         SR    1,1
+         SR    2,2
+         SEARCH   PHRASE,10,,(X'40')
+*
+         SR    1,1
+         SR    2,2
+         SEARCH   PHRASE,,TABLE,(X'40')
+*
+         SR    1,1
+         SR    2,2
+         MVC   PHRASE(10),=CL10'HAPPY DAYS'
+         SEARCH   PHRASE,10,TABLE,()
+*
+* The next few calls to SEARCH should succeed.
+*
+         XPRNT =CL31'0Test A should find a character',31
+         SR    1,1
+         SR    2,2
+         MVC   PHRASE(10),=CL10'HAPPY DAYS'
+         SEARCH   PHRASE,10,TABLE,(X'40')
+         BC    B'1000',NOT1
+         BC    B'0010',LAST1
+         XPRNT =CL20'0Found the character',20
+         B     DONE1
+NOT1     XPRNT =CL23'0No character was found',23
+         B     DONE1
+LAST1    XPRNT =CL29'0Found a character at the end',29
+DONE1    DS    0H
+         XHEXO 1,R1
+         XHEXO 2,R2
+         XPRNT REGLINE,48
+         XDUMP TABLE,256
+*
+         XPRNT =CL42'0Test B should find a character at the end',42
+         SR    1,1
+         SR    2,2
+         MVC   PHRASE(10),=CL10'QRSTUVWXYZ'
+         SEARCH   PHRASE,10,TABLE,(C'A',C'M',C'Z')
+         BC    B'1000',NOT2
+         BC    B'0010',LAST2
+         XPRNT =CL20'0Found the character',20
+         B     DONE2
+NOT2     XPRNT =CL23'0No character was found',23
+         B     DONE2
+LAST2    XPRNT =CL29'0Found a character at the end',29
+DONE2    DS    0H
+         XHEXO 1,R1
+         XHEXO 2,R2
+         XPRNT REGLINE,48
+         XDUMP TABLE,256
+*
+         XPRNT =CL35'0Test C should not find a character',35
+         SR    1,1
+         SR    2,2
+         MVC   PHRASE(10),=CL10'ABCEFGHJKL'
+         SEARCH   PHRASE,10,TABLE,(196,213,64,248)
+         BC    B'1000',NOT3
+         BC    B'0010',LAST3
+         XPRNT =CL20'0Found the character',20
+         B     DONE3
+NOT3     XPRNT =CL23'0No character was found',23
+         B     DONE3
+LAST3    XPRNT =CL29'0Found 1 character at the end',29
+DONE3    DS    0H
+         XHEXO 1,R1
+         XHEXO 2,R2
+         XPRNT REGLINE,48
+         XDUMP TABLE,256
+*
+         XPRNT =CL31'0Test D should find a character',31
+         SR    1,1
+         SR    2,2
+         MVC   PHRASE(10),=CL10'-$_?5.CR+.'
+         SEARCH   PHRASE,10,TABLE,                                     +
+               (C'1',X'F2',243,244,C'5',X'F6',247)
+         BC    B'1000',NOT4
+         BC    B'0010',LAST4
+         XPRNT =CL20'0Found the character',20
+         B     DONE4
+NOT4     XPRNT =CL23'0No character was found',23
+         B     DONE4
+LAST4    XPRNT =CL29'0Found 1 character at the end',29
+DONE4    DS    0H
+         XHEXO 1,R1
+         XHEXO 2,R2
+         XPRNT REGLINE,48
+         XDUMP TABLE,256
+*
+*  Standard exit linkage                                               
+*                                                                      
+         L     13,4(13)                                                
+         LM    14,12,12(13)                                            
+         BR    14                                                      
+         EJECT                                                         
+********************************************************************** 
+*          The storage section for DRIVER starts here.               * 
+********************************************************************** 
+*                                                                      
+         LTORG                                                         
+*                                                                      
+DRIVSAV  DC    18F'-1'                 Save area for linkage.          
+*                                                                      
+* Here we have the variables for testing STRCPY.
+*
+OLD      DS    15C 
+NEW      DS    15C
+*
+LENGTH   DS    PL2
+*
+PLINE1   DC    C'0'
+         DC    CL20'Length of source:   '
+L1       DS    4C
+*
+PLINE2   DC    C'0'
+         DC    CL20'Length of new copy: '
+L2       DS    4C
+*
+PLINE3   DC    C'0'
+         DC    CL20'Value of source:    '
+V3       DS    15C
+*
+PLINE4   DC    C'0'
+         DC    CL20'Value of new copy:  '
+V4       DS    15C
+*
+TRTABLE  DC    XL16'5C0102030405060708090A0B0C0D0E0F'
+         DC    XL16'101112131415161718191A1B1C1D1E1F'
+         DC    XL16'202122232425262728292A2B2C2D2E2F'
+         DC    XL16'303132333435363738393A3B3C3D3E3F'
+         DC    XL16'404142434445464748494A4B4C4D4E4F'
+         DC    XL16'505152535455565758595A5B5C5D5E5F'
+         DC    XL16'606162636465666768696A6B6C6D6E6F'
+         DC    XL16'707172737475767778797A7B7C7D7E7F'
+         DC    XL16'808182838485868788898A8B8C8D8E8F'
+         DC    XL16'909192939495969798999A9B9C9D9E9F'
+         DC    XL16'A0A1A2A3A4A5A6A7A8A9AAABACADAEAF'
+         DC    XL16'B0B1B2B3B4B5B6B7B8B9BABBBCBDBEBF'
+         DC    XL16'C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF'
+         DC    XL16'D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF'
+         DC    XL16'E0E1E2E3E4E5E6E7E8E9EAEBECEDEEEF'
+         DC    XL16'F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF'
+*
+*
+TESTMEN  DC    F'-1'
+TESTMEZ  DC    F'0'
+TESTMEP  DC    F'1'
+*
+TEMP     DS    D
+*
+*
+* Variables for testing SEARCH
+*
+PHRASE   DS    10C
+*
+         ORG   DRIVER+((*-DRIVER+31)/32)*32
+TABLE    DS    XL256
+*
+REGLINE  DC    C'0'
+         DC    CL13'Register 1 = '
+R1       DS    8C
+         DC    CL18' and Register 2 = '
+R2       DS    8C
+*
+*********************************************************************
+*
+* STRLEN is an internal subroutine to calculate a string length.
+*
+* It has two arguments:  the address of a string and the address  
+* of a 2-byte packed decimal field in which to report the length.
+*
+* Register  1 = address of parameter list
+*           2 = address of the string; from 0(1)
+*           3 = address of the counter; from 4(1)
+*          10 = return address
+*
+*********************************************************************
+*
+STRLEN   DS    0H
+         STM   2,3,SLSAVE          Save the registers
+         LM    2,3,0(1)            Unload the parameter list
+         ZAP   0(2,3),=P'0'        Initialize the counter
+SLLOOP   CLI   0(2),X'00'          Have we reached the delimiter?
+         BE    SLEND               If so, end the loop
+         AP    0(2,3),=P'1'        Increment the counter
+         LA    2,1(0,2)            Advance string pointer
+         B     SLLOOP              Repeat the loop
+SLEND    DS    0H        
+         LM    2,3,SLSAVE          Restore the registers
+         BR    10                  Return to the caller
+SLSAVE   DS    2F
+*
+********************************************************************** 
+*                 The DRIVER program ends here.                      * 
+********************************************************************** 
+         END   DRIVER                  End of the overall program.
+

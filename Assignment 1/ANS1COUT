@@ -1,0 +1,120 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 18.53.02 JOB04620 ---- WEDNESDAY, 31 JAN 2018 ----
+ 18.53.02 JOB04620  IRR010I  USERID KC03P70  IS ASSIGNED TO THIS JOB.
+ 18.53.02 JOB04620  ICH70001I KC03P70  LAST ACCESS AT 18:48:48 ON WEDNESDAY, JANUARY 31, 2018
+ 18.53.02 JOB04620  $HASP373 KC03P70A STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 18.53.02 JOB04620  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 18.53.02 JOB04620  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 18.53.02 JOB04620  -KC03P70A                      00     37 ******    .00     .0     89   0      0      0      0     0
+ 18.53.02 JOB04620  -KC03P70A ENDED.  NAME-Spencer Yoder        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 18.53.02 JOB04620  $HASP395 KC03P70A ENDED
+0------ JES2 JOB STATISTICS ------
+-  31 JAN 2018 JOB EXECUTION DATE
+-           39 CARDS READ
+-          120 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           10 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              JOB04620
+         2 //STEP1 EXEC PGM=ASSIST                                                 00020000
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+         4 //SYSPRINT DD SYSOUT=*                                                  00040000
+         5 //SYSIN DD *                                                            00050000
+ ICH70001I KC03P70  LAST ACCESS AT 18:48:48 ON WEDNESDAY, JANUARY 31, 2018
+ IEF236I ALLOC. FOR KC03P70A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEF142I KC03P70A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03P70.KC03P70A.JOB04620.D0000102.?         SYSOUT        
+ IEF285I   KC03P70.KC03P70A.JOB04620.D0000101.?         SYSIN         
+ IEF373I STEP/STEP1   /START 2018031.1853
+ IEF032I STEP/STEP1   /STOP  2018031.1853 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        0K  SYS:    11980K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03P70A/START 2018031.1853
+ IEF033I  JOB/KC03P70A/STOP  2018031.1853 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ***************************************************************         00051101         
+                                       2 * ASSIGMENT 1A                                                          00051201         
+                                       3 * NAME: SPENCER YODER                                                   00051301         
+                                       4 *                                                                       00051401         
+                                       5 * FUNCTION:                                                             00051501         
+                                       6 *     IT WILL TAKE THE VAR FIRST AND SUBTRACT IT FROM SECOND.           00051601         
+                                       7 *     THEN IT WILL ADD SECOND INTO FIRST. THEN DUMP THE DATA.           00051701         
+                                       8 *     IT THEN SAVES THE REUSLTS OF THE 2 CALC INTO RESULT1 AND RESULT2  00051801         
+                                       9 *                                                                       00051901         
+                                      10 * REGISTERS USED:                                                       00052001         
+                                      11 *     1    FIRST VALUE '113'                                            00052101         
+                                      12 *     2    SECOND VALUE '52'                                            00052201         
+                                      13 *     3    FIRST VALUE '113'                                            00052301         
+                                      14 *     4    SECOND VALUE '52'                                            00052401         
+                                      15 **************************************************************          00053001         
+ 000000                               16 MAIN      CSECT                                                         00060000         
+ 000000                               17           USING MAIN,15                                                 00070000         
+ 000000 581F 0028            00028    18           L     1,40(15)                                                00080000         
+ 000004 582F 002C            0002C    19           L     2,44(15)                                                00090000         
+ 000008 583F 0028            00028    20           L     3,40(15)                                                00100000         
+ 00000C 584F 002C            0002C    21           L     4,44(15)                                                00110000         
+ 000010 1B12                          22           SR    1,2                                                     00120000         
+ 000012 1A34                          23           AR    3,4                                                     00130000         
+ 000014 5010 F030            00030    24           ST    1,RESULT1                                               00131000         
+ 000018 5030 F034            00034    25           ST    3,RESULT2                                               00132000         
+                                      26 *         XDUMP                                                         00140000         
+ 00001C E060 F030 0008 00030          27           XDUMP RESULT1,8                                               00141000         
+ 000022 E060 F034 0008 00034          28           XDUMP RESULT2,8                                               00142000         
+ 000028 00000071                      29 FIRST     DC  F'113'                                                    00150000         
+ 00002C 00000034                      30 SECOND    DC  F'52'                                                     00160000         
+ 000030                               31 RESULT1   DS  F                                                         00161000         
+ 000034                               32 RESULT2   DS  F                                                         00162000         
+                                      33           END   MAIN                                                    00170000         
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:     892 HIGH:     400 LEAVING:  492276 FREE BYTES. AVERAGE:       38 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.000 SECS,    34000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+0BEGIN XSNAP - CALL     1 AT E0000022 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     000030 TO 000038                                                      
+ 000020   0008E060 F0340008 00000071 00000034    0000003D 000000A5 F5F5F5F5 00000000   *....0...................5555....*         
+0                                                                                                                                 
+0BEGIN XSNAP - CALL     2 AT E0000028 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     000034 TO 00003C                                                      
+ 000020   0008E060 F0340008 00000071 00000034    0000003D 000000A5 F5F5F5F5 00000000   *....0...................5555....*         
+0                                                                                                                                 
+1*** EXECUTION TIME =    0.000 SECS.        11 INSTRUCTIONS EXECUTED -    11000 INSTRUCTIONS/SEC ***                              
+0*** FIRST CARD NOT READ: NO CARDS READ:FILE UNOPENED                                                                             
+1 ASSIST COMPLETION DUMP                                                                                                          
+0PSW AT ABEND FFC50001 6000002A       COMPLETION CODE   SYSTEM = 0C1 OPERATION                                                    
+0** TRACE OF INSTRUCTIONS JUST BEFORE TERMINATION: PSW BITS SHOWN ARE THOSE BEFORE CORRESPONDING INSTRUCTION DECODED ***          
+0  IM LOCATION    INSTRUCTION :  IM = PSW BITS 32-39(ILC,CC,MASK) BEFORE INSTRUCTION EXECUTED AT PROGRAM LOCATION SHOWN           
+0  00  000004     582F 002C                                                                                                       
+0  80  000008     583F 0028                                                                                                       
+0  80  00000C     584F 002C                                                                                                       
+0  80  000010     1B12                                                                                                            
+0  60  000012     1A34                                                                                                            
+0  60  000014     5010 F030                                                                                                       
+0  A0  000018     5030 F034                                                                                                       
+0  A0  00001C     E060 F030 0008                                                                                                  
+0  E0  000022     E060 F034 0008                                                                                                  
+0  E0  000028     0000            <-- LAST INSTRUCTION DONE - PROBABLE CAUSE OF TERMINATION                                       
+0                                                                                                                                 
+-** TRACE OF LAST 10 BRANCH INSTRUCTIONS EXECUTED: PSW BITS SHOWN ARE THOSE BEFORE CORRESPONDING INSTRUCTION DECODED ***          
+0  IM LOCATION    INSTRUCTION :  IM = PSW BITS 32-39(ILC,CC,MASK) BEFORE INSTRUCTION EXECUTED AT PROGRAM LOCATION SHOWN           
+0  00  000000     0000                                                                                                            
+0 REGS 0-7      F4F4F4F4    0000003D    00000034    000000A5    00000034    F4F4F4F4    F4F4F4F4    F4F4F4F4                      
+  REGS 8-15     F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4    F4F4F4F4    00000038    FFFE7960    00000000                      
+0 FLTR 0-6      F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4        F4F4F4F4F4F4F4F4                          
+1 USER STORAGE                                                                                                                    
+0                             CORE ADDRESSES SPECIFIED-     000000 TO 000180                                                      
+ 000000   581F0028 582F002C 583F0028 584F002C    1B121A34 5010F030 5030F034 E060F030   *......................0...0...0.*         
+ 000020   0008E060 F0340008 00000071 00000034    0000003D 000000A5 F5F5F5F5 00000000   *....0...................5555....*         
+ 000040   F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5    F5F5F5F5 F5F5F5F5 F5F5F5F5 F5F5F5F5   *55555555555555555555555555555555*         
+   LINES    000060-000140    SAME AS ABOVE                                                                                        
+0                                                                                                                                 

@@ -1,0 +1,116 @@
+
+    *
+
+    Assignment 9
+
+    *
+
+    *50 points *
+
+*Overview*
+
+In this assignment, you will write 2 macros. These will be tested with a
+driver program that will be provided.
+
+You may find it useful to examine the material on macros in the
+textbook, Chapter 9, or on various web pages.
+
+Document your macros completely.
+
+------------------------------------------------------------------------
+
+*Macros*
+
+The first macro is called STRCPY. Its purpose is to make a copy of a
+C-style string.
+
+A C-style string is the type of character string used in the C language.
+It is stored as a sequence of consecutive bytes and ends with a byte
+containing X'00'.
+
+STRCPY has two symbolic parameters:
+
+  * &SOURCE is the address of a C-style string of some length.
+
+  * &DEST is the address to which we want to copy the string. 
+
+Each of these addresses may be a label or a D(B) expression.
+
+It is the responsibility of the user to ensure that the string is
+terminated properly with X'00' and that the destination is large enough
+to hold the value.
+
+The STRCPY macro should verify that each of its mandatory symbolic
+parameters is present. If a parameter is missing, the macro should print
+an informative error message using MNOTE and then MEXIT.
+
+The STRCPY macro should not change the value of any of its parameters.
+
+The simplest way to implement STRCPY is to copy one byte at a time in a
+loop until the value X'00' is found. That value should also be copied.
+
+The second macro is called _SEARCH_. Its purpose is to make it easier to
+use TRT. to search a character variable.
+
+SEARCH has four symbolic parameters, all positional:
+
+  * &STR is the label of a character value to be searched.
+
+  * &LEN is the length of the character variable.
+
+  * &TABLE is the label of a 256-byte space we will use to create a
+    search table.
+
+  * &LIST is a sublist in which each item is an immediate byte. 
+
+The SEARCH macro should verify that each of its mandatory symbolic
+parameters is present. If a parameter is missing, the macro should print
+an informative error message using MNOTE and then MEXIT. If &LIST is an
+empty list (as in '()'), use an MNOTE to announce this fact and do
+nothing else.
+
+If &LIST is not empty, the SEARCH macro will do the following:
+
+  * Initialize all of &TABLE to X'00'.
+  * For each value in &LIST, change the corresponding entry in &TABLE to
+    X'FF'.
+  * Use TRT to search &STR with the search table &TABLE. 
+
+The SEARCH macro should not change any register values except for
+registers 1 and 2, which are affected by TRT. If &LIST is empty,
+registers 1 and 2 should also be unchanged.
+
+The SEARCH macro will set the condition code (if &LIST is empty).
+
+You will probably need to use a local arithmetic variable and the length
+attribute. You will probably find MVI useful.
+
+Notice that the values of &STR and &TABLE may not be D(B) addresses.
+This is just a convenience. We could manage with D(B) addresses.
+
+------------------------------------------------------------------------
+
+*Job Control Language*
+
+Use the following Job Control Language (JCL) to execute Assignment 9 The
+fields described in lower case are the same as described in Chapter 2 of
+your _Notes and Examples_ book. This JCL combines your macros with the
+driver program.
+
+The driver program is a _complete_ program. It begins with CSECT and
+ends with END. Do not supply _anything_ other than your two macros.
+
+//jobname JOB ,'your name',MSGCLASS=H
+//STEP1   EXEC  PGM=ASSIST,PARM='MACRO=F'
+//STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT  DD  SYSOUT=*
+//SYSIN     DD  * 
+  Your Macros go here.  Each Macro must begin with 
+  MACRO and a Prototype statement.  Your model
+  statements follow and the Macro ends with MEND.  
+  (You should remove these four lines.)
+//          DD DSN=KC02314.SPRING18.CSCI360.HW9.DRIVER,DISP=SHR
+//FT05F001  DD DUMMY
+//FT06F001  DD SYSOUT=*
+//
+

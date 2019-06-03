@@ -1,0 +1,363 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010017
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+***********************************************************             00060011
+* PROGRAM: ASSIGNMENT 8                                                 00060113
+* PROGRAMMER: SPENCER YODER                                             00060211
+*                                                                       00060311
+* NAME: MAIN                                                            00060411
+*                                                                       00060511
+* FUNCTION:                                                             00060611
+*   CALLS THE BUILD FUNCTION TO ADD ALL THE CARDS INTO THE              00060711
+*   TABLE. IT THEN CALLS THE PRINT FUNCTION TO PRINT ALL                00060811
+*   THE ENTRIES IN THE TABLE.                                           00060911
+*                                                                       00061011
+* REGUSTORS USED:                                                       00061111
+*   1  PRAMATER LIST                                                    00061211
+*   14 ADDRESS TO NEXT INSTRUCTION                                      00061311
+*   15 ADDRESS TO THE ROUTING                                           00061411
+***********************************************************             00061511
+MAIN     CSECT                                                          00061600
+         STM   14,12,12(13)             ENTRY LINKAGE                   00061700
+         LR    12,15                                                    00061800
+         USING MAIN,12                                                  00061900
+         LA    14,MSAVE                                                 00062000
+         ST    13,4(0,14)                                               00062100
+         ST    14,8(0,13)                                               00062200
+         LR    13,14                                                    00062300
+*        *                                                              00062400
+         LA    1,BPARM                  LOAD THE PARM LIST              00062511
+         L     15,=V(BUILD)             SAVE BUILD INTO REG15           00062600
+         BALR  14,15                    GOTO BUILD                      00062700
+*        *                                                              00062800
+         XDUMP TABLE,EOT-TABLE                                          00062914
+*        *                                                              00063013
+         LA    1,PPARM1                 LOAD THE PARM LIST              00063120
+         L     15,=V(PRINT)             SAVE PRINT INTO REG15           00063220
+         BALR  14,15                    GOTO PRINT                      00063324
+*        *                                                              00063424
+         LA    1,BPARM                  LOAD THE PARM LIST              00063524
+         L     15,=V(SORT)              SAVE SORT INTO REG15            00063624
+         BALR  14,15                    GOTO SORT                       00063724
+*        *                                                              00063924
+         LA    1,PPARM1                 LOAD THE PARM LIST              00064024
+         L     15,=V(PRINT)             SAVE PRINT INTO REG15           00064124
+         BALR  14,15                    GOTO PRINT                      00064224
+*        *                                                              00064324
+         L     13,4(0,13)               EXIT LINKAGE                    00064400
+         LM    14,12,12(13)                                             00064500
+         BR    14                                                       00064600
+         LTORG                                                          00064700
+***MAIN VARABLES*******************************************             00064811
+MSAVE    DS    18F                      MAIN SAVE AREA                  00064900
+***PARM VARABLE********************************************             00065011
+         ORG MAIN+((*-MAIN+15)/16)*16   SET ON THE 16 BIT BOUNDRY       00065124
+TABLE    DS    19CL16                   MAIN TABLE SAVE AREA            00066024
+EOT      DC    A(TABLE)                 EOT POINTER                     00067006
+HEADING1 DC    C'1'                     UNSTORED HEADING                00067124
+         DC    CL23' '                                                  00067220
+         DC    CL26'Players in On-Line Bowling'                         00067313
+HEADING2 DC    C'1'                     SORTED HEADING                  00067424
+         DC    CL21' '                                                  00067520
+         DC    CL30'Players In Order by High Score'                     00067613
+BPARM    DC    A(TABLE,EOT)             BUILD PARMS LIST                00067711
+PPARM1   DC    A(TABLE,EOT,HEADING1)    PRINT PARMS LIST-UNSORTED       00067824
+PPARM2   DC    A(TABLE,EOT,HEADING2)    PRINT PARMS LIST-SORTED         00067924
+***********************************************************             00069411
+* NAME: BUILD                                                           00069511
+*                                                                       00069611
+* FUNCTION:                                                             00069711
+*   READS ALL THE CARDS AND STORES THEM INTO A TABLE. IT                00069811
+*   WILL CONVERT THE TEXT INTO THE CORRECT FORMAT BEFORE                00069911
+*   SAVEING IT.                                                         00070011
+*                                                                       00070111
+* REGISTORS USED:                                                       00070211
+*   2  ADDRESS OF THE TABLE                                             00070613
+*   3  ADDRESS OF THE FIRST EMPTY ENTRY                                 00070713
+*   4  ADDRESS OF THE BUFFER                                            00070813
+*   5  TEMP FOR CONVERT TO BINARY/STCM                                  00070923
+***********************************************************             00071011
+BUILD    CSECT                                                          00071100
+         STM   14,12,12(13)             ENTRY LINKAGE                   00071200
+         LR    12,15                                                    00071300
+         USING BUILD,12                                                 00071400
+         LA    14,BSAVE                                                 00071500
+         ST    13,4(0,14)                                               00071600
+         ST    14,8(0,13)                                               00071700
+         LR    13,14                                                    00071800
+*        *                                                              00071900
+         LM    2,3,0(1)                 LOAD PARM LIST                  00072024
+         LA    4,BUFFER                 LAAD THE INPUT LINE BUFFER      00072124
+         USING $ENTRY,2                 USE THE TABLE DSECT             00072224
+         USING #INPUT,4                 USE THE INPUT DSECT             00072324
+LOOP5    XREAD BUFFER,80                READ CARD                       00072424
+         BC    B'0100',END5             IF NO MORE CARD ARE LEFT        00073024
+*ID NUM                                                                 00073113
+         PACK  TEMPD,#IDNUM             PACK THE ID NUM                 00073224
+         CVB   5,TEMPD                  CONVERT TO BINARY               00073324
+         ST    5,$ID                    SAVE IN TABLE                   00073424
+*USERNAME                                                               00073814
+         MVC   TEMPC1,#NAME             SAVE FIRST HALF OF NAME         00073924
+         MVC   TEMPC2,#NAME+4           SAVE SECOND HALF OF NAME        00074024
+         XC    TEMPC1,$ID               ENCRYPT THE NAME 1/2            00074124
+         XC    TEMPC2,$ID               ENCRYPT THE NAME 2/2            00074224
+         MVC   $NAME,TEMPC1             SAVE FIRST HALF IN TABLE        00074324
+         MVC   $NAME+4,TEMPC2           SAVE SECOND HALF IN TABLE       00074424
+*SCORE                                                                  00074514
+         PACK  TEMPP,#SCORE             PACK THE SCORE                  00074624
+         ZAP   $SCORE,TEMPP             MOVE TO TABLE                   00074724
+*DATE YEAR                                                              00074821
+         PACK  TEMPD,#DATE(4)           PACK THE YEAR                   00074924
+         SP    TEMPD,=P'1990'           SUB 1990                        00075024
+         CVB   5,TEMPD                  CONVER TO BINARY                00075124
+         STCM  5,B'1111',DATE1          STORE ALL IN DATE 1             00075424
+*DATE MONTH                                                             00075621
+         PACK  TEMPD,#DATE+4(2)         PACK THE MONTH                  00075724
+         CVB   5,TEMPD                  CONVERT TO BINARY               00075824
+         SLL   5,28                     SHIF 28 BITS LEFT               00075924
+         STCM  5,B'1111',DATE2          SAVE INTO DATE 2                00076124
+*DATE DAY                                                               00076221
+         PACK  TEMPD,#DATE+6(2)         PACK THE DAY                    00076324
+         CVB   5,TEMPD                  CONVERT TO BINARY               00076424
+         SLL   5,27                     SHIF 27 BITS LEFT               00076624
+         STCM  5,B'1111',DATE3          SAVE INTO DATE 3                00076724
+*SAVE DATE                                                              00076821
+         ICM   5,B'1111',DATE1          MOVE YEAR INTO REG5             00077024
+         SLL   5,8                      SHIFT IT 8 TO THE LEFT          00077124
+         ICM   5,B'0001',DATE2          MOVE MONTH INTO REG5            00077324
+         SLL   5,4                      MAKE ROOM FOR DAY               00077424
+         ICM   5,B'0001',DATE3          MOVE IN THE DAY                 00077624
+         SRL   5,3                      GET RID OF THE EXTRA ZERO       00077724
+         STCM  5,B'0011',$DATE          SAVE IN TABLE                   00077824
+*MOVE TABLE                                                             00078014
+         A     2,=F'16'                 MOVE TABLE PTR 16 BYTES         00078124
+         B     LOOP5                    GO BACK TO LOOP                 00078224
+END5     DS    0H                                                       00078324
+         L     3,0(0,2)                                                 00079014
+*        *                              EXIT LINKAGE                    00080611
+         L     13,4(0,13)               LOAD THE CALLING SAVE AREA      00080711
+         LM    14,12,12(13)             REALL THE REGISTORS             00080811
+         BR    14                       GO HOME                         00080911
+         LTORG                                                          00081000
+************************************************************            00081112
+BSAVE    DS    18F                      BUILD SAVE AREA                 00081211
+BUFFER   DC    80C' '                   INPUT BUFFER                    00081314
+TEMPD    DS    D                        TEMP DWORD FOR CVB              00081414
+TEMPP    DS    PL2                      TEMP PACKED FOR SOCRE           00081514
+TEMPP2   DS    PL3                                                      00081615
+TEMPC1   DS    CL4                      TEMP CHAR FOR USERNAME FIRST    00081714
+TEMPC2   DS    CL4                      TEMP CHAR FOR USERNAME SECOND   00081824
+TEMPB    DS    XL4                      TMEP 2 BYTES FOR DATE           00081918
+DATE1    DS    F                        TEMP FOR THE YEAR               00082024
+DATE2    DS    F                        TEMP FOR THE MONTH              00083024
+DATE3    DS    F                        TEMP FOR THE DAY                00084024
+************************************************************            00087812
+* NAME: PRINT                                                           00087912
+*                                                                       00088012
+* FUNCTION:                                                             00088112
+*   USED TO PRINT ALL THE CONTENTS OF THE TABLE. IT ALSO                00088212
+*   KEEPS TRACK OF THE LINE COUNTER AND THE TOTAL PAGES.                00088312
+*                                                                       00088412
+* REGISTORES USED:                                                      00088512
+*   2   ADDRESS OF TABLE                                                00088601
+*   3   ADDRESS OF EOT                                                  00088701
+*   4   ADDRESS OF HEADER                                               00088801
+*   5   ADDRESS OF THE LINE                                             00088901
+*   7   CONVERT TO DECIMAL                                              00089112
+*   8   TOTAL PAGE COUNTER                                              00089209
+************************************************************            00089312
+PRINT    CSECT                                                          00089400
+         STM   14,12,12(13)             ENTRY LINKAGE                   00089500
+         LR    12,15                                                    00089600
+         USING PRINT,12                                                 00089700
+         LA    14,PSAVE                                                 00089800
+         ST    13,4(0,14)                                               00089900
+         ST    14,8(0,13)                                               00090000
+         LR    13,14                                                    00090100
+*        *                                                              00095400
+         LM    2,4,0(1)                LOAD THE PARM LIST               00095524
+         LA    5,OUTLINE               LOAD THE OUTPUT LINE             00095624
+         USING $ENTRY,2                USE DSECT FOR TABLE              00095724
+         USING #OUTPUT,5               USE DSECT FOR OUTPUT LINE        00095824
+         MVI   OUTLINE,C'0'            PRINT EMPTY LINE                 00096024
+         XPRNT OUTLINE,1                                                00096124
+         MVC   OUTLINE,0(4)            COPY HEADING                     00096524
+         XPRNT OUTLINE,52              PRINT HEADING                    00097024
+         XPRNT COLUMNS,74              PRING THE COLUMNS NAMES          00097324
+TOP      DS    0H                                                       00097419
+         CR    2,3                     CHECK TO SEE END OF TABLE        00097524
+         BE    EXIT                    IF SO EXIT                       00097624
+         MVI   OUTLINE+1,C' '          CLEAR 2ND CHAR                   00097724
+         MVC   OUTLINE+2(131),OUTLINE+1 SET LINE TO BLANK               00097819
+         MVI   OUTLINE,C'0'            SET CCC                          00097919
+*ID NUM                                                                 00098019
+         L     7,$ID                   LOAD ID INTO REG 7               00098224
+         CVD   7,DWOUT                 CHANGE IT TO DECIMAL             00098324
+         MVC   #ID,=X'4021202020202020202020' SET PATTERN               00098424
+         ED    #ID,DWOUT+3             MOVE IT TO LINE                  00098524
+         CLC   #ID+1(0),C' '           CHECK TO SEE IF ZERO IS GONE     00098625
+         BNE   NOPE                    ELSE SKIP                        00098725
+         MVI   #ID+1,C'0'              ADD IN THE ZERO                  00098925
+NOPE     DS    0H                      SKIP                             00099025
+*USERNAME                                                               00099120
+         MVC   COUT1,$NAME             MOVE FIRST HALF TO TEMP          00099224
+         MVC   COUT2,$NAME+4           MOVE SECOND HALF                 00099324
+         XC    COUT1,$ID               DECRYPT FIRST HALF               00099424
+         XC    COUT2,$ID               DECRYPT SECOND HALF              00099524
+         MVC   #UNAME,COUT1            MOVE TO OUT LINE                 00099624
+         MVC   #UNAME+4,COUT2          MOVE TO OUT LINE                 00099724
+         MVI   #UNAME+8,C' '           CLEAR OUT LAST F5                00099826
+         MVI   #UNAME+9,C' '           CLEAR OUT EXTRA F5               00099926
+*SCORE                                                                  00100020
+         MVC   #HSCORE,=X'40212020'    SET PATTERN                      00100124
+         ED    #HSCORE,$SCORE          COPY TO LINE                     00100224
+         CP    $SCORE,=P'99'                                            00100325
+         BH    NEXT                                                     00100425
+         MVI   #HSCORE+1,C'0'                                           00100525
+NEXT     DS    0H                                                       00100625
+*DATE YEAR                                                              00100723
+         ICM   7,B'1111',$DATE         SAVE DATE IN REG7                00100824
+         SRL   7,25                    CLEAR OUT MONTH AND DAY          00100924
+         CVD   7,DWOUT                 CONVERT TO DECIMAL               00101024
+         AP    DWOUT,=P'1990'          ADD 1990                         00101124
+         MVC   CDATE1,DWOUT+5          MOVE TO TEMP                     00101224
+*DATE MONTH                                                             00101323
+         ICM   7,B'1111',$DATE         SAVE DATE IN REG7                00101424
+         SLL   7,7                     CLEAR OUT YEAR                   00101524
+         SRL   7,28                    CLEAR OUT DAY                    00101624
+         CVD   7,DWOUT                 CONVERT TO DECMIAL               00101724
+         MVC   CDATE2,DWOUT+6          SAVE IN TEMP                     00101824
+*DATE DAY                                                               00101924
+         ICM   7,B'1111',$DATE         SAVE DATE IN REG7                00102024
+         SLL   7,11                    CLEAR OUT YEAR AND MONTH         00102124
+         SRL   7,27                    MOVE ALL THE WAY TO RIGHT        00102224
+         CVD   7,DWOUT                 CONVERT TO DECIMAL               00102324
+         MVC   CDATE3,DWOUT+6          SAVE IN TEMP                     00102424
+*BUILD YEAR                                                             00102524
+         MVC   TEMPDATE,CDATE1         ADD YEAR TO DATE TEMP            00102624
+         MVC   TEMPDATE+5,CDATE3       ADD MONTH AND DAY                00102724
+         MVC   #HDATE,=X'612120202020212020212020'  EDIT PATTERN        00102824
+         ED    #HDATE,TEMPDATE         COPY TO LINE                     00102924
+         MVI   #HDATE,X'40'            CLEAR OUT FIRST CHAR             00103024
+         MVI   #HDATE+1,X'40'          CLEAR SECOND CHAR                00103124
+         MVI   #HDATE+12,X'40'         DO YOU EVEN READ THE COMMENTS?   00103224
+         MVI   #HDATE+13,X'40'         CLEAR 13 CHAR                    00103324
+*PRINT LINE                                                             00103424
+         XPRNT OUTLINE,132             PRINT THE LINE                   00103524
+         A     2,=F'16'                MOVE TABLE PTR 16                00103624
+         B     TOP                     KEEP PRITING MORE LINES          00103724
+EXIT     DS    0H                                                       00103820
+*        *                                                              00103913
+         L     13,4(0,13)               EXIT LINKAGE                    00104000
+         LM    14,12,12(13)                                             00104100
+         BR    14                                                       00104200
+         LTORG                                                          00104300
+************************************************************            00104412
+PSAVE    DS    18F                      PRINT SAVE AREA                 00104512
+OUTLINE  DC    CL133' '                 OUTPUT LINE                     00104624
+COLUMNS  DC    C'-'                     COLUMNS HEADING                 00104724
+         DC    CL9'User Name'                                           00104819
+         DC    CL14' '                                                  00104919
+         DC    CL9'ID Number'                                           00105019
+         DC    CL9' '                                                   00105119
+         DC    CL15'High Score Date'                                    00105219
+         DC    CL7' '                                                   00105319
+         DC    CL10'High Score'                                         00105419
+DWOUT    DS    D                        DOUBLE WORD FOR CVB             00105524
+COUT1    DS    CL4                      FIRST HALF OF NAME              00105624
+COUT2    DS    CL4                      SECOND HALF OF NAME             00105724
+POUT     DS    PL2                      TEMP FOR SCORE                  00105824
+CDATE1   DS    PL3                      YEAR                            00105924
+CDATE2   DS    PL2                      MONTH                           00106024
+CDATE3   DS    PL2                      DAY                             00106124
+TEMPDATE DS    CL12                     WHOLE TEMP DATE                 00106224
+TEST     DS    CL50                                                     00106324
+************************************************************            00106412
+* NAME: SORT                                                            00106524
+*                                                                       00106624
+* FUNCTION:                                                             00106724
+*   SORTS THE TABLE BASED ON THE HIGH SCORE. IT WILL SORT               00106824
+*   USING SELECTION SORT FROM HIGH TO LOW.                              00106924
+*                                                                       00107024
+* REGISTORS USED:                                                       00107124
+*   1  PARM LIST                                                        00107224
+*   2  ADDRESS OF TABLE                                                 00107324
+*   3  ADDRESS OF END OF TABLE                                          00107424
+*   4  INDEX I                                                          00107524
+*   5  INDEX J                                                          00107624
+*   6  INDEX SMALL                                                      00107724
+*   7  VALUE OF TABLE[J]                                                00107824
+*   8  VALUE OF TABLE[SMALL]                                            00107924
+*   9  VALUE OF TABLE[I]                                                00108024
+************************************************************            00108124
+SORT     CSECT                                                          00108224
+         STM   14,12,12(13)             ENTRY LINKAGE                   00108324
+         LR    12,15                                                    00108424
+         USING SORT,12                                                  00108524
+         LA    14,SSAVE                                                 00108624
+         ST    13,4(0,14)                                               00108724
+         ST    14,8(0,13)                                               00108824
+         LR    13,14                                                    00108924
+*        *                                                              00109024
+         LM    2,3,0(1)                 LOAD PARM LIST                  00109124
+         LR    4,2                      LOAD THE TABLE ADDRESS IN 4     00109224
+         USING $ENTRY,4                 USE THE TABLE DSECT             00109324
+LOOP1    CR    4,3                      CHECK TO SEE END OF TABLE       00109424
+         BNL   END1                     IF SO EXIT                      00109524
+         LR    6,4                      SMALL = I                       00109624
+         LA    5,16(0,4)                J=I+1                           00109724
+LOOP2    CR    5,3                      CHECK TO SEE END OF TABLE       00109824
+         BNL   END2                     EXIT J LOOP                     00109924
+         L     7,8(0,5)                 7=TABLE[J]                      00110024
+         L     8,8(0,6)                 8=TABLE[SMALL]                  00110124
+         CR    7,8                      COMPARE                         00110224
+         BNH   SKIP                     IF BIGGER SKIP                  00110324
+         LR    6,5                      UPDATE SMALLER INDEX            00110424
+SKIP     LA    5,16(0,5)                J++                             00110524
+         B     LOOP2                    GO BACK TO J LOOP               00110624
+END2     L     9,0(0,4)                 LOAD TABLE[I] VALUE             00110724
+         MVC   SWAP1,0(6)               SAVE SMALL VALUE                00110824
+         MVC   0(16,6),0(4)             MOVE SMALLER INTO SMALL         00110924
+         MVC   0(16,4),SWAP1            RESTORE SMALL                   00111024
+         LA    4,16(0,4)                I++                             00111124
+         B     LOOP1                    GO TO I LOOP                    00111224
+END1     DS    0H                                                       00111324
+*        *                                                              00111424
+         L     13,4(0,13)               EXIT LINKAGE                    00111524
+         LM    14,12,12(13)                                             00111624
+         BR    14                                                       00111724
+         LTORG                                                          00111824
+************************************************************            00111924
+SSAVE    DS    18F                      SORT SAVE AREA                  00112024
+SWAP1    DS    CL16                     TEMP TO STORE 1 ENTRY           00112124
+***DUMMIE SECTIONS******************************************            00112224
+$ENTRY   DSECT                          DSECT FOR THE TABLE             00112312
+$NAME    DS    XL8                                                      00112413
+$SCORE   DS    PL2                                                      00112513
+$DATE    DS    PL2                                                      00112613
+$ID      DS    PL4                                                      00112713
+************************************************************            00112812
+#INPUT   DSECT                                                          00112913
+#NAME    DS    CL8                                                      00113013
+         DS    CL2                                                      00113113
+#IDNUM   DS    CL9                                                      00113214
+         DS    CL2                                                      00113313
+#DATE    DS    CL8                                                      00113413
+         DS    CL2                                                      00113513
+#SCORE   DS    CL3                                                      00113613
+************************************************************            00113713
+#OUTPUT  DSECT                          DSECT FOR THE OUTPUT LINE       00113812
+         DS    C                                                        00113901
+#UNAME   DS    CL8                                                      00114013
+         DS    CL14                                                     00114113
+#ID      DS    CL10                                                     00114220
+         DS    CL9                                                      00114324
+#HDATE   DS    CL14                                                     00114424
+         DS    CL10                                                     00114524
+#HSCORE  DS    CL4                                                      00114620
+         END   MAIN                                                     00114700
+/*                                                                      00114800
+//FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW8DATA,DISP=SHR           00115017
+//                                                                      00120000

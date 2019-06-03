@@ -1,0 +1,82 @@
+
+    *Program 9 Output*
+
+Here is correct output for Programming Assignment 9. The addresses in
+your XDUMPs will probably be different.
+
+Bear in mind that the macros should also produce MNOTE messages in the
+program listing.
+
+1Results of testing macros                                                                                                           
+-First we test the STRCPY macro.                                                                                                     
+ In printing strings, the zero byte is                                                                                               
+ represented by *.                                                                                                                   
+-1st test:  a string of length 0.                                                                                                    
+0Length of source:      0                                                                                                            
+0Length of new copy:    0                                                                                                            
+0Value of source:    *                                                                                                               
+0Value of new copy:  *                                                                                                               
+-2nd test:  a string of all 0s.                                                                                                      
+0Length of source:      0                                                                                                            
+0Length of new copy:    0                                                                                                            
+0Value of source:    ***************                                                                                                 
+0Value of new copy:  *                                                                                                               
+-3rd test:  a string of alternating 0s.                                                                                              
+0Length of source:      1                                                                                                            
+0Length of new copy:    1                                                                                                            
+0Value of source:    A*B*C*                                                                                                          
+0Value of new copy:  A*                                                                                                              
+-4th test:  an ordinary string.                                                                                                      
+0Length of source:     11                                                                                                            
+0Length of new copy:   11                                                                                                            
+0Value of source:    Test 4 data*                                                                                                    
+0Value of new copy:  Test 4 data*                                                                                                    
+0                                                                                                                                    
+-Next we test the ____ macro.                                                                                                        
+0                                                                                                                                    
+-Next we test the SEARCH macro.                                                                                                      
+0Before the call, registers 1 and 2 contain 0                                                                                        
+1Test A should find a character                                                                                                      
+0Found the character                                                                                                                 
+0Register 1 = 00000945 and Register 2 = 000000FF                                                                                     
+0BEGIN XSNAP - CALL     1 AT D0000324 USER STORAGE                                                                                   
+0                             CORE ADDRESSES SPECIFIED-     000960 TO 000A60                                                         
+ 000960   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+   LINES    000980-000980    SAME AS ABOVE                                                                                           
+ 0009A0   FF000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+ 0009C0   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+   LINES    0009E0-000A40    SAME AS ABOVE                                                                                           
+0                                                                                                                                    
+0Test B should find a character at the end                                                                                           
+0Found a character at the end                                                                                                        
+0Register 1 = 00000949 and Register 2 = 000000FF                                                                                     
+0BEGIN XSNAP - CALL     2 AT E0000386 USER STORAGE                                                                                   
+0                             CORE ADDRESSES SPECIFIED-     000960 TO 000A60                                                         
+ 000960   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+   LINES    000980-000A00    SAME AS ABOVE                                                                                           
+ 000A20   00FF0000 00000000 00000000 00000000    00000000 FF000000 00000000 00000000   *................................*            
+ 000A40   00000000 00000000 00FF0000 00000000    00000000 00000000 00000000 00000000   *................................*            
+0                                                                                                                                    
+0Test C should not find a character                                                                                                  
+0No character was found                                                                                                              
+0Register 1 = 00000000 and Register 2 = 00000000                                                                                     
+0BEGIN XSNAP - CALL     3 AT C00003EC USER STORAGE                                                                                   
+0                             CORE ADDRESSES SPECIFIED-     000960 TO 000A60                                                         
+ 000960   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+   LINES    000980-000980    SAME AS ABOVE                                                                                           
+ 0009A0   FF000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+ 0009C0   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+   LINES    0009E0-000A00    SAME AS ABOVE                                                                                           
+ 000A20   00000000 FF000000 00000000 00000000    00000000 00FF0000 00000000 00000000   *................................*            
+ 000A40   00000000 00000000 00000000 00000000    00000000 00000000 FF000000 00000000   *................................*            
+0                                                                                                                                    
+0Test D should find a character                                                                                                      
+0Found the character                                                                                                                 
+0Register 1 = 00000944 and Register 2 = 000000FF                                                                                     
+0BEGIN XSNAP - CALL     4 AT D000045E USER STORAGE                                                                                   
+0                             CORE ADDRESSES SPECIFIED-     000960 TO 000A60                                                         
+ 000960   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*            
+   LINES    000980-000A20    SAME AS ABOVE                                                                                           
+1000A40   00000000 00000000 00000000 00000000    00FFFFFF FFFFFFFF 00000000 00000000   *................................*            
+0
+

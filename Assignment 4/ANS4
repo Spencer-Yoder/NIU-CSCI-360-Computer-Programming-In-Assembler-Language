@@ -1,0 +1,271 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010000
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+********************************************************                00060000
+* PROGRAM: ASSIGNMENT 4                                                 00080012
+* PROGRAMMER: SPENCER YODER                                             00090000
+*                                                                       00100000
+* NAME: MAIN                                                            00100112
+*                                                                       00100212
+* FUNCTION:                                                             00101012
+*   IT WILL READ AN 'N' NUMBER OF CARDS AND SAVE THEM                   00102012
+*   INTO A TABLE. IT WILL THEN PRINT ALL THE NUMBER ON                  00103012
+*   A LINE, WITH 6 NUBMER ON A ROW. IT WILL THEN PRINT                  00104012
+*   ALL THE ODD NUMBER ON A LINE, ONLY 5 PER ROW./                      00105012
+*                                                                       00106012
+* REGISTERS USED:                                                       00110012
+*   1  PRAMATOR LIST                                                    00111012
+*  11  BAL RETURN REGISTOR                                              00119112
+********************************************************                00120000
+MAIN     CSECT                                                          00130000
+         USING MAIN,15                                                  00140000
+         LA    R1,PARMS              LOAD THE PRAMATER LIST             00150012
+         BAL   R11,BUILD             CALL BUILD                         00160012
+         BAL   R11,PRINT             CALL PRINT                         00161012
+         BAL   R11,ODDS              CALL PRINT ODD                     00162012
+         BR    14                    EXIT                               00163012
+         LTORG                                                          00163101
+********************************************************                00163201
+* NAME: BUILD                                                           00163312
+*                                                                       00163412
+* FUNCTION:                                                             00163512
+*   THIS WILL READ ANY AMOUNT OF CARDS AND SAVE THE FIRST               00163612
+*   65 NUMBER INTO A TABLE.                                             00163712
+*                                                                       00163812
+* PRAMATERS:                                                            00163912
+*   IT WILL TAKE IN A PRAMATER LIST OF THE ADDRESS TO THE               00164012
+*   TABLE AND THE END OF TABLE VALUE.                                   00164112
+*                                                                       00164212
+* PESEUDOCODE:                                                          00164312
+*   STORE ALL REGISTORS                                                 00164412
+*   INITIALIZE THE COUNTER AND LOAD PRAM LIST                           00164512
+*   READ FIRST CARD                                                     00164612
+*      WHILE STILL CARD TO READ                                         00164712
+*         IF THERE IS NOT MORE THAN 65 ALREADY                          00164812
+*            WHILE NUMBER ON LINE                                       00164912
+*              READ THE FISRT NUBMER ON LINE                            00165012
+*              IF NOT END OF LINE                                       00165112
+*               SAVE NUMBER TO TABLE                                    00165212
+*               ADD 1 TO THE TOTAL NUBMER IN TABLE                      00165312
+*               MOVE TABLE POINTER BY FULL WORD                         00165412
+*               READ NEXT NUMBER ON LINE                                00165512
+*              ELSE                                                     00165612
+*               NEXT LINE                                               00165712
+*            END WHILE                                                  00165812
+*        ELSE                                                           00165912
+*           STOP INPUTING NUMBER TO TABLE                               00166012
+*      END WHILE                                                        00166112
+*                                                                       00166212
+* REGISTORS USED:                                                       00166312
+*   1  XDECI ADDRESS TO NEXT NUBMER                                     00166412
+*   2  ADDRESS TO TABLE                                                 00166512
+*   3  ADDREST TO END OF TABLE                                          00166612
+*   4  SAVED VALUE FROM XDECI                                           00166712
+*  13  COUTNER                                                          00166812
+************************************************************            00166912
+BUILD    DS    0H                                                       00167001
+         STM   0,15,RSAVE            SAVE ALL REGISTORS                 00167101
+         LM    2,3,0(1)              LOAD THE PARM LIST                 00167209
+         SR    R13,R13               ZERO COUNTER                       00167301
+LLOOP    XREAD BUFFER,80             LINE LOOP/READ LINE                00167401
+         BC    B'0100',LEND          IF END OF FILE, EXIT               00167501
+         C     R13,=F'65'            COMPARE COUNTER TO 65              00167605
+         BC    B'1010',LEND          IF = TO 65, STOP                   00167709
+         XDECI R4,BUFFER             READ FIRST NUMBER                  00167801
+         BC    B'0001',LLOOP         IF NO NUMBER, NEXT LINE            00167909
+         A     R13,=F'1'             ADD 1 TO COUNTER                   00168001
+         ST    R4,0(2)             SAVE NUMBER IN TABLE                 00168109
+         A     R2,=F'4'              MOVE THE TABLE PRT                 00168209
+CLOOP    XDECI R4,0(R1)            IF MORE NUMBER IN LINE               00168309
+         BC    B'0001',LLOOP         GO TO NEXT LINE                    00168409
+         C     R13,=F'65'            CHECK TOTAL NUMBER IN TABL         00168509
+         BC    B'1010',LEND                                             00168605
+         A     R13,=F'1'             ADD 1 TO COUNTER                   00168701
+         ST    R4,0(2)             STORE INTO THE TABLE                 00168809
+         A     R2,=F'4'              MOVE THE TABLE PTR                 00168909
+         B     CLOOP                 KEEP GOING ON THE LINE             00169001
+LEND     ST    2,0(3)              MOVE THE 'EOT'                       00169109
+         LM    0,15,RSAVE            LOAD ALL REGISTORS                 00169201
+         BR    11                    RETURN                             00169306
+***VARABLES FOR BUILD***********************************                00169412
+BUFFER   DS    80C                                                      00169512
+         DC    C'*'                                                     00169612
+********************************************************                00169701
+* NAME: PRINT                                                           00169812
+*                                                                       00169912
+* FUNCTION:                                                             00170012
+*    THIS WILL PRINT OUT ALL THE CONTENTS OF THE TABLE                  00170112
+*    ONTO A LINE WITH 6 NUMBER PER LINE.                                00170212
+*                                                                       00170312
+* INPUT:                                                                00170412
+*   PRAMATER LIST OF TABLE AND END OF TABLE ADDRESS                     00170512
+*                                                                       00170612
+* PSEUDOCODE:                                                           00170712
+*   STORE ALL REGISTORS                                                 00170812
+*   PRINT THE HEDDER                                                    00170912
+*   LOAD ADDRESS OF LIST+1                                              00171012
+*   LOAD THE PARM LIST                                                  00171112
+*   SET COUNTER                                                         00171212
+*   WHILE NOT END OF TABLE                                              00171312
+*      IF LINE SIZE IS 6                                                00171412
+*        PRINT LINE                                                     00171512
+*        RESET LINE COUNTER                                             00171612
+*      ELSE                                                             00171712
+*        PRINT NUMBER ON LINE                                           00171812
+*        ADVANCE LINE BY 12 BYTES                                       00171912
+*        ADVANCE TABLE                                                  00172012
+*        COUNTER++                                                      00172112
+*   END WHILE                                                           00172212
+*   PRINT LINE, NO MATTER IF THERE IS 6                                 00172312
+*                                                                       00172412
+* REGISTORS USED:                                                       00172512
+*   2  ADDRESS OF TABLE                                                 00172712
+*   3  END OF TABLE ADDRESS                                             00172812
+*   4  ADDRESS OF THE LINE                                              00172912
+*   7 VALUE IN THE TABLE AT THE ADDRESS                                 00173012
+*  13  COUNTER                                                          00173112
+********************************************************                00173203
+PRINT    DS    0H                                                       00173301
+         STM   0,15,RSAVE            STORE ALL THE REG                  00173413
+         XPRNT HEDDER,132                                               00173512
+         XPRNT BLINE,85                                                 00173613
+         LA    R4,BLINE+1            ADDRESS OF THE LINE                00173702
+         LM    2,3,0(1)              LOAD PRAM LIST                     00173802
+         SR    R13,R13               ZERO COUNTER                       00173902
+LOOP     CR    R3,R2                 LOOP UNITL END OF TABLE            00174005
+         BC    B'1100',ENDLOOP                                          00174105
+         C     R13,=F'6'             CHECK LINE SIZE                    00174210
+         BC    B'0100',KEEPGOIN                                         00174302
+         XPRNT BLINE,85              PRINT LINE                         00174410
+         MVI   BLINE+1,C' '          BLANK THE LINE                     00174613
+         MVC   BLINE+2(83),BLINE+1                                      00174710
+         LA    R4,BLINE+1            LOAD LINE ADDRESS                  00174813
+         SR    R13,R13               RESET COUNTER                      00174905
+KEEPGOIN DS    0H                                                       00175003
+         L     R7,0(R2)              GET VALUE OF ADDRESS               00175111
+         XDECO R7,0(4)             PRINT TABLE TO LINE                  00175211
+         A     R4,=F'12'             ADVANCE LINE BY 12                 00175305
+         A     R2,=F'4'              MOVE TO NEXT TABLE POS             00175410
+         A     R13,=F'1'             ADD COUNTER                        00175504
+         B     LOOP                  GOTO LOOP                          00175704
+ENDLOOP  XPRNT BLINE,85              PRINT THE LAST LINE                00175813
+         MVI   BLINE+1,C' '          BLANK THE LINE                     00175913
+         MVC   BLINE+2(83),BLINE+1                                      00176013
+         LM    0,15,RSAVE            RELOAD REGITORS                    00176113
+         BR    11                    RETURN TO MAIN                     00176213
+********************************************************                00176312
+HEDDER   DC    C'1'                  ALL NUMBER HEDDER                  00176412
+         DC    CL34' '                                                  00176512
+         DC    CL15'LIST OF NUMBERS'                                    00176612
+         DC    CL82' '                                                  00176712
+********************************************************                00176812
+* NAME: ODDS                                                            00176912
+*                                                                       00177012
+* FUNCTION:                                                             00177112
+*    THIS WILL PRINT OUT ALL THE ODD NUB OF  THE TABLE                  00177212
+*    ONTO A LINE WITH 5 NUMBER PER LINE.                                00177312
+*                                                                       00177412
+* INPUT:                                                                00177512
+*   PRAMATER LIST OF TABLE AND END OF TABLE ADDRESS                     00177612
+*                                                                       00177712
+* PSEUDOCODE:                                                           00177812
+*   STORE ALL REGISTORS                                                 00177912
+*   PRINT THE HEDDER                                                    00178012
+*   LOAD ADDRESS OF LIST+1                                              00178112
+*   LOAD THE PARM LIST                                                  00178212
+*   SET COUNTER                                                         00178312
+*   WHILE NOT END OF TABLE                                              00178412
+*      IF LINE SIZE IS 5                                                00178512
+*        PRINT LINE                                                     00178612
+*        RESET LINE COUNTER                                             00178712
+*      ELSE                                                             00178812
+*        DIVIDE NUBMER BY 2                                             00178912
+*        SKIP IF REMANDER IS 0                                          00179012
+*        PRINT NUMBER ON LINE                                           00179112
+*        ADVANCE LINE BY 12 BYTES                                       00179212
+*        ADVANCE TABLE                                                  00179312
+*        COUNTER++                                                      00179412
+*   END WHILE                                                           00179512
+*   PRINT LINE, NO MATTER IF THERE IS 5                                 00179612
+*                                                                       00179712
+* REGISTORS USED:                                                       00179812
+*   2  ADDRESS OF TABLE                                                 00179912
+*   3  END OF TABLE ADDRESS                                             00180012
+*   4  ADDRESS OF THE LINE                                              00180112
+*   6  USE IN DIVIDEING                                                 00180212
+*   7 VALUE IN THE TABLE AT THE ADDRESS                                 00180312
+*  13  COUNTER                                                          00180412
+********************************************************                00180512
+ODDS     DS    0H                                                       00180601
+         STM   0,15,RSAVE                                               00180711
+         XPRNT OHEDDER,132           PRINT THE HEDDER                   00180811
+         XPRNT BLINE,85                                                 00180913
+         LA    R4,BLINE+1            ADDRESS OF THE LINE                00181011
+         LM    2,3,0(1)              LOAD PRAM LIST                     00181111
+         SR    R13,R13               ZERO COUNTER                       00181211
+LOOP2    CR    R3,R2                 LOOP UNITL END OF TABLE            00181311
+         BC    B'1100',ELOOP                                            00181411
+         C     R13,=F'5'             CHECK LINE SIZE                    00181511
+         BC    B'0100',KEEPGO                                           00181611
+         XPRNT BLINE,85              PRINT LINE                         00181711
+         MVI   BLINE+1,C' '          SET 2 CHAR TO BLANK                00181811
+         MVC   BLINE+2(83),BLINE+1   SET ALL OTHER TO SPACE             00181911
+         LA    R4,BLINE+1            RELOAD THE ADDRESS OF LINE         00182011
+         SR    R13,R13               RESET COUNTER                      00182111
+KEEPGO   DS    0H                                                       00182211
+         L     R7,0(R2)              GET VALUE OF ADDRESS               00182311
+         M     R6,=F'1'              SET NEG OR POS IN TABLE            00182413
+         D     R6,=F'2'              DIVIDE BY 2                        00182513
+         C     R6,=F'0'              CHECK TO SEE IF EVEN               00182613
+         BC    B'1000',EVEN                                             00182711
+         L     R7,0(R2)              RELOAD VALUE FROM TABLE            00182813
+         XDECO R7,0(4)               PRINT VALUE TO LINE                00182911
+         A     R4,=F'12'             ADVANCE LINE BY 12                 00183011
+         A     R13,=F'1'             ADD 1 TO THE COUNTER               00183111
+EVEN     DS    0H                                                       00183211
+         A     R2,=F'4'              MOVE TO NEXT TABLE POS             00183311
+         B     LOOP2                 GOTO LOOP2                         00183411
+ELOOP    XPRNT BLINE,85              PRINT THE LAST LINE                00183511
+         LM    0,15,RSAVE            RELAOD ALL REGISTORS               00183613
+         BR    11                    RETURN TO MAIN                     00183713
+***ODDS VARABLES****************************************                00183812
+OHEDDER  DC    C'1'                  ODD NUBMER HEDDER                  00183912
+         DC    CL26' '                                                  00184012
+         DC    CL19'LIST OF ODD NUMBERS'                                00184112
+         DC    CL87' '                                                  00184212
+********************************************************                00184312
+*                                                                       00184412
+*                                                                       00184512
+**VARABLES SHARED BETWEEN ALL ROUTINES******************                00184612
+TABLE    DS    65F                TABLE WITH 65 FULLWORD                00184712
+EOT      DS    F                  END OF TABLE PTR                      00184812
+********************************************************                00184901
+PARMS    DC    A(TABLE)           PRAMATER LIST                         00185012
+         DC    A(EOT)                                                   00185101
+********************************************************                00185201
+RSAVE    DS    16F                USED TO SAVE ALL REG                  00185312
+********************************************************                00185401
+BLINE    DC    C'0'               BLANK LINE FOR PRINTING..             00185512
+         DC    CL84' '                  ALL OF THE NUMBERS              00185612
+***REGISTORS EQUATES************************************                00185712
+R0   EQU    0                                                           00185812
+R1   EQU    1                                                           00185901
+R2   EQU    2                                                           00186001
+R3   EQU    3                                                           00186101
+R4   EQU    4                                                           00186201
+R5   EQU    5                                                           00186301
+R6   EQU    6                                                           00186401
+R7   EQU    7                                                           00186501
+R8   EQU    8                                                           00186601
+R9   EQU    9                                                           00186701
+R10  EQU    10                                                          00186801
+R11  EQU    11                                                          00186901
+R12  EQU    12                                                          00187001
+R13  EQU    13                                                          00187101
+R14  EQU    14                                                          00187201
+R15  EQU    15                                                          00188001
+         END   MAIN                                                     00190000
+/*                                                                      00380000
+//FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW4DATA,DISP=SHR           00390000

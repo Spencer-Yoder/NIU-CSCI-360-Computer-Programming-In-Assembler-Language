@@ -1,0 +1,92 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010000
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+********************************************************                00060000
+*                                                                       00070000
+* PROGRAM: ASSIGN2                                                      00080000
+* PROGRAMMER: SPENCER YODER                                             00090000
+*                                                                       00100000
+* REGISTERS USED                                                        00110006
+* 1 USED BY XDECI                                                       00111006
+* 2 LOOP COUNTER                                                        00112006
+* 3 TOTAL                                                               00113006
+* 5 X-VALUE                                                             00114006
+* 6 Y-VALUE                                                             00115006
+* 7 Z-VALUE                                                             00116006
+* 8 RESULTS OF LINE                                                     00117006
+********************************************************                00120000
+MAIN     CSECT                                                          00130000
+         USING MAIN,15                                                  00140000
+         SR    2,2                   CLEAR REG 2                        00150006
+         SR    3,3                   CLEAR REG 3                        00151006
+LOOP     DS    0H                    START OF LOOP                      00152006
+         XREAD INPUT,80              READ THE WHOLE LINE ON THE CARD    00153006
+         BC    B'0100',ENDLOOP       IF END OF FILE, GO TO END OF LOOP  00154006
+         XDECI 5,INPUT               GET X VALUE                        00157006
+         XDECI 6,0(,R1)              GET Y VALUE STARTING AT REG 1      00158006
+         XDECI 7,0(,R1)              GET Z VALUE STARTING AT REG 1      00159006
+         XDECO 5,XOUT                CONVERT X VALUE INTO TEXT          00159106
+         XDECO 6,YOUT                CONVERT Y VALUE INTO TEXT          00159206
+         XDECO 7,ZOUT                CONVERT Z VALUE INTO TEXT          00159306
+         AR    5,6                   ADD X + Y                          00159406
+         SR    5,7                   SUB (XY)-Z                         00159506
+         AR    3,5                   ADD TOTAL + (XYZ)                  00159706
+         XDECO 5,RESULTS             CONVERT TOTAL INTO TEXT            00159806
+         XPRNT OUTPUT,96             PRINT THE WHOLE LINE               00159906
+         A     2,STEP                COUNTER + 1                        00160006
+         B     LOOP                  GO TO TOP OF LOOP                  00160106
+ENDLOOP  DS    0H                    END OF LOOP                        00160206
+         XDECO 2,COUNT               CONVERT THE COUNT TO TEXT          00161006
+         XDECO 3,TOTAL               CONVERT THE TOTAL TO TEXT          00161106
+         XPRNT LLINE,96              PRINT LAST LINE                    00162006
+         BR    14                                                       00163004
+********************************************************                00180006
+**** VARABLES                                                           00190006
+INPUT    DC    80C' '                VAR FOR STORING THE WHOLE LINE     00201006
+STEP     DC    F'1'                  VAR EQUAL TO 1                     00207006
+********************************************************                00208006
+**** OUTPUT LINE                                                        00208106
+OUTPUT   DC    CL1' '                LINE OUTPUT FOR EACH ROW           00209006
+         DC    CL4'X = '                                                00209101
+XOUT     DS    CL12                                                     00209201
+         DC    CL8' '                                                   00209301
+         DC    CL4'Y = '                                                00209401
+YOUT     DS    CL12                                                     00209501
+         DC    CL8' '                                                   00209601
+         DC    CL4'Z = '                                                00209701
+ZOUT     DS    CL12                                                     00209801
+         DC    CL10' '                                                  00209901
+         DC    CL9'Result = '                                           00210001
+RESULTS  DS    CL12                                                     00210101
+*********************************************************               00210201
+**** LAST LINE                                                          00210306
+LLINE    DC    CL1' '                LINE OUTPUT FOR THE LAST LINE      00210406
+         DC    CL18'Number of Lines = '                                 00210505
+COUNT    DS    CL12                                                     00210601
+         DC    CL8' '                                                   00210701
+         DC    CL17'Sum of Results = '                                  00210801
+TOTAL    DS    CL12                                                     00210903
+         DC    CL29' '                                                  00211001
+********************************************************                00211102
+R1   EQU    1                       RENAME REG 1 TO R1                  00211206
+         END MAIN                                                       00212002
+********************************************************                00220000
+/*                                                                      00230000
+//FT05F001  DD  *                                                       00240000
+    4500   -230      9                                                  00250000
+       0     +7      2                                                  00260000
+    8516   2853      0                                                  00270000
+    0020      0   3245                                                  00280000
+    5529   6977   1681                                                  00290000
+    1013    250     85                                                  00300000
+       0   3364   5275                                                  00310000
+    -887   1100   2293                                                  00320000
+    1234   8447   4591                                                  00330000
+     -89     -7     23                                                  00340000
+    8513   5409   2538                                                  00350000
+    0001   0002   0003                                                  00360000
+    9999   9998   9997                                                  00370000
+/*                                                                      00380000
+//FT06F001    DD SYSOUT=*                                               00390000

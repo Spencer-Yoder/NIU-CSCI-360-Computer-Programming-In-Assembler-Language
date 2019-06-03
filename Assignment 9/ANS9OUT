@@ -1,0 +1,667 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 09.08.30 JOB08355 ---- SATURDAY,  28 APR 2018 ----
+ 09.08.30 JOB08355  IRR010I  USERID KC03P70  IS ASSIGNED TO THIS JOB.
+ 09.08.30 JOB08355  ICH70001I KC03P70  LAST ACCESS AT 09:04:02 ON SATURDAY, APRIL 28, 2018
+ 09.08.30 JOB08355  $HASP373 KC03P70A STARTED - INIT 1    - CLASS A        - SYS S0W1
+ 09.08.30 JOB08355  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 09.08.30 JOB08355  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 09.08.30 JOB08355  -KC03P70A                      00    401 ******    .00     .0    306   0      0      0      0     0
+ 09.08.30 JOB08355  -KC03P70A ENDED.  NAME-Spencer Yoder        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 09.08.30 JOB08355  $HASP395 KC03P70A ENDED
+0------ JES2 JOB STATISTICS ------
+-  28 APR 2018 JOB EXECUTION DATE
+-           69 CARDS READ
+-          667 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           53 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              JOB08355
+         2 //STEP1   EXEC  PGM=ASSIST,PARM='MACRO=F'                               00020000
+         3 //STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                     00030000
+         4 //SYSPRINT  DD  SYSOUT=*                                                00040000
+         5 //SYSIN     DD  *                                                       00050000
+         6 //          DD DSN=KC02314.SPRING18.CSCI360.HW9.DRIVER,DISP=SHR         00100000
+         7 //FT05F001  DD DUMMY                                                    00110000
+         8 //FT06F001  DD SYSOUT=*                                                 00120000
+ ICH70001I KC03P70  LAST ACCESS AT 09:04:02 ON SATURDAY, APRIL 28, 2018
+ IEF236I ALLOC. FOR KC03P70A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME
+ IEF237I DMY  ALLOCATED TO FT05F001
+ IEF237I JES2 ALLOCATED TO FT06F001
+ IEF142I KC03P70A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03P70.KC03P70A.JOB08355.D0000102.?         SYSOUT        
+ IEF285I   KC03P70.KC03P70A.JOB08355.D0000101.?         SYSIN         
+ IGD104I KC02314.SPRING18.CSCI360.HW9.DRIVER          RETAINED,  DDNAME=        
+ IEF285I   KC03P70.KC03P70A.JOB08355.D0000103.?         SYSOUT        
+ IEF373I STEP/STEP1   /START 2018118.0908
+ IEF032I STEP/STEP1   /STOP  2018118.0908 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        4K  SYS:    11968K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03P70A/START 2018118.0908
+ IEF033I  JOB/KC03P70A/STOP  2018118.0908 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0MACRO=F                                                                                                                          
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 **********************************************                          00050108         
+                                       2 * PROGRAM: ASSIGNMENT 9                                                 00050208         
+                                       3 * NAME: STRCPY                                                          00050308         
+                                       4 * PROGRAMMER: SPENCER YODER                                             00050408         
+                                       5 *                                                                       00050508         
+                                       6 * FUNCTION: COPY THE SOURCE STRING INTO THE                             00050608         
+                                       7 *    DEST STRING. IT LOOKS FOR '00', TO END                             00050708         
+                                       8 *    COPY.                                                              00050808         
+                                       9 *                                                                       00050908         
+                                      10 * REG USED:                                                             00051008         
+                                      11 *   4  PTR TO SOURCE                                                    00051108         
+                                      12 *   5  PTR TO DEST                                                      00051208         
+                                      13 **********************************************                          00051301         
+                                      14          MACRO                                                          00051408         
+                                      15          STRCPY  &SOURCE,&DEST                                          00052001         
+                                      16          AIF     ('&SOURCE' EQ '').ERROR       CHECK FOR PARM ERROR     00053002         
+                                      17          AIF     ('&DEST' EQ '').ERROR         CHECK FOR PARM ERROR     00054002         
+                                      18          LA      4,&SOURCE                     SAVE PTR TO SOURCE       00054608         
+                                      19          LA      5,&DEST                       SAVE PTR TO DEST         00054708         
+                                      20 TOP&SYSNDX     DS    0H                        TOP OF LOOP              00054808         
+                                      21          MVC     0(1,5),0(4)                   COPY CHAR                00055508         
+                                      22          CLI     0(5),X'00'                    CHECK TO SEE IF '00'     00055608         
+                                      23          BE      END&SYSNDX                    IF 00 END LOOP           00055708         
+                                      24          A       4,=F'1'                       MOVE PTR 1 CHAR          00055808         
+                                      25          A       5,=F'1'                       MOVE PTR 1 CHAR          00055908         
+                                      26          B       TOP&SYSNDX                    GOTO TOP LOOP            00056008         
+                                      27 END&SYSNDX     DS    0H                                                 00056508         
+                                      28          MEXIT                                 EXIT MACRO               00056608         
+                                      29 .ERROR   MNOTE 'INVALID PARAMETER!!!'          ERRROR MISSING ARUGUMN   00056708         
+                                      30          MEND                                  END                      00056808         
+                                      31 **********************************************                          00056901         
+                                      32 * NAME: SEARCH                                                          00057008         
+                                      33 *                                                                       00057108         
+                                      34 * FUCTION: SEARCHES TO SEE IF STR WAS ANYPART                           00057208         
+                                      35 *    IN THE LIST THAT WAS PASSED IN.                                    00057308         
+                                      36 **********************************************                          00057408         
+                                      37          MACRO                                                          00057501         
+                                      38 &LABE1   SEARCH  &STR,&LEN,&TABLE,&LIST                                 00057601         
+                                      39          LCLA    &N,&I                                                  00057702         
+                                      40          LCLA    &E                                                     00057802         
+                                      41          AIF     ('&STR' EQ '').ERROR          CHECK FOR PARM ERROR     00057902         
+                                      42          AIF     ('&LEN' EQ '').ERROR                                   00058002         
+                                      43          AIF     ('&TABLE' EQ '').ERROR                                 00058102         
+                                      44          AIF     ('&LIST' EQ '').ERROR                                  00058202         
+                                      45 &N       SETA    N'&LIST                       GET LENGTH OF LIST       00058302         
+                                      46 &I       SETA    1                             SET COUNTER TO 1         00058404         
+                                      47 &E       SETA    &SYSLIST(4,1)                 GET FIRST CHAR, LIST     00058502         
+                                      48          AIF     ('&E' EQ '0').EMPTY           IF LIST EMPTY            00058602         
+                                      49          XC      &TABLE,&TABLE                                          00058707         
+                                      50 .TOP     AIF     (&I GT &N).END                IF END OF LIST           00058802         
+                                      51          MVI     &TABLE+&SYSLIST(4,&I),X'FF'                            00058904         
+                                      52 &I       SETA    &I+1                          ADD 1 TO COUNTER         00059002         
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                      53          AGO     .TOP                          GOTO LIST                00059102         
+                                      54 .END     ORG                                                            00059202         
+                                      55          TRT     &STR.(&LEN.),&TABLE           TRANSLATE AND TEST       00059302         
+                                      56          MEXIT                                                          00059402         
+                                      57 .ERROR   MNOTE 'INVALID PARAMETER!!!'                                   00059502         
+                                      58          MEXIT                                                          00059602         
+                                      59 .EMPTY   MNOTE 'THE LIST IS EMPTY!!!'                                   00059702         
+                                      60          MEND                                                           00059801         
+                                      61 **********************************************                          00060001         
+                                      62 **********************************************************************                   
+                                      63 *                                                                    *                   
+                                      64 *            Name:  DRIVER.                                          *                   
+                                      65 *                                                                    *                   
+                                      66 *        Function:  Test platform for macros.                        *                   
+                                      67 *                                                                    *                   
+                                      68 *           Input:  None.                                            *                   
+                                      69 *                                                                    *                   
+                                      70 *          Output:  Results of the tests.                            *                   
+                                      71 *                                                                    *                   
+                                      72 *     Entry Conds:  14 -- Return address to the operating            *                   
+                                      73 *                         system.                                    *                   
+                                      74 *                   15 -- Address of entry to the program.           *                   
+                                      75 *                                                                    *                   
+                                      76 *  Register Usage:   2 -- Used in addresses in macro tests.          *                   
+                                      77 *                   11 -- Second base register.                      *                   
+                                      78 *                   12 -- Base register.                             *                   
+                                      79 *                                                                    *                   
+                                      80 *      Exit Conds:  14 -- Return address to the operating            *                   
+                                      81 *                         system.                                    *                   
+                                      82 *                                                                    *                   
+                                      83 **********************************************************************                   
+                                      84 *                                                                                        
+ 000000                               85 DRIVER   CSECT                         Beginning of the program.                         
+                                      86 *                                                                                        
+                                      88 *                                                                                        
+                                      89 *  Standard Entry linkage.                                                               
+                                      90 *                                                                                        
+ 000000 90EC D00C            0000C    91          STM   14,12,12(13)                                                              
+ 000004 18CF                          92          LR    12,15                                                                     
+ 000000                               93          USING DRIVER,12                                                                 
+ 000006 41E0 C6D4            006D4    94          LA    14,DRIVSAV                                                                
+ 00000A 50DE 0004            00004    95          ST    13,4(14)                                                                  
+ 00000E 50ED 0008            00008    96          ST    14,8(13)                                                                  
+ 000012 18DE                          97          LR    13,14                                                                     
+                                      98 *                                                                                        
+ 000014 E020 C444 001A 00444          99          XPRNT =C'1Results of testing macros',26   Print the title.                      
+                                     100 *                                                                                        
+ 00001A E020 C3F0 0020 003F0         101          XPRNT  =CL32'-First we test the STRCPY macro.',32                               
+ 000020 E020 C45E 0026 0045E         102          XPRNT  =CL38' In printing strings, the zero byte is',38                         
+ 000026 E020 C484 0012 00484         103          XPRNT  =CL18' represented by *.',18                                             
+                                     104 *                                                                                        
+                                     105 * The first block of code deals with the STRCPY macro.                                   
+                                     106 *                                                                                        
+ 00002C E020 C54C 0021 0054C         107          XPRNT  =CL33'-1st test:  a string of length 0.',33                              
+ 000032 9200 C71C      0071C         108          MVI    OLD,X'00'                                                                
+ 000036 D20D C71D C496 0071D 00496   109          MVC    OLD+1(14),=14C' '                                                        
+ 00003C D20E C72B C56D 0072B 0056D   110          MVC    NEW(15),=15C' '                                                          
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     111          STRCPY OLD,NEW                                                                  
+ 000042 4140 C71C            0071C   112+         LA      4,OLD                         SAVE PTR TO SOURCE                        
+ 000046 4150 C72B            0072B   113+         LA      5,NEW                         SAVE PTR TO DEST                          
+ 00004A                              114+TOP0001        DS    0H                        TOP OF LOOP                               
+ 00004A D200 5000 4000 00000 00000   115+         MVC     0(1,5),0(4)                   COPY CHAR                                 
+ 000050 9500 5000      00000         116+         CLI     0(5),X'00'                    CHECK TO SEE IF '00'                      
+ 000054 4780 C064            00064   117+         BE      END0001                       IF 00 END LOOP                            
+ 000058 5A40 C418            00418   118+         A       4,=F'1'                       MOVE PTR 1 CHAR                           
+ 00005C 5A50 C418            00418   119+         A       5,=F'1'                       MOVE PTR 1 CHAR                           
+ 000060 47F0 C04A            0004A   120+         B       TOP0001                       GOTO TOP LOOP                             
+ 000064                              121+END0001        DS    0H                                                                  
+ 000064 D203 C751 C41C 00751 0041C   122          MVC    L1(4),=CL4'   0'                                                         
+ 00006A E020 C73C 0019 0073C         123          XPRNT  PLINE1,25                                                                
+ 000070 4110 C410            00410   124          LA     1,=A(NEW,LENGTH)                                                         
+ 000074 45A0 CA10            00A10   125          BAL    10,STRLEN                                                                
+ 000078 D203 C76A C420 0076A 00420   126          MVC    L2(4),=X'40202120'                                                       
+ 00007E DE03 C76A C73A 0076A 0073A   127          ED     L2(4),LENGTH                                                             
+ 000084 E020 C755 0019 00755         128          XPRNT  PLINE2,25                                                                
+ 00008A DC0E C71C C7B6 0071C 007B6   129          TR     OLD(15),TRTABLE                                                          
+ 000090 D20E C783 C71C 00783 0071C   130          MVC    V3(15),OLD                                                               
+ 000096 E020 C76E 0024 0076E         131          XPRNT  PLINE3,36                                                                
+ 00009C DC0E C72B C7B6 0072B 007B6   132          TR     NEW(15),TRTABLE                                                          
+ 0000A2 D20E C7A7 C72B 007A7 0072B   133          MVC    V4(15),NEW                                                               
+ 0000A8 E020 C792 0024 00792         134          XPRNT  PLINE4,36                                                                
+                                     135 *                                                                                        
+ 0000AE E020 C4A4 0022 004A4         136          XPRNT  =CL34'-2nd test:  a string of all 0s.',34                                
+ 0000B4 D20E C71C C57C 0071C 0057C   137          MVC    OLD(15),=15X'00'                                                         
+ 0000BA D20E C72B C56D 0072B 0056D   138          MVC    NEW(15),=15C' '                                                          
+                                     139          STRCPY OLD,NEW                                                                  
+ 0000C0 4140 C71C            0071C   140+         LA      4,OLD                         SAVE PTR TO SOURCE                        
+ 0000C4 4150 C72B            0072B   141+         LA      5,NEW                         SAVE PTR TO DEST                          
+ 0000C8                              142+TOP0002        DS    0H                        TOP OF LOOP                               
+ 0000C8 D200 5000 4000 00000 00000   143+         MVC     0(1,5),0(4)                   COPY CHAR                                 
+ 0000CE 9500 5000      00000         144+         CLI     0(5),X'00'                    CHECK TO SEE IF '00'                      
+ 0000D2 4780 C0E2            000E2   145+         BE      END0002                       IF 00 END LOOP                            
+ 0000D6 5A40 C418            00418   146+         A       4,=F'1'                       MOVE PTR 1 CHAR                           
+ 0000DA 5A50 C418            00418   147+         A       5,=F'1'                       MOVE PTR 1 CHAR                           
+ 0000DE 47F0 C0C8            000C8   148+         B       TOP0002                       GOTO TOP LOOP                             
+ 0000E2                              149+END0002        DS    0H                                                                  
+ 0000E2 D203 C751 C41C 00751 0041C   150          MVC    L1(4),=CL4'   0'                                                         
+ 0000E8 E020 C73C 0019 0073C         151          XPRNT  PLINE1,25                                                                
+ 0000EE 4110 C410            00410   152          LA     1,=A(NEW,LENGTH)                                                         
+ 0000F2 45A0 CA10            00A10   153          BAL    10,STRLEN                                                                
+ 0000F6 D203 C76A C420 0076A 00420   154          MVC    L2(4),=X'40202120'                                                       
+ 0000FC DE03 C76A C73A 0076A 0073A   155          ED     L2(4),LENGTH                                                             
+ 000102 E020 C755 0019 00755         156          XPRNT  PLINE2,25                                                                
+ 000108 DC0E C71C C7B6 0071C 007B6   157          TR     OLD(15),TRTABLE                                                          
+ 00010E D20E C783 C71C 00783 0071C   158          MVC    V3(15),OLD                                                               
+ 000114 E020 C76E 0024 0076E         159          XPRNT  PLINE3,36                                                                
+ 00011A DC0E C72B C7B6 0072B 007B6   160          TR     NEW(15),TRTABLE                                                          
+ 000120 D20E C7A7 C72B 007A7 0072B   161          MVC    V4(15),NEW                                                               
+ 000126 E020 C792 0024 00792         162          XPRNT  PLINE4,36                                                                
+                                     163 *                                                                                        
+ 00012C E020 C58B 0027 0058B         164          XPRNT  =CL39'-3rd test:  a string of alternating 0s.',39                        
+ 000132 D205 C71C C4C6 0071C 004C6   165          MVC    OLD(6),=XL6'C100C200C300'                                                
+ 000138 D208 C722 C5B2 00722 005B2   166          MVC    OLD+6(9),=9C' '                                                          
+ 00013E D20E C72B C56D 0072B 0056D   167          MVC    NEW(15),=15C' '                                                          
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     168          STRCPY OLD,NEW                                                                  
+ 000144 4140 C71C            0071C   169+         LA      4,OLD                         SAVE PTR TO SOURCE                        
+ 000148 4150 C72B            0072B   170+         LA      5,NEW                         SAVE PTR TO DEST                          
+ 00014C                              171+TOP0003        DS    0H                        TOP OF LOOP                               
+ 00014C D200 5000 4000 00000 00000   172+         MVC     0(1,5),0(4)                   COPY CHAR                                 
+ 000152 9500 5000      00000         173+         CLI     0(5),X'00'                    CHECK TO SEE IF '00'                      
+ 000156 4780 C166            00166   174+         BE      END0003                       IF 00 END LOOP                            
+ 00015A 5A40 C418            00418   175+         A       4,=F'1'                       MOVE PTR 1 CHAR                           
+ 00015E 5A50 C418            00418   176+         A       5,=F'1'                       MOVE PTR 1 CHAR                           
+ 000162 47F0 C14C            0014C   177+         B       TOP0003                       GOTO TOP LOOP                             
+ 000166                              178+END0003        DS    0H                                                                  
+ 000166 D203 C751 C424 00751 00424   179          MVC    L1(4),=CL4'   1'                                                         
+ 00016C E020 C73C 0019 0073C         180          XPRNT  PLINE1,25                                                                
+ 000172 4110 C410            00410   181          LA     1,=A(NEW,LENGTH)                                                         
+ 000176 45A0 CA10            00A10   182          BAL    10,STRLEN                                                                
+ 00017A D203 C76A C420 0076A 00420   183          MVC    L2(4),=X'40202120'                                                       
+ 000180 DE03 C76A C73A 0076A 0073A   184          ED     L2(4),LENGTH                                                             
+ 000186 E020 C755 0019 00755         185          XPRNT  PLINE2,25                                                                
+ 00018C DC0E C71C C7B6 0071C 007B6   186          TR     OLD(15),TRTABLE                                                          
+ 000192 D20E C783 C71C 00783 0071C   187          MVC    V3(15),OLD                                                               
+ 000198 E020 C76E 0024 0076E         188          XPRNT  PLINE3,36                                                                
+ 00019E DC0E C72B C7B6 0072B 007B6   189          TR     NEW(15),TRTABLE                                                          
+ 0001A4 D20E C7A7 C72B 007A7 0072B   190          MVC    V4(15),NEW                                                               
+ 0001AA E020 C792 0024 00792         191          XPRNT  PLINE4,36                                                                
+                                     192 *                                                                                        
+ 0001B0 E020 C5BB 001F 005BB         193          XPRNT  =CL31'-4th test:  an ordinary string.',31                                
+ 0001B6 D20A C71C C5DA 0071C 005DA   194          MVC    OLD(11),=CL11'Test 4 data'                                               
+ 0001BC D203 C727 C428 00727 00428   195          MVC    OLD+11(4),=X'00404040'                                                   
+                                     196          STRCPY OLD,NEW                                                                  
+ 0001C2 4140 C71C            0071C   197+         LA      4,OLD                         SAVE PTR TO SOURCE                        
+ 0001C6 4150 C72B            0072B   198+         LA      5,NEW                         SAVE PTR TO DEST                          
+ 0001CA                              199+TOP0004        DS    0H                        TOP OF LOOP                               
+ 0001CA D200 5000 4000 00000 00000   200+         MVC     0(1,5),0(4)                   COPY CHAR                                 
+ 0001D0 9500 5000      00000         201+         CLI     0(5),X'00'                    CHECK TO SEE IF '00'                      
+ 0001D4 4780 C1E4            001E4   202+         BE      END0004                       IF 00 END LOOP                            
+ 0001D8 5A40 C418            00418   203+         A       4,=F'1'                       MOVE PTR 1 CHAR                           
+ 0001DC 5A50 C418            00418   204+         A       5,=F'1'                       MOVE PTR 1 CHAR                           
+ 0001E0 47F0 C1CA            001CA   205+         B       TOP0004                       GOTO TOP LOOP                             
+ 0001E4                              206+END0004        DS    0H                                                                  
+ 0001E4 DC0E C71C C7B6 0071C 007B6   207          TR     OLD(15),TRTABLE                                                          
+ 0001EA D20E C783 C71C 00783 0071C   208          MVC    V3(15),OLD                                                               
+ 0001F0 D203 C751 C42C 00751 0042C   209          MVC    L1(4),=CL4'  11'                                                         
+ 0001F6 E020 C73C 0019 0073C         210          XPRNT  PLINE1,25                                                                
+ 0001FC 4110 C410            00410   211          LA     1,=A(NEW,LENGTH)                                                         
+ 000200 45A0 CA10            00A10   212          BAL    10,STRLEN                                                                
+ 000204 D203 C76A C420 0076A 00420   213          MVC    L2(4),=X'40202120'                                                       
+ 00020A DE03 C76A C73A 0076A 0073A   214          ED     L2(4),LENGTH                                                             
+ 000210 DC0E C72B C7B6 0072B 007B6   215          TR     NEW(15),TRTABLE                                                          
+ 000216 D20E C7A7 C72B 007A7 0072B   216          MVC    V4(15),NEW                                                               
+ 00021C E020 C755 0019 00755         217          XPRNT  PLINE2,25                                                                
+ 000222 E020 C76E 0024 0076E         218          XPRNT  PLINE3,36                                                                
+ 000228 E020 C792 0024 00792         219          XPRNT  PLINE4,36                                                                
+                                     220 *                                                                                        
+                                     221 * The last three tests all have missing values.                                          
+                                     222 * We should have MNOTEs.                                                                 
+                                     223 *                                                                                        
+                                     224 * 5th test:  Missing SOURCE                                                              
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     225          STRCPY ,NEW                                                                     
+ ----->AS***MNOTE***    1,INVALID PARAMETER!!!                                                                    <-ERROR         
+                                     227 *                                                                                        
+                                     228 * 6th test:  Missing DEST                                                                
+                                     229          STRCPY OLD                                                                      
+ ----->AS***MNOTE***    1,INVALID PARAMETER!!!                                                                    <-ERROR         
+                                     231 *                                                                                        
+                                     232 * 7th test:  Missing both arguments                                                      
+                                     233          STRCPY                                                                          
+ ----->AS***MNOTE***    1,INVALID PARAMETER!!!                                                                    <-ERROR         
+                                     235 *                                                                                        
+                                     236 * The second block of code deals with the ____ macro.                                    
+                                     237 *                                                                                        
+ 00022E E020 C5E5 0001 005E5         238          XPRNT =C'0',1                 Skip an extra 2 lines.                            
+ 000234 E020 C5E6 001D 005E6         239          XPRNT =CL29'-Next we test the ____ macro.',29                                   
+                                     240 *                                      Print a heading.                                  
+                                     241 *                                                                                        
+                                     242 * The next block of code deals with the SEARCH macro.                                    
+                                     243 *                                                                                        
+ 00023A E020 C5E5 0001 005E5         244          XPRNT =C'0',1                 Skip an extra 2 lines.                            
+ 000240 E020 C603 001F 00603         245          XPRNT =CL31'-Next we test the SEARCH macro.',31                                 
+                                     246 *                                      Print a heading.                                  
+ 000246 E020 C4CC 002E 004CC         247          XPRNT =CL46'0Before the call, registers 1 and 2 contain 0',46                   
+                                     248 *                                                                                        
+                                     249 *                                                                                        
+                                     250 * These first three calls to SEARCH have problems which should                           
+                                     251 * result in MNOTEs.                                                                      
+                                     252 *                                                                                        
+ 00024C 1B11                         253          SR    1,1                                                                       
+ 00024E 1B22                         254          SR    2,2                                                                       
+                                     255          SEARCH   PHRASE,10,,(X'40')                                                     
+ ----->AS***MNOTE***    1,INVALID PARAMETER!!!                                                                    <-ERROR         
+                                     257 *                                                                                        
+ 000250 1B11                         258          SR    1,1                                                                       
+ 000252 1B22                         259          SR    2,2                                                                       
+                                     260          SEARCH   PHRASE,,TABLE,(X'40')                                                  
+ ----->AS***MNOTE***    1,INVALID PARAMETER!!!                                                                    <-ERROR         
+                                     262 *                                                                                        
+ 000254 1B11                         263          SR    1,1                                                                       
+ 000256 1B22                         264          SR    2,2                                                                       
+ 000258 D209 C8D0 C4FA 008D0 004FA   265          MVC   PHRASE(10),=CL10'HAPPY DAYS'                                              
+                                     266          SEARCH   PHRASE,10,TABLE,()                                                     
+ ----->AS224 INVALID CONVERSION, CHAR TO ARITH: STMT/MACRO    47/SEARCH  -->                                      <-ERROR         
+ ----->AS***MNOTE***    1,THE LIST IS EMPTY!!!                                                                    <-ERROR         
+                                     268 *                                                                                        
+                                     269 * The next few calls to SEARCH should succeed.                                           
+                                     270 *                                                                                        
+ 00025E E020 C622 001F 00622         271          XPRNT =CL31'0Test A should find a character',31                                 
+ 000264 1B11                         272          SR    1,1                                                                       
+ 000266 1B22                         273          SR    2,2                                                                       
+ 000268 D209 C8D0 C4FA 008D0 004FA   274          MVC   PHRASE(10),=CL10'HAPPY DAYS'                                              
+                                     275          SEARCH   PHRASE,10,TABLE,(X'40')                                                
+ 00026E D7FF C8E0 C8E0 008E0 008E0   276+         XC      TABLE,TABLE                                                             
+ 000274 92FF C920      00920         277+         MVI     TABLE+X'40',X'FF'                                                       
+ 000278                              278+         ORG                                                                             
+ 000278 DD09 C8D0 C8E0 008D0 008E0   279+         TRT     PHRASE(10),TABLE              TRANSLATE AND TEST                        
+ 00027E 4780 C290            00290   280          BC    B'1000',NOT1                                                              
+1                                                                                                               PAGE    6         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000282 4720 C29A            0029A   281          BC    B'0010',LAST1                                                             
+ 000286 E020 C430 0014 00430         282          XPRNT =CL20'0Found the character',20                                            
+ 00028C 47F0 C2A0            002A0   283          B     DONE1                                                                     
+ 000290 E020 C641 0017 00641         284 NOT1     XPRNT =CL23'0No character was found',23                                         
+ 000296 47F0 C2A0            002A0   285          B     DONE1                                                                     
+ 00029A E020 C658 001D 00658         286 LAST1    XPRNT =CL29'0Found a character at the end',29                                   
+ 0002A0                              287 DONE1    DS    0H                                                                        
+ 0002A0 6210 C9EE            009EE   288          XHEXO 1,R1                                                                      
+ 0002A4 6220 CA08            00A08   289          XHEXO 2,R2                                                                      
+ 0002A8 E020 C9E0 0030 009E0         290          XPRNT REGLINE,48                                                                
+ 0002AE E060 C8E0 0100 008E0         291          XDUMP TABLE,256                                                                 
+                                     292 *                                                                                        
+ 0002B4 E020 C504 002A 00504         293          XPRNT =CL42'0Test B should find a character at the end',42                      
+ 0002BA 1B11                         294          SR    1,1                                                                       
+ 0002BC 1B22                         295          SR    2,2                                                                       
+ 0002BE D209 C8D0 C52E 008D0 0052E   296          MVC   PHRASE(10),=CL10'QRSTUVWXYZ'                                              
+                                     297          SEARCH   PHRASE,10,TABLE,(C'A',C'M',C'Z')                                       
+ 0002C4 D7FF C8E0 C8E0 008E0 008E0   298+         XC      TABLE,TABLE                                                             
+ 0002CA 92FF C9A1      009A1         299+         MVI     TABLE+C'A',X'FF'                                                        
+ 0002CE 92FF C9B4      009B4         300+         MVI     TABLE+C'M',X'FF'                                                        
+ 0002D2 92FF C9C9      009C9         301+         MVI     TABLE+C'Z',X'FF'                                                        
+ 0002D6                              302+         ORG                                                                             
+ 0002D6 DD09 C8D0 C8E0 008D0 008E0   303+         TRT     PHRASE(10),TABLE              TRANSLATE AND TEST                        
+ 0002DC 4780 C2EE            002EE   304          BC    B'1000',NOT2                                                              
+ 0002E0 4720 C2F8            002F8   305          BC    B'0010',LAST2                                                             
+ 0002E4 E020 C430 0014 00430         306          XPRNT =CL20'0Found the character',20                                            
+ 0002EA 47F0 C2FE            002FE   307          B     DONE2                                                                     
+ 0002EE E020 C641 0017 00641         308 NOT2     XPRNT =CL23'0No character was found',23                                         
+ 0002F4 47F0 C2FE            002FE   309          B     DONE2                                                                     
+ 0002F8 E020 C658 001D 00658         310 LAST2    XPRNT =CL29'0Found a character at the end',29                                   
+ 0002FE                              311 DONE2    DS    0H                                                                        
+ 0002FE 6210 C9EE            009EE   312          XHEXO 1,R1                                                                      
+ 000302 6220 CA08            00A08   313          XHEXO 2,R2                                                                      
+ 000306 E020 C9E0 0030 009E0         314          XPRNT REGLINE,48                                                                
+ 00030C E060 C8E0 0100 008E0         315          XDUMP TABLE,256                                                                 
+                                     316 *                                                                                        
+ 000312 E020 C675 0023 00675         317          XPRNT =CL35'0Test C should not find a character',35                             
+ 000318 1B11                         318          SR    1,1                                                                       
+ 00031A 1B22                         319          SR    2,2                                                                       
+ 00031C D209 C8D0 C538 008D0 00538   320          MVC   PHRASE(10),=CL10'ABCEFGHJKL'                                              
+                                     321          SEARCH   PHRASE,10,TABLE,(196,213,64,248)                                       
+ 000322 D7FF C8E0 C8E0 008E0 008E0   322+         XC      TABLE,TABLE                                                             
+ 000328 92FF C9A4      009A4         323+         MVI     TABLE+196,X'FF'                                                         
+ 00032C 92FF C9B5      009B5         324+         MVI     TABLE+213,X'FF'                                                         
+ 000330 92FF C920      00920         325+         MVI     TABLE+64,X'FF'                                                          
+ 000334 92FF C9D8      009D8         326+         MVI     TABLE+248,X'FF'                                                         
+ 000338                              327+         ORG                                                                             
+ 000338 DD09 C8D0 C8E0 008D0 008E0   328+         TRT     PHRASE(10),TABLE              TRANSLATE AND TEST                        
+ 00033E 4780 C350            00350   329          BC    B'1000',NOT3                                                              
+ 000342 4720 C35A            0035A   330          BC    B'0010',LAST3                                                             
+ 000346 E020 C430 0014 00430         331          XPRNT =CL20'0Found the character',20                                            
+ 00034C 47F0 C360            00360   332          B     DONE3                                                                     
+ 000350 E020 C641 0017 00641         333 NOT3     XPRNT =CL23'0No character was found',23                                         
+ 000356 47F0 C360            00360   334          B     DONE3                                                                     
+ 00035A E020 C698 001D 00698         335 LAST3    XPRNT =CL29'0Found 1 character at the end',29                                   
+ 000360                              336 DONE3    DS    0H                                                                        
+ 000360 6210 C9EE            009EE   337          XHEXO 1,R1                                                                      
+1                                                                                                               PAGE    7         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000364 6220 CA08            00A08   338          XHEXO 2,R2                                                                      
+ 000368 E020 C9E0 0030 009E0         339          XPRNT REGLINE,48                                                                
+ 00036E E060 C8E0 0100 008E0         340          XDUMP TABLE,256                                                                 
+                                     341 *                                                                                        
+ 000374 E020 C6B5 001F 006B5         342          XPRNT =CL31'0Test D should find a character',31                                 
+ 00037A 1B11                         343          SR    1,1                                                                       
+ 00037C 1B22                         344          SR    2,2                                                                       
+ 00037E D209 C8D0 C542 008D0 00542   345          MVC   PHRASE(10),=CL10'-$_?5.CR+.'                                              
+                                     346          SEARCH   PHRASE,10,TABLE,                                     X                 
+                                                        (C'1',X'F2',243,244,C'5',X'F6',247)                                       
+ 000384 D7FF C8E0 C8E0 008E0 008E0   347+         XC      TABLE,TABLE                                                             
+ 00038A 92FF C9D1      009D1         348+         MVI     TABLE+C'1',X'FF'                                                        
+ 00038E 92FF C9D2      009D2         349+         MVI     TABLE+X'F2',X'FF'                                                       
+ 000392 92FF C9D3      009D3         350+         MVI     TABLE+243,X'FF'                                                         
+ 000396 92FF C9D4      009D4         351+         MVI     TABLE+244,X'FF'                                                         
+ 00039A 92FF C9D5      009D5         352+         MVI     TABLE+C'5',X'FF'                                                        
+ 00039E 92FF C9D6      009D6         353+         MVI     TABLE+X'F6',X'FF'                                                       
+ 0003A2 92FF C9D7      009D7         354+         MVI     TABLE+247,X'FF'                                                         
+ 0003A6                              355+         ORG                                                                             
+ 0003A6 DD09 C8D0 C8E0 008D0 008E0   356+         TRT     PHRASE(10),TABLE              TRANSLATE AND TEST                        
+ 0003AC 4780 C3BE            003BE   357          BC    B'1000',NOT4                                                              
+ 0003B0 4720 C3C8            003C8   358          BC    B'0010',LAST4                                                             
+ 0003B4 E020 C430 0014 00430         359          XPRNT =CL20'0Found the character',20                                            
+ 0003BA 47F0 C3CE            003CE   360          B     DONE4                                                                     
+ 0003BE E020 C641 0017 00641         361 NOT4     XPRNT =CL23'0No character was found',23                                         
+ 0003C4 47F0 C3CE            003CE   362          B     DONE4                                                                     
+ 0003C8 E020 C698 001D 00698         363 LAST4    XPRNT =CL29'0Found 1 character at the end',29                                   
+ 0003CE                              364 DONE4    DS    0H                                                                        
+ 0003CE 6210 C9EE            009EE   365          XHEXO 1,R1                                                                      
+ 0003D2 6220 CA08            00A08   366          XHEXO 2,R2                                                                      
+ 0003D6 E020 C9E0 0030 009E0         367          XPRNT REGLINE,48                                                                
+ 0003DC E060 C8E0 0100 008E0         368          XDUMP TABLE,256                                                                 
+                                     369 *                                                                                        
+                                     370 *  Standard exit linkage                                                                 
+                                     371 *                                                                                        
+ 0003E2 58DD 0004            00004   372          L     13,4(13)                                                                  
+ 0003E6 98EC D00C            0000C   373          LM    14,12,12(13)                                                              
+ 0003EA 07FE                         374          BR    14                                                                        
+1                                                                                                               PAGE    8         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                                                                                                                  
+                                                                                                                                  
+                                     376 **********************************************************************                   
+                                     377 *          The storage section for DRIVER starts here.               *                   
+                                     378 **********************************************************************                   
+                                     379 *                                                                                        
+                                     380          LTORG                                                                           
+ 0003F0 60C68999A2A340A6             381                =CL32'-First we test the STRCPY macro.'                                   
+ 000410 0000072B0000073A             382                =A(NEW,LENGTH)                                                            
+ 000418 00000001                     383                =F'1'                                                                     
+ 00041C 404040F0                     384                =CL4'   0'                                                                
+ 000420 40202120                     385                =X'40202120'                                                              
+ 000424 404040F1                     386                =CL4'   1'                                                                
+ 000428 00404040                     387                =X'00404040'                                                              
+ 00042C 4040F1F1                     388                =CL4'  11'                                                                
+ 000430 F0C696A4958440A3             389                =CL20'0Found the character'                                               
+ 000444 F1D985A2A493A3A2             390                =C'1Results of testing macros'                                            
+ 00045E 40C9954097998995             391                =CL38' In printing strings, the zero byte is'                             
+ 000484 409985979985A285             392                =CL18' represented by *.'                                                 
+ 000496 4040404040404040             393                =14C' '                                                                   
+ 0004A4 60F2958440A385A2             394                =CL34'-2nd test:  a string of all 0s.'                                    
+ 0004C6 C100C200C300                 395                =XL6'C100C200C300'                                                        
+ 0004CC F0C2858696998540             396                =CL46'0Before the call, registers 1 and 2 contain 0'                      
+ 0004FA C8C1D7D7E840C4C1             397                =CL10'HAPPY DAYS'                                                         
+ 000504 F0E385A2A340C240             398                =CL42'0Test B should find a character at the end'                         
+ 00052E D8D9E2E3E4E5E6E7             399                =CL10'QRSTUVWXYZ'                                                         
+ 000538 C1C2C3C5C6C7C8D1             400                =CL10'ABCEFGHJKL'                                                         
+ 000542 605B6D6FF54BC3D9             401                =CL10'-$_?5.CR+.'                                                         
+ 00054C 60F1A2A340A385A2             402                =CL33'-1st test:  a string of length 0.'                                  
+ 00056D 4040404040404040             403                =15C' '                                                                   
+ 00057C 0000000000000000             404                =15X'00'                                                                  
+ 00058B 60F3998440A385A2             405                =CL39'-3rd test:  a string of alternating 0s.'                            
+ 0005B2 4040404040404040             406                =9C' '                                                                    
+ 0005BB 60F4A38840A385A2             407                =CL31'-4th test:  an ordinary string.'                                    
+ 0005DA E385A2A340F44084             408                =CL11'Test 4 data'                                                        
+ 0005E5 F0                           409                =C'0'                                                                     
+ 0005E6 60D585A7A340A685             410                =CL29'-Next we test the ____ macro.'                                      
+ 000603 60D585A7A340A685             411                =CL31'-Next we test the SEARCH macro.'                                    
+ 000622 F0E385A2A340C140             412                =CL31'0Test A should find a character'                                    
+ 000641 F0D5964083888199             413                =CL23'0No character was found'                                            
+ 000658 F0C696A495844081             414                =CL29'0Found a character at the end'                                      
+ 000675 F0E385A2A340C340             415                =CL35'0Test C should not find a character'                                
+ 000698 F0C696A4958440F1             416                =CL29'0Found 1 character at the end'                                      
+ 0006B5 F0E385A2A340C440             417                =CL31'0Test D should find a character'                                    
+                                     418 *                                                                                        
+ 0006D4 FFFFFFFFFFFFFFFF             419 DRIVSAV  DC    18F'-1'                 Save area for linkage.                            
+                                     420 *                                                                                        
+                                     421 * Here we have the variables for testing STRCPY.                                         
+                                     422 *                                                                                        
+ 00071C                              423 OLD      DS    15C                                                                       
+ 00072B                              424 NEW      DS    15C                                                                       
+                                     425 *                                                                                        
+ 00073A                              426 LENGTH   DS    PL2                                                                       
+                                     427 *                                                                                        
+ 00073C F0                           428 PLINE1   DC    C'0'                                                                      
+ 00073D D3859587A3884096             429          DC    CL20'Length of source:   '                                                
+ 000751                              430 L1       DS    4C                                                                        
+1                                                                                                               PAGE    9         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     431 *                                                                                        
+ 000755 F0                           432 PLINE2   DC    C'0'                                                                      
+ 000756 D3859587A3884096             433          DC    CL20'Length of new copy: '                                                
+ 00076A                              434 L2       DS    4C                                                                        
+                                     435 *                                                                                        
+ 00076E F0                           436 PLINE3   DC    C'0'                                                                      
+ 00076F E58193A485409686             437          DC    CL20'Value of source:    '                                                
+ 000783                              438 V3       DS    15C                                                                       
+                                     439 *                                                                                        
+ 000792 F0                           440 PLINE4   DC    C'0'                                                                      
+ 000793 E58193A485409686             441          DC    CL20'Value of new copy:  '                                                
+ 0007A7                              442 V4       DS    15C                                                                       
+                                     443 *                                                                                        
+ 0007B6 5C01020304050607             444 TRTABLE  DC    XL16'5C0102030405060708090A0B0C0D0E0F'                                    
+ 0007C6 1011121314151617             445          DC    XL16'101112131415161718191A1B1C1D1E1F'                                    
+ 0007D6 2021222324252627             446          DC    XL16'202122232425262728292A2B2C2D2E2F'                                    
+ 0007E6 3031323334353637             447          DC    XL16'303132333435363738393A3B3C3D3E3F'                                    
+ 0007F6 4041424344454647             448          DC    XL16'404142434445464748494A4B4C4D4E4F'                                    
+ 000806 5051525354555657             449          DC    XL16'505152535455565758595A5B5C5D5E5F'                                    
+ 000816 6061626364656667             450          DC    XL16'606162636465666768696A6B6C6D6E6F'                                    
+ 000826 7071727374757677             451          DC    XL16'707172737475767778797A7B7C7D7E7F'                                    
+ 000836 8081828384858687             452          DC    XL16'808182838485868788898A8B8C8D8E8F'                                    
+ 000846 9091929394959697             453          DC    XL16'909192939495969798999A9B9C9D9E9F'                                    
+ 000856 A0A1A2A3A4A5A6A7             454          DC    XL16'A0A1A2A3A4A5A6A7A8A9AAABACADAEAF'                                    
+ 000866 B0B1B2B3B4B5B6B7             455          DC    XL16'B0B1B2B3B4B5B6B7B8B9BABBBCBDBEBF'                                    
+ 000876 C0C1C2C3C4C5C6C7             456          DC    XL16'C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF'                                    
+ 000886 D0D1D2D3D4D5D6D7             457          DC    XL16'D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF'                                    
+ 000896 E0E1E2E3E4E5E6E7             458          DC    XL16'E0E1E2E3E4E5E6E7E8E9EAEBECEDEEEF'                                    
+ 0008A6 F0F1F2F3F4F5F6F7             459          DC    XL16'F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF'                                    
+                                     460 *                                                                                        
+                                     461 *                                                                                        
+ 0008B8 FFFFFFFF                     462 TESTMEN  DC    F'-1'                                                                     
+ 0008BC 00000000                     463 TESTMEZ  DC    F'0'                                                                      
+ 0008C0 00000001                     464 TESTMEP  DC    F'1'                                                                      
+                                     465 *                                                                                        
+ 0008C8                              466 TEMP     DS    D                                                                         
+                                     467 *                                                                                        
+                                     468 *                                                                                        
+                                     469 * Variables for testing SEARCH                                                           
+                                     470 *                                                                                        
+ 0008D0                              471 PHRASE   DS    10C                                                                       
+                                     472 *                                                                                        
+ 0008E0                              473          ORG   DRIVER+((*-DRIVER+31)/32)*32                                              
+ 0008E0                              474 TABLE    DS    XL256                                                                     
+                                     475 *                                                                                        
+ 0009E0 F0                           476 REGLINE  DC    C'0'                                                                      
+ 0009E1 D9858789A2A38599             477          DC    CL13'Register 1 = '                                                       
+ 0009EE                              478 R1       DS    8C                                                                        
+ 0009F6 4081958440D98587             479          DC    CL18' and Register 2 = '                                                  
+ 000A08                              480 R2       DS    8C                                                                        
+                                     481 *                                                                                        
+                                     482 *********************************************************************                    
+                                     483 *                                                                                        
+                                     484 * STRLEN is an internal subroutine to calculate a string length.                         
+                                     485 *                                                                                        
+                                     486 * It has two arguments:  the address of a string and the address                         
+                                     487 * of a 2-byte packed decimal field in which to report the length.                        
+1                                                                                                               PAGE   10         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     488 *                                                                                        
+                                     489 * Register  1 = address of parameter list                                                
+                                     490 *           2 = address of the string; from 0(1)                                         
+                                     491 *           3 = address of the counter; from 4(1)                                        
+                                     492 *          10 = return address                                                           
+                                     493 *                                                                                        
+                                     494 *********************************************************************                    
+                                     495 *                                                                                        
+ 000A10                              496 STRLEN   DS    0H                                                                        
+ 000A10 9023 CA3C            00A3C   497          STM   2,3,SLSAVE          Save the registers                                    
+ 000A14 9823 1000            00000   498          LM    2,3,0(1)            Unload the parameter list                             
+ 000A18 F810 3000 CA48 00000 00A48   499          ZAP   0(2,3),=P'0'        Initialize the counter                                
+ 000A1E 9500 2000      00000         500 SLLOOP   CLI   0(2),X'00'          Have we reached the delimiter?                        
+ 000A22 4780 CA34            00A34   501          BE    SLEND               If so, end the loop                                   
+ 000A26 FA10 3000 CA49 00000 00A49   502          AP    0(2,3),=P'1'        Increment the counter                                 
+ 000A2C 4120 2001            00001   503          LA    2,1(0,2)            Advance string pointer                                
+ 000A30 47F0 CA1E            00A1E   504          B     SLLOOP              Repeat the loop                                       
+ 000A34                              505 SLEND    DS    0H                                                                        
+ 000A34 9823 CA3C            00A3C   506          LM    2,3,SLSAVE          Restore the registers                                 
+ 000A38 07FA                         507          BR    10                  Return to the caller                                  
+ 000A3C                              508 SLSAVE   DS    2F                                                                        
+                                     509 *                                                                                        
+                                     510 **********************************************************************                   
+                                     511 *                 The DRIVER program ends here.                      *                   
+                                     512 **********************************************************************                   
+                                     513          END   DRIVER                  End of the overall program.                       
+ 000A48 0C                           514                =P'0'                                                                     
+ 000A49 1C                           515                =P'1'                                                                     
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   23292 HIGH:    2744 LEAVING:  467532 FREE BYTES. AVERAGE:       50 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.005 SECS,   103200 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1Results of testing macros                                                                                                        
+-First we test the STRCPY macro.                                                                                                  
+ In printing strings, the zero byte is                                                                                            
+ represented by *.                                                                                                                
+-1st test:  a string of length 0.                                                                                                 
+0Length of source:      0                                                                                                         
+0Length of new copy:    0                                                                                                         
+0Value of source:    *                                                                                                            
+0Value of new copy:  *                                                                                                            
+-2nd test:  a string of all 0s.                                                                                                   
+0Length of source:      0                                                                                                         
+0Length of new copy:    0                                                                                                         
+0Value of source:    ***************                                                                                              
+0Value of new copy:  *                                                                                                            
+-3rd test:  a string of alternating 0s.                                                                                           
+0Length of source:      1                                                                                                         
+0Length of new copy:    1                                                                                                         
+0Value of source:    A*B*C*                                                                                                       
+0Value of new copy:  A*                                                                                                           
+-4th test:  an ordinary string.                                                                                                   
+0Length of source:     11                                                                                                         
+0Length of new copy:   11                                                                                                         
+0Value of source:    Test 4 data*                                                                                                 
+0Value of new copy:  Test 4 data*                                                                                                 
+0                                                                                                                                 
+-Next we test the ____ macro.                                                                                                     
+0                                                                                                                                 
+-Next we test the SEARCH macro.                                                                                                   
+0Before the call, registers 1 and 2 contain 0                                                                                     
+1Test A should find a character                                                                                                   
+0Found the character                                                                                                              
+0Register 1 = 000008D5 and Register 2 = 000000FF                                                                                  
+0BEGIN XSNAP - CALL     1 AT D00002B4 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     0008E0 TO 0009E0                                                      
+ 0008E0   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+   LINES    000900-000900    SAME AS ABOVE                                                                                        
+ 000920   FF000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+ 000940   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+   LINES    000960-0009C0    SAME AS ABOVE                                                                                        
+0                                                                                                                                 
+0Test B should find a character at the end                                                                                        
+0Found a character at the end                                                                                                     
+0Register 1 = 000008D9 and Register 2 = 000000FF                                                                                  
+0BEGIN XSNAP - CALL     2 AT E0000312 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     0008E0 TO 0009E0                                                      
+ 0008E0   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+   LINES    000900-000980    SAME AS ABOVE                                                                                        
+ 0009A0   00FF0000 00000000 00000000 00000000    00000000 FF000000 00000000 00000000   *................................*         
+ 0009C0   00000000 00000000 00FF0000 00000000    00000000 00000000 00000000 00000000   *................................*         
+0                                                                                                                                 
+0Test C should not find a character                                                                                               
+0No character was found                                                                                                           
+0Register 1 = 00000000 and Register 2 = 00000000                                                                                  
+0BEGIN XSNAP - CALL     3 AT C0000374 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     0008E0 TO 0009E0                                                      
+ 0008E0   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+   LINES    000900-000900    SAME AS ABOVE                                                                                        
+ 000920   FF000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+ 000940   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+   LINES    000960-000980    SAME AS ABOVE                                                                                        
+ 0009A0   00000000 FF000000 00000000 00000000    00000000 00FF0000 00000000 00000000   *................................*         
+ 0009C0   00000000 00000000 00000000 00000000    00000000 00000000 FF000000 00000000   *................................*         
+0                                                                                                                                 
+0Test D should find a character                                                                                                   
+0Found the character                                                                                                              
+0Register 1 = 000008D4 and Register 2 = 000000FF                                                                                  
+0BEGIN XSNAP - CALL     4 AT D00003E2 USER STORAGE                                                                                
+0                             CORE ADDRESSES SPECIFIED-     0008E0 TO 0009E0                                                      
+ 0008E0   00000000 00000000 00000000 00000000    00000000 00000000 00000000 00000000   *................................*         
+   LINES    000900-0009A0    SAME AS ABOVE                                                                                        
+10009C0   00000000 00000000 00000000 00000000    00FFFFFF FFFFFFFF 00000000 00000000   *................................*         
+0                                                                                                                                 
+0*** EXECUTION TIME =    0.000 SECS.       340 INSTRUCTIONS EXECUTED -   340000 INSTRUCTIONS/SEC ***                              
+0*** FIRST CARD NOT READ: NO CARDS READ:FILE UNOPENED                                                                             
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

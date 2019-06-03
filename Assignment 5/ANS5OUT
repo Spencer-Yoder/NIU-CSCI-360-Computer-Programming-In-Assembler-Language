@@ -1,0 +1,353 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 21.07.47 JOB07662 ---- SATURDAY,  17 MAR 2018 ----
+ 21.07.47 JOB07662  IRR010I  USERID KC03P70  IS ASSIGNED TO THIS JOB.
+ 21.07.47 JOB07662  ICH70001I KC03P70  LAST ACCESS AT 21:06:17 ON SATURDAY, MARCH 17, 2018
+ 21.07.47 JOB07662  $HASP373 KC03P70A STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 21.07.47 JOB07662  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 21.07.47 JOB07662  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 21.07.47 JOB07662  -KC03P70A                      00     83 ******    .00     .0    239   0      0      0      0     0
+ 21.07.47 JOB07662  -KC03P70A ENDED.  NAME-Spencer Yoder        TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 21.07.47 JOB07662  $HASP395 KC03P70A ENDED
+0------ JES2 JOB STATISTICS ------
+-  17 MAR 2018 JOB EXECUTION DATE
+-          266 CARDS READ
+-          353 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           38 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              JOB07662
+         2 //STEP1 EXEC PGM=ASSIST                                                 00020000
+         3 //STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+         4 //SYSPRINT DD SYSOUT=*                                                  00040000
+         5 //SYSIN DD *                                                            00050000
+         6 //FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW5DATA,DISP=SHR           00410011
+ ICH70001I KC03P70  LAST ACCESS AT 21:06:17 ON SATURDAY, MARCH 17, 2018
+ IEF236I ALLOC. FOR KC03P70A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF142I KC03P70A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03P70.KC03P70A.JOB07662.D0000102.?         SYSOUT        
+ IEF285I   KC03P70.KC03P70A.JOB07662.D0000101.?         SYSIN         
+ IGD104I KC02314.SPRING18.CSCI360.HW5DATA             RETAINED,  DDNAME=FT05F001
+ IEF373I STEP/STEP1   /START 2018076.2107
+ IEF032I STEP/STEP1   /STOP  2018076.2107 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   268K  EXT:        4K  SYS:    11432K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03P70A/START 2018076.2107
+ IEF033I  JOB/KC03P70A/STOP  2018076.2107 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ********************************************************                00060000         
+                                       2 * PROGRAM: ASSIGNMENT 5                                                 00080018         
+                                       3 * PROGRAMMER: SPENCER YODER                                             00090000         
+                                       4 *                                                                       00100000         
+                                       5 * NAME: MAIN                                                            00100100         
+                                       6 *                                                                       00100200         
+                                       7 * FUNCTION:                                                             00101000         
+                                       8 *   IT WILL READ AN 'N' NUMBER OF CARDS AND SAVE THEM                   00102000         
+                                       9 *   INTO A TABLE. IT WILL THEN PRINT ALL THE NUMBER ON                  00103000         
+                                      10 *   A LINE.                                                             00104018         
+                                      11 *                                                                       00106000         
+                                      12 * REGISTERS USED:                                                       00110000         
+                                      13 *   1  PRAMATOR LIST                                                    00111000         
+                                      14 *   4  OUT PRAMATOR LINST                                               00119118         
+                                      15 *   6  STORAGE FOR DIV NUMBER                                           00119218         
+                                      16 *  14  ADDRESS TO NEXT INSTRUCTION                                      00119318         
+                                      17 *  15  ADDRESS TO ROUTINE                                               00119418         
+                                      18 ********************************************************                00120000         
+ 000000                               19 MAIN     CSECT                                                          00130000         
+ 000000 90EC D00C            0000C    20          STM   14,12,12(13)           ENTRY LINKAGE                     00131021         
+ 000004 18CF                          21          LR    12,15                                                    00132020         
+ 000000                               22          USING MAIN,12                                                  00140020         
+ 000006 41E0 C090            00090    23          LA    14,MSAVE                                                 00141020         
+ 00000A 50D0 E004            00004    24          ST    13,4(0,14)                                               00142020         
+ 00000E 50E0 D008            00008    25          ST    14,8(0,13)                                               00143020         
+ 000012 18DE                          26          LR    13,14                                                    00144020         
+                                      27 *        *                                                              00145020         
+ 000014 4110 C23C            0023C    28          LA    R1,PARMS              LOAD THE PRAMATER LIST             00150000         
+ 000018 4140 C24C            0024C    29          LA    R4,OUTPARM+8                                             00160018         
+ 00001C 58F0 C088            00088    30          L     15,=V(BUILD)          LOAD BUILD                         00160116         
+ 000020 05EF                          31          BALR  14,15                 CALL BUILD                         00160319         
+                                      32 *                                                                       00160518         
+ 000022 E020 C264 0010 00264          33          XPRNT HEDDER1,16            PRINT HEDDER                       00160718         
+ 000028 4140 C244            00244    34          LA    R4,OUTPARM            LOAD OUT PRAMATER LIST             00160818         
+ 00002C 58F0 C08C            0008C    35          L     15,=V(PRNT)           LOAD PRINT ALL                     00160917         
+ 000030 05EF                          36          BALR  14,15                 CALL PRINT ALL                     00161019         
+                                      37 *                                                                       00161118         
+ 000032 5860 C224            00224    38          L     R6,D1                 LOAD DIV FOR HEDDER                00161418         
+ 000036 5260 C282            00282    39          XDECO R6,DIV                ADD TO HEDDER                      00161618         
+ 00003A E020 C274 001A 00274          40          XPRNT HEDDER2,26            PRINT HEDDER                       00161718         
+ 000040 4140 C24C            0024C    41          LA    R4,OUTPARM+8          MOVE OPARM LIST 2FULLWORDS         00162018         
+ 000044 58F0 C08C            0008C    42          L     15,=V(PRNT)           PRINT D1,H1                        00162117         
+ 000048 05EF                          43          BALR  14,15                                                    00162219         
+                                      44 *                                                                       00162318         
+ 00004A 5860 C22C            0022C    45          L     R6,D2                 LOAD DIV FOR HEDDER                00162518         
+ 00004E 5260 C282            00282    46          XDECO R6,DIV                ADD TO HEDDER                      00162618         
+ 000052 E020 C274 001A 00274          47          XPRNT HEDDER2,26            PRINT HEDDER                       00162718         
+ 000058 4140 C254            00254    48          LA    R4,OUTPARM+16         MOVE OPARM TO D2,H2                00162818         
+ 00005C 58F0 C08C            0008C    49          L     15,=V(PRNT)           PRINT D2,H2                        00162917         
+ 000060 05EF                          50          BALR  14,15                                                    00163019         
+                                      51 *                                                                       00163118         
+ 000062 5860 C234            00234    52          L     R6,D3                 LOAD DIV FOR HEDDER                00163318         
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000066 5260 C282            00282    53          XDECO R6,DIV                ADD TO HEDDER                      00163418         
+ 00006A E020 C274 001A 00274          54          XPRNT HEDDER2,26            PRINT HEDDER                       00163518         
+ 000070 4140 C25C            0025C    55          LA    R4,OUTPARM+24         MOVE OPARM TO D3,D3                00163618         
+ 000074 58F0 C08C            0008C    56          L     15,=V(PRNT)           PRINT D3,H3                        00163717         
+ 000078 05EF                          57          BALR  14,15                                                    00163819         
+                                      58 *        *                                                              00163920         
+ 00007A 58D0 D004            00004    59          L     13,4(0,13)            EXIT LINKAGE                       00164021         
+ 00007E 98EC D00C            0000C    60          LM    14,12,12(13)                                             00164120         
+ 000082 07FE                          61          BR    14                    EXIT                               00164407         
+                                      62          LTORG                                                          00165000         
+ 000088 00000290                      63                =V(BUILD)                                                                 
+ 00008C 000003F0                      64                =V(PRNT)                                                                  
+                                      65 ********************************************************                00165120         
+ 000090                               66 MSAVE    DS    18F                MAIN SAVE AREA                        00166020         
+                                      67 ***GLOABLE VARS*****************************************                00184618         
+ 0000D8                               68 TABLE    DS    80F'-128'          TABLE WITH 80 FULLWORD                00184718         
+ 000218                               69 EOT      DS    F                  END OF TABLE PTR                      00184900         
+ 00021C 00000001                      70 D0       DC    F'1'               DIV                                   00185018         
+ 000220 00000005                      71 H0       DC    F'5'               HOW MANY NUMBER PER LINE              00185118         
+ 000224                               72 D1       DS    F                                                        00185213         
+ 000228                               73 H1       DS    F                                                        00185313         
+ 00022C                               74 D2       DS    F                                                        00185413         
+ 000230                               75 H2       DS    F                                                        00185513         
+ 000234                               76 D3       DS    F                                                        00185613         
+ 000238                               77 H3       DS    F                                                        00185713         
+                                      78 ***PRAMATER LISTS***************************************                00185818         
+ 00023C 000000D8                      79 PARMS    DC    A(TABLE)           PRAMATER LIST                         00185900         
+ 000240 00000218                      80          DC    A(EOT)                                                   00186000         
+ 000244 0000021C                      81 OUTPARM  DC    A(D0)              PRAM LIST OF DIV AND HOW MANY         00186218         
+ 000248 00000220                      82          DC    A(H0)                                                    00186317         
+ 00024C 00000224                      83          DC    A(D1)                                                    00186417         
+ 000250 00000228                      84          DC    A(H1)                                                    00186513         
+ 000254 0000022C                      85          DC    A(D2)                                                    00186613         
+ 000258 00000230                      86          DC    A(H2)                                                    00186713         
+ 00025C 00000234                      87          DC    A(D3)                                                    00186813         
+ 000260 00000238                      88          DC    A(H3)                                                    00186913         
+                                      89 ***HEDDER LINES*****************************************                00187018         
+ 000264 F1                            90 HEDDER1  DC    C'1'                                                     00187118         
+ 000265 E3C1C2D3C540C3D6              91          DC    CL15'TABLE CONTENTS '                                    00187218         
+ 000274 F1                            92 HEDDER2  DC    C'1'                                                     00187318         
+ 000275 D4E4D3E3C9D7D3C5              93          DC    CL13'MULTIPLES OF '                                      00187418         
+ 000282                               94 DIV      DS    CL12                                                     00187518         
+                                      95 ***REGISTORS EQUATES************************************                00187600         
+ 000000                               96 R0   EQU    0                                                           00187700         
+ 000001                               97 R1   EQU    1                                                           00187800         
+ 000002                               98 R2   EQU    2                                                           00187900         
+ 000003                               99 R3   EQU    3                                                           00188000         
+ 000004                              100 R4   EQU    4                                                           00188100         
+ 000005                              101 R5   EQU    5                                                           00188200         
+ 000006                              102 R6   EQU    6                                                           00188300         
+ 000007                              103 R7   EQU    7                                                           00188400         
+ 000008                              104 R8   EQU    8                                                           00188500         
+ 000009                              105 R9   EQU    9                                                           00188600         
+ 00000A                              106 R10  EQU    10                                                          00188700         
+ 00000B                              107 R11  EQU    11                                                          00188800         
+ 00000C                              108 R12  EQU    12                                                          00188900         
+ 00000D                              109 R13  EQU    13                                                          00189000         
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00000E                              110 R14  EQU    14                                                          00189100         
+ 00000F                              111 R15  EQU    15                                                          00190000         
+                                     112 *///////////////////////////////////////////////////////                00191003         
+                                     113 *///////////////////////////////////////////////////////                00192003         
+                                     114 ********************************************************                00192102         
+                                     115 * NAME: BUILD                                                           00192202         
+                                     116 *                                                                       00192302         
+                                     117 * FUNCTION:                                                             00192402         
+                                     118 *   THIS WILL READ ANY AMOUNT OF CARDS AND SAVE THE FIRST               00192502         
+                                     119 *   80 NUMBER INTO A TABLE.                                             00192618         
+                                     120 *                                                                       00192702         
+                                     121 * PRAMATERS:                                                            00192802         
+                                     122 *   IT WILL TAKE IN A PRAMATER LIST OF THE ADDRESS TO THE               00192902         
+                                     123 *   TABLE AND THE END OF TABLE VALUE.                                   00193002         
+                                     124 *   IT WILL ALSO HAVE A PRAMATER LIST FOR THE DIV AND H VALUE.          00193118         
+                                     125 *                                                                       00193202         
+                                     126 * REGISTORS USED:                                                       00193302         
+                                     127 *   1  XDECI ADDRESS TO NEXT NUBMER                                     00193402         
+                                     128 *   2  ADDRESS TO TABLE                                                 00193502         
+                                     129 *   3  ADDREST TO END OF TABLE                                          00193602         
+                                     130 *   4  SAVED VALUE FROM XDECI                                           00193702         
+                                     131 *   6  ADDRESS TO THE OUT PARM LIST                                     00193813         
+                                     132 ************************************************************            00193902         
+ 000290                              133 BUILD    CSECT                                                          00194003         
+ 000290 90EC D00C            0000C   134          STM   14,12,12(13)         SAVE THE REGISTORS                  00194118         
+ 000294 18CF                         135          LR    12,15                SET 12 AS BASE                      00194218         
+ 000290                              136          USING BUILD,12             USE BASE                            00194318         
+ 000296 41E0 C114            003A4   137          LA    14,BSAVE             POINT R14 TO SAVE AREA              00194418         
+ 00029A 50D0 E004            00004   138          ST    13,4(0,14)           SAVE FORWARD PTR                    00194518         
+ 00029E 50E0 D008            00008   139          ST    14,8(0,13)           SAVE BACKWARD PRT                   00194618         
+ 0002A2 18DE                         140          LR    13,14                POINT R13 TO SAVE AREA              00194718         
+                                     141 *        *                                                              00194803         
+ 0002A4 9823 1000            00000   142          LM    2,3,0(1)             LOAD THE PARM LIST                  00194918         
+ 0002A8 5864 0000            00000   143          L     6,0(4)               LOAD ADDRESS OF OPARM               00195018         
+ 0002AC E000 C0C0 0050 00350         144 LLOOP    XREAD BUFFER,80            LINE LOOP/READ LINE                 00195218         
+ 0002B2 4740 C0AC            0033C   145          BC    B'0100',LEND         IF END OF FILE, EXIT                00195318         
+ 0002B6 5340 C0C0            00350   146          XDECI R4,BUFFER            READ FIRST NUMBER                   00195618         
+ 0002BA 4710 C01C            002AC   147          BC    B'0001',LLOOP        IF NO NUMBER, NEXT LINE             00195718         
+ 0002BE 5940 C0B8            00348   148          C     R4,=F'-222222222'    CHECK TO SEE IF -2222222            00195813         
+ 0002C2 4780 C052            002E2   149          BE    EODATA               IF = GOTO END OF DATA               00195918         
+ 0002C6 5042 0000            00000   150          ST    R4,0(2)              SAVE NUMBER IN TABLE                00196418         
+ 0002CA 5A20 C0BC            0034C   151          A     R2,=F'4'             MOVE THE TABLE PRT                  00196618         
+ 0002CE 5341 0000            00000   152 CLOOP    XDECI R4,0(R1)            IF MORE NUMBER IN LINE               00196702         
+ 0002D2 4710 C01C            002AC   153          BC    B'0001',LLOOP        GO TO NEXT LINE                     00196818         
+ 0002D6 5042 0000            00000   154          ST    R4,0(2)             STORE INTO THE TABLE                 00197202         
+ 0002DA 5A20 C0BC            0034C   155          A     R2,=F'4'             MOVE THE TABLE PTR                  00197318         
+ 0002DE 47F0 C03E            002CE   156          B     CLOOP                KEEP GOING ON THE LINE              00197418         
+ 0002E2 5023 0000            00000   157 EODATA   ST    2,0(3)               SAVE END OF TABLE                   00197518         
+ 0002E6 E000 C0C0 0050 00350         158          XREAD BUFFER,80            READ FIRST ROW                      00197618         
+ 0002EC 5340 C0C0            00350   159          XDECI R4,BUFFER            READ FIRST NUM                      00197718         
+ 0002F0 5046 0000            00000   160          ST    R4,0(6)              SAVE D1                             00197818         
+ 0002F4 5A60 C0BC            0034C   161          A     R6,=F'4'             MOVE OPRAM LIST 1 SPACE             00197918         
+ 0002F8 5341 0000            00000   162          XDECI R4,0(R1)             READ H1                             00198018         
+ 0002FC 5046 0000            00000   163          ST    R4,0(6)              SAVE                                00198118         
+ 000300 5A60 C0BC            0034C   164          A     R6,=F'4'             MOVE OPRAM LIST                     00198218         
+ 000304 E000 C0C0 0050 00350         165          XREAD BUFFER,80            READ SECOND ROW                     00198313         
+ 00030A 5340 C0C0            00350   166          XDECI R4,BUFFER            READ FIRST NUM                      00198418         
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00030E 5046 0000            00000   167          ST    R4,0(6)              SAVE                                00198518         
+ 000312 5A60 C0BC            0034C   168          A     R6,=F'4'             MOVE PRT                            00198618         
+ 000316 5341 0000            00000   169          XDECI R4,0(R1)             READ SECOND NUMBER                  00198718         
+ 00031A 5046 0000            00000   170          ST    R4,0(6)              SAVE                                00198818         
+ 00031E 5A60 C0BC            0034C   171          A     R6,=F'4'             MOVE OPRAM PRT                      00198918         
+ 000322 E000 C0C0 0050 00350         172          XREAD BUFFER,80            READ THIRD LINE                     00199013         
+ 000328 5340 C0C0            00350   173          XDECI R4,BUFFER            READ FIRST NUBMER                   00199118         
+ 00032C 5046 0000            00000   174          ST    R4,0(6)              SAVE FIRST NUMBER                   00199218         
+ 000330 5A60 C0BC            0034C   175          A     R6,=F'4'             MOVE PRT                            00199318         
+ 000334 5341 0000            00000   176          XDECI R4,0(R1)             JUST LIKE THE LAST 2 TIMES          00199418         
+ 000338 5046 0000            00000   177          ST    R4,0(6)              SAVE SECOND NUMBER                  00199518         
+ 00033C                              178 LEND     DS    0H                                                       00199818         
+                                     179 *        *                                                              00200113         
+ 00033C 58D0 D004            00004   180          L     13,4(0,13)           POINT R13 TO CALLER SAVE AREA       00200218         
+ 000340 98EC D00C            0000C   181          LM    14,12,12(13)         RESTORE REGISTORS                   00200318         
+ 000344 07FE                         182          BR    14                   RETURN                              00200418         
+                                     183          LTORG                                                          00200511         
+ 000348 F2C12872                     184                =F'-222222222'                                                            
+ 00034C 00000004                     185                =F'4'                                                                     
+                                     186 ***VARABLES FOR BUILD***********************************                00200602         
+ 000350                              187 BUFFER   DS    80C                                                      00200702         
+ 0003A0 5C                           188          DC    C'*'                                                     00200802         
+                                     189 ********************************************************                00200902         
+ 0003A4                              190 BSAVE    DS    18F                  SAVE AREA FOR BUILD                 00201018         
+                                     191 *///////////////////////////////////////////////////////                00201103         
+                                     192 *///////////////////////////////////////////////////////                00201203         
+                                     193 ********************************************************                00202001         
+                                     194 * NAME: PRINT                                                           00210002         
+                                     195 *                                                                       00220001         
+                                     196 * FUNCTION:                                                             00230001         
+                                     197 *    THIS WILL PRINT THE VALUES ON A LINE DEPENDING OF                  00240018         
+                                     198 *    THE DIV AND HOWMANY NUMBERS.                                       00250018         
+                                     199 *                                                                       00260001         
+                                     200 * INPUT:                                                                00270001         
+                                     201 *   PRAMATER LIST OF TABLE AND END OF TABLE ADDRESS.                    00280018         
+                                     202 *   PRAMATER LIST OF THE DIV AND HOW MANY.                              00281018         
+                                     203 *                                                                       00290001         
+                                     204 * REGISTORS USED:                                                       00379401         
+                                     205 *   2  ADDRESS OF TABLE                                                 00379501         
+                                     206 *   3  END OF TABLE ADDRESS                                             00379601         
+                                     207 *   4  ADDRESS OF THE LINE                                              00379701         
+                                     208 *   6  USE IN DIVIDEING                                                 00379801         
+                                     209 *   7 VALUE IN THE TABLE AT THE ADDRESS                                 00380001         
+                                     210 *   8  COUNTER                                                          00388011         
+                                     211 *   9  DIVISON VALUE  (D)                                               00388115         
+                                     212 *   10 HOW MANY NUM ON LINE (H)                                         00388215         
+                                     213 ********************************************************                00389001         
+ 0003F0                              214 PRNT     CSECT                                                          00389117         
+ 0003F0 90EC D00C            0000C   215          STM   14,12,12(13)          ENTRY LINKAGE                      00389318         
+ 0003F4 18CF                         216          LR    12,15                                                    00389411         
+ 0003F0                              217          USING PRNT,12                                                  00389517         
+ 0003F6 41E0 C0F8            004E8   218          LA    14,PSAVE                                                 00389611         
+ 0003FA 50D0 E004            00004   219          ST    13,4(0,14)                                               00389718         
+ 0003FE 50E0 D008            00008   220          ST    14,8(0,13)                                               00389811         
+ 000402 18DE                         221          LR    13,14                                                    00389911         
+                                     222 *        *                                                              00390013         
+ 000404 989A 4000            00000   223          LM    9,10,0(4)             LOAD THE D AND H VALUE             00390517         
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000408 4140 C0A1            00491   224          LA    R4,BLINE+1            ADDRESS OF THE LINE                00390901         
+ 00040C 9823 1000            00000   225          LM    2,3,0(1)              LOAD PRAM LIST                     00391101         
+ 000410 5B30 C090            00480   226          S     3,=F'4'                                                  00391218         
+ 000414 1B88                         227          SR    R8,R8                ZERO COUNTER                        00391411         
+ 000416 1932                         228 LOOP2    CR    R3,R2                 LOOP UNITL END OF TABLE            00391501         
+ 000418 47C0 C076            00466   229          BC    B'1100',ELOOP                                            00391717         
+ 00041C 598A 0000            00000   230          C     R8,0(10)              IF MAX NUMBER ON LINE              00391918         
+ 000420 4740 C04A            0043A   231          BC    B'0100',KEEPGO                                           00392101         
+ 000424 E020 C0A0 0055 00490         232          XPRNT BLINE,85              PRINT LINE                         00392201         
+ 00042A 9240 C0A1      00491         233          MVI   BLINE+1,C' '          SET 2 CHAR TO BLANK                00393001         
+ 00042E D252 C0A2 C0A1 00492 00491   234          MVC   BLINE+2(83),BLINE+1   SET ALL OTHER TO SPACE             00394001         
+ 000434 4140 C0A1            00491   235          LA    R4,BLINE+1            RELOAD THE ADDRESS OF LINE         00395001         
+ 000438 1B88                         236          SR    R8,R8                 RESET COUNTER                      00396011         
+ 00043A                              237 KEEPGO   DS    0H                                                       00397001         
+ 00043A 5872 0000            00000   238          L     R7,0(R2)              GET VALUE OF ADDRESS               00397101         
+ 00043E 5C60 C094            00484   239          M     R6,=F'1'              SET NEG OR POS IN TABLE            00397201         
+ 000442 5D69 0000            00000   240          D     R6,0(9)                                                  00397618         
+ 000446 5960 C098            00488   241          C     R6,=F'0'              CHECK TO SEE IF R IS ZERO          00397715         
+ 00044A 4760 C06E            0045E   242          BC    B'0110',NOTZERO                                          00397818         
+ 00044E 5872 0000            00000   243          L     R7,0(R2)              RELOAD VALUE FROM TABLE            00397901         
+ 000452 5274 0000            00000   244          XDECO R7,0(4)               PRINT VALUE TO LINE                00398001         
+ 000456 5A40 C09C            0048C   245          A     R4,=F'12'             ADVANCE LINE BY 12                 00398101         
+ 00045A 5A80 C094            00484   246          A     R8,=F'1'              ADD 1 TO THE COUNTER               00398211         
+ 00045E                              247 NOTZERO  DS    0H                                                       00398318         
+ 00045E 5A20 C090            00480   248          A     R2,=F'4'              MOVE TO NEXT TABLE POS             00398401         
+ 000462 47F0 C026            00416   249          B     LOOP2                 GOTO LOOP2                         00398501         
+ 000466 E020 C0A0 0055 00490         250 ELOOP    XPRNT BLINE,85              PRINT THE LAST LINE                00398601         
+ 00046C 9240 C0A1      00491         251          MVI   BLINE+1,C' '          CLEAR THE LINE                     00398718         
+ 000470 D252 C0A2 C0A1 00492 00491   252          MVC   BLINE+2(83),BLINE+1                                      00398818         
+                                     253 *        *                                                              00398913         
+ 000476 58D0 D004            00004   254          L     13,4(0,13)            EXIT LINKAGE                       00399118         
+ 00047A 98EC D00C            0000C   255          LM    14,12,12(13)                                             00399211         
+ 00047E 07FE                         256          BR    14                                                       00399318         
+                                     257          LTORG                                                          00399411         
+ 000480 00000004                     258                =F'4'                                                                     
+ 000484 00000001                     259                =F'1'                                                                     
+ 000488 00000000                     260                =F'0'                                                                     
+ 00048C 0000000C                     261                =F'12'                                                                    
+                                     262 ***PRINT VARABLES***************************************                00399513         
+ 000490 F0                           263 BLINE    DC    C'0'               BLANK LINE FOR PRINTING..             00400102         
+ 000491 4040404040404040             264          DC    CL84' '               ALL OF THE NUMBERS                 00400218         
+                                     265 ********************************************************                00400301         
+ 0004E8                              266 PSAVE    DS    18F                   SAVE AREA FOR PRINT                00400418         
+                                     267          END   MAIN                                                     00400603         
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   15452 HIGH:    1376 LEAVING:  476740 FREE BYTES. AVERAGE:       62 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.001 SECS,   268000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1TABLE CONTENTS                                                                                                                   
+0      -26924          29          97        3290         355                                                                     
+0          74        -350        -724           7         -37                                                                     
+0          53       -8909          21          46          13                                                                     
+0         591          10          26       -1869       -6299                                                                     
+0           3         333      -15141         868         662                                                                     
+0         859        -529          35        -288       -8942                                                                     
+0       27446       -6729           6        3548         -84                                                                     
+0        -840      -13931       32439       -5537          82                                                                     
+0         833          58        3977       22386       20537                                                                     
+0        7595       -4350        -374          21         -68                                                                     
+0        4734          18        -788       -3728       22483                                                                     
+0         310         514       18935       -5249         798                                                                     
+0       11008       14989         485          23        9503                                                                     
+0           6          76           4           6      -18467                                                                     
+0        -169         -58        5705      -16827        2995                                                                     
+0        5436         902         382         718                                                                                 
+1MULTIPLES OF           11                                                                                                        
+0       32439       20537        -374                                                                                             
+0         902                                                                                                                     
+1MULTIPLES OF            9                                                                                                        
+0         333        -288        4734          18        5436                                                                     
+1MULTIPLES OF            8                                                                                                        
+0        -288        -840       -3728       11008                                                                                 
+0*** EXECUTION TIME =    0.003 SECS.      4595 INSTRUCTIONS EXECUTED -  1531666 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

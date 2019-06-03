@@ -1,0 +1,138 @@
+
+    *
+
+    CSCI 360
+
+    Assignment 7
+
+    *
+
+    *100 points *
+
+*Overview*
+
+As in Assignment 6, we have a file containing various pieces of
+information. In this case, however, the data is not all lined up for us
+in neat columns. We will need to use TRT and EX to extract the data from
+the record, and we will use TR to standardize the appearance of the names.
+
+For this assignment, we will write a program that will read a file
+containing information about the players of the Greek Myth game: ID
+numbers, names and three scores for each person. The information will be
+stored in a table. We will print the table.
+
+The program will make use of external subroutines, character data and
+packed decimal numbers.
+
+------------------------------------------------------------------------
+
+*Input*
+
+The input to the program will be a file with an unknown number of
+records. Each record represents a single client of player in the Greek
+Myth game and has the following format:
+
+Each input record contains:
+
+     ID Number (always 8 digits)
+     at least one space
+     First Name (up to 10 characters)
+     at least one space
+     Last Name (up to 12 characters)
+     at least one space
+     three scores, each 1-3 digits, separated by at least 1 space
+     more spaces to make up 80 columns in all
+
+Use the following JCL statement to specify the input file:
+
+//FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW7DATA,DISP=SHR
+
+------------------------------------------------------------------------
+
+*Processing Requirements*
+
+The main program will carry out the following steps:
+
+  * Call subroutine BUILD to read the file and store the data in a table.
+
+    The arguments for BUILD are the address of the table and the address
+    of a fullword that contains the address of the next available entry.
+
+  * Call subroutine PRINT to print the contents of the table, using
+    appropriate page and column headings.
+
+    The arguments for PRINT are the address of the table, the address of
+    a fullword that contains the address of the next available entry,
+    the address of the caption to use in the page heading, and the
+    address of the page counter.
+
+------------------------------------------------------------------------
+
+*Other Notes*
+
+ 1. Declare the table to hold 50 entries. Each entry should have the
+    following format:
+      * ID Number (stored as a fullword)
+      * Last Name (12 characters)
+      * First Name (10 characters)
+      * Score 1 (2 packed decimal bytes)
+      * Score 2 (2 packed decimal bytes)
+      * Score 3 (2 packed decimal bytes) 
+
+ 2. Use this DSECT to describe a table entry:
+
+         $ENTRY   DSECT
+         $ID      DS    F
+         $LNAME   DS    12C
+         $FNAME   DS    10C
+         $SCORE1  DS    PL2
+         $SCORE2  DS    PL2
+         $SCORE3  DS    PL2
+
+ 3. You may assume there no more than 50 players.
+
+ 4. The names are in a mixture of upper and lower case. You should use
+    TR to put them in a standard format in which the first letter of
+    each first or last name is an upper-case letter and that the other
+    letters are lower-case.
+
+ 5. Write this program incrementally, one subroutine at a time. Start
+    with BUILD and XDUMP the table to see whether BUILD is correct.
+    After that, write and test PRINT.
+
+ 6. The JCL for this assignment is the same as the JCL used in
+    Assignment 6 except for the line given above to provide the data.
+
+ 7. You may not use XDECI or XDECO anywhere in this assignment. The
+    scores should all be stored in packed decimal format and the ID
+    numbers should be stored as binary fullwords.
+
+ 8. When the table is printed, we will have a caption at the top of the
+    page. The PRINT subroutine will have an extra argument, the address
+    of a character field of length 24. When we call PRINT, the caption
+    should be "Greek Myth: Player Data".
+
+ 9. As you work on this, you may need to XDUMP all or part of the table
+    to check your work. Each line of XDUMP prints 32 bytes of data, and
+    each table entry is 32 bytes long. Use the following ORG trick to
+    line up your table on a 32-byte boundary:
+
+              ORG PROG7+((*-PROG7+31)/32)*32)
+    TABLE    DS  1600C
+
+------------------------------------------------------------------------
+
+*Output*
+
+The page header for each report should start at the top of a new page.
+The page heading should be centered. The page heading should include a
+page number (as in Assignment 6.)
+
+The column headers should be triple-spaced from the page header.
+
+The lines of player information should be double spaced.
+
+Print no more than 20 lines of player information per page.
+
+Print ID numbers as 8 digits with leading zeroes, as in "00123456".
+

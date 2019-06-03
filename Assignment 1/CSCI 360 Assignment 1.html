@@ -1,0 +1,65 @@
+
+    *
+
+    CSCI 360
+
+    Assignment 1
+
+    *
+
+    *50 points *
+
+This assignment is in three parts:
+
+------------------------------------------------------------------------
+
+*Part A*
+
+Write a program that does the following:
+
+  * Declare a fullword FIRST with the value 113.
+  * Declare a fullword SECOND with the value 52.
+  * Subtract SECOND from FIRST. To do this, simply load these numbers
+    into registers and use an SR.
+  * Add FIRST to SECOND. To do this, load the two numbers into registers
+    (a different pair of registers) and use an AR.
+  * Now use an XDUMP to dump out the registers and look at the register
+    values to see your answer. 
+
+------------------------------------------------------------------------
+
+*Part B*
+
+Modify the program from Part A as follows:
+
+  * Declare two consecutive fullwords of storage called RESULT1 and
+    RESULT2.
+  * Store (ST) the first answer (FIRST minus SECOND) into RESULT1.
+  * Store (ST) the second answer (SECOND plus FIRST) into RESULT2.
+  * XDUMP that area of storage (containing RESULT1 and RESULT2) using
+    XDUMP. You can use XDUMP to print the RESULTs in storage by using
+    the label followed by the length of the field like this: XDUMP
+    RESULT1,8.
+  * Go into the XDUMP output and verify your math is correct. 
+
+------------------------------------------------------------------------
+
+*Part C*
+
+Now rewrite your program using explicit addressing. This means on the L
+and ST, take out your labels and fill in the addresses of the various
+fullwords. You can get these addresses from the program listing of part B.
+
+------------------------------------------------------------------------
+
+*Other Notes*
+
+Hint: Start with the JCL and the trivial little program we had in the
+lab training exercise. Take out the two SR lines and put in what you need.
+
+Be sure your name and the assignment number (including Part A, B or C)
+is included in the documentation for each file.
+
+Turn in all three programs (from Parts A, B and C) and the output file
+from Part C.
+

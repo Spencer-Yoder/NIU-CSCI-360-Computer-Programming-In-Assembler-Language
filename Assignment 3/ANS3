@@ -1,0 +1,212 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H
+//STEP1 EXEC PGM=ASSIST
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+********************************************************
+*
+* PROGRAM: ASSIGN3
+* PROGRAMMER: SPENCER YODER
+*
+* FUNCTION:  IT WILL READ A FILE LINE BY LINE. IT WILL
+*            CALCULATE THE PRE-TOTAL BY PRICE*NUMBER ORD
+*            AND CALCULATE SHIPPING AND A DISCOUNT. AT THE
+*            END IT WILL DISPLAY THE TOTAL NUMBER OF LINES,
+*            NUMER OF ORDERS WITH FREE SHIPPING, AND THE
+*            GRAND TOTAL. IT WILL CALCULAT THE AVERAGE
+*            SALE AND PRINT IT OUT.
+*
+* REGISTERS USED:
+* 1    USED BY XDECI
+* 2    PRODUCT ID
+* 3    ORDER ID
+* 5    NUMBERD ORDERD
+* 6    PRETOTAL
+* 7    UNIT PRICE
+* 8    DISCOUNT PRICE - DEVISION REMAINDER
+* 9    GRAND TOTAL    - DEVISION QUOTIENT
+* 10
+* 11
+* 12   NUMBER OF NO SHIPPING COUNTER
+* 13   TOTAL LINE COUNTER
+********************************************************
+MAIN     CSECT
+         USING MAIN,15
+         SR    R9,R9               SET SOME OF THE REG TO ZERO
+         SR    R10,R10
+         SR    R11,R11
+         SR    R12,R12
+         SR    R13,R13
+         XPRNT INTO,133            PRINT THE FILE HEADDER
+         XPRNT HEADER,133          PRINT THE COLUMNS LABELS
+*
+LOOP     DS    0H                  TOP OF THE MAIN LOOP
+         XREAD CARD,80             READ IN THE CARD AND
+         BC    B'0100',ENDLOOP     IF EOF THEN BRANCH TO THE END OF THE LOOP
+         XDECI R2,CARD             GET AND SAVE PRODUCT ID
+         XDECI R3,0(,R1)           GET AND SAVE ORDER ID
+         XDECI R5,0(,R1)           GET AND SAVE NUMBER ORDERD
+         XDECI R6,0(,R1)           GET AND SAVE PRICE EACH
+         XDECO R2,PRODID           CONVERT PRODUCT ID TO STRING
+         XDECO R3,ORDERID          CONVERT ODER ID TO STRING
+         XDECO R5,NUMORD           CONVERT NUMBER ORDER TO STRING
+         XDECO R6,PRICE            CONVERT PRICE TO STRING
+         MR    R4,R6               MULTPLY THE NUMBER ORDERD BY PRICE
+         C     R5,=F'20000'        CHECK TO SEE IF IT IS LESS THAN
+         BL    LESDISC             IF SUB-TOTAL LES, GOTO LESS DISCOUNT
+*
+         L     R7,=F'500'          GRATER THAN 20,000 GIVE 500 DISCOUNT
+         XDECO R7,DISCO            CONVERT DISCOUNT TO STRING
+         B     CSHIP               GOTO CALCULATE SHIPPING
+*
+LESDISC  DS    0H                  IF LESS THAN 20,000 FOR A DISCOUNT
+         L     R7,=F'0'            SET DISCOUNT TO 0
+         XDECO R7,DISCO            CONVERT DISCOUNT TO STRING
+*
+CSHIP    DS    0H                  CALCULATE SHIPPING
+         C     R5,=F'10000'        CHECK TO SEE IF SUB-TOTAL LESS
+         BL    LESSHI              IF LESS GOTO LESS SHIPPING
+*
+         L     R8,=F'0'            ELSE SET SHIPPING TO 0
+         XDECO R8,SHIP             CONVERT SHIPPING PRICE TO STRING
+         A     R12,=F'1'           ADD 1 TO THE FREE SHIPPING COUNTER
+         B     FINAL               GOTO FINAL CALCULATE
+*
+LESSHI   DS    0H                  IS SHIPPING IS LESS THAN 10,000
+         L     R8,=F'600'          SET SHIPPING TO 600
+         XDECO R8,SHIP             CONVERT SHIPPING PRICE TO STRING
+*
+FINAL    DS    0H                  FINAL CALCULATIONS
+         AR    R5,R8               ADD PRE TOTAL WITH SHIPPING
+         SR    R5,R7               SUBTRACT PRE TOTAL - DISCOUNT
+         AR    R9,R5               ADD TOTAL TO GRAND TOTAL
+         XDECO R5,TOTAL            CONVERT TOTAL TO STRING
+         A     R13,=F'1'           ADD 1 TO THE COUNTER
+         XPRNT OUTPUT,133          PRINT THE PRODUCT LINE
+         B     LOOP                GOTO THE TOP OF THE LOOP
+*
+ENDLOOP  DS    0H                  AFTER ADD THE LINE HAVE BEEN READ
+         XDECO R13,COUNT           CONVER THE COUNT TO STRING
+         XPRNT OCOUNT,133          PRINT THE COUNT LINE
+         XDECO R12,TSHIP           CONVERT TOTAL SHIP COUNT TO STRING
+         XPRNT OSHIP,133           PRINT TOTAL FREE SHIPING LINE
+         XDECO R9,TSALES           CONVERT GRAND TOTAL TO STRING
+         XPRNT OSALES,133          PRINT GRADN TOTAL LINE
+*
+         SR    R4,R4               CLEAR UP SOME REGISTORS
+         SR    R5,R5
+         SR    R8,R8
+         DR    R8,R13              DEVIDE GRAND TOTAL BY COUNT
+         LR    R8,R5               SAVE THE REMANDER INTO NEW REG
+         M     R4,=F'2'            CALCULATE 2 TIMES THE REMAINDER
+         CR    R4,R13              SEE IF IT IS BIGGER THAN COUNT
+         BH    NOROUND             IF NO GOTO NOROUND
+         A     R9,=F'1'            ELSE, ADD 1 TO THE QUOTIENT
+*
+NOROUND  DS    0H
+         XDECO R9,TAVG             CONVERT AVERAGE TO STRING
+         XPRNT OAVG,133            PRINT AVERAGE LINE
+         BR    14                  SEND THE PROGRAM HOME
+         LTORG                     PLACE HOLDER FOR LITERALS
+***************************************************************
+**EQUATES**
+***********
+R1       EQU   1
+R2       EQU   2
+R3       EQU   3
+R4       EQU   4
+R5       EQU   5
+R6       EQU   6
+R7       EQU   7
+R8       EQU   8
+R9       EQU   9
+R10      EQU   10
+R11      EQU   11
+R12      EQU   12
+R13      EQU   13
+***************************************************************
+**VARABLE FOR READING CARD**
+****************************
+CARD     DC    80C' '
+***************************************************************
+**LINE FOR FILE HEADDER**
+*************************
+INTO     DC    CL1'1'
+         DC    CL43' '
+         DC    CL28'Sales Report -- Widgets-R-Us'
+         DC    CL61' '
+***************************************************************
+**LINE FOR COUMNS HEADDER**
+***************************
+HEADER   DC    CL1'0'
+         DC    CL5' '
+         DC    CL8'ORDER ID'
+         DC    CL9' '
+         DC    CL10'PRODUCT ID'
+         DC    CL7' '
+         DC    CL10'PRICE EACH'
+         DC    CL5' '
+         DC    CL14'NUMBER ORDERED'
+         DC    CL6' '
+         DC    CL8'DISCOUNT'
+         DC    CL9' '
+         DC    CL8'SHIPPING'
+         DC    CL11' '
+         DC    CL5'TOTAL'
+         DC    CL18' '
+***************************************************************
+**LINE FOR EACH PRODUCT**
+*************************
+OUTPUT   DC    CL1'0'
+         DC    CL1' '
+ORDERID  DS    CL8            VARABLE FOR THE ORDER ID
+         DC    CL11' '
+PRODID   DS    CL8            VARABLE FOR THE PRODUCT ID
+         DC    CL9' '
+NUMORD   DS    CL8            VARABLE FOR THE NUMB ORDERED
+         DC    CL11' '
+PRICE    DS    CL8            VARABLE FOR PRICE
+         DC    CL6' '
+DISCO    DS    CL8            VARABLE FOR THE DISCOUNT
+         DC    CL9' '
+SHIP     DS    CL8            VARABLE FOR SHIPPING PRICE
+         DC    CL8' '
+TOTAL    DS    CL8            VARABLE FOR TOTAL AFTER CALC
+         DC    CL21' '
+****************************************************************
+**LINE FOR TOTAL SALES**
+************************
+OCOUNT   DC    CL1'-'
+         DC    CL22'TOTAL NUMBER OF SALES:'
+         DC    CL8' '
+COUNT    DS    12C            VARABLE FOR TOTAL NUMBER OF SALES
+         DC    CL94' '
+****************************************************************
+**lINE FOR FREE SHIPPING COUNT**
+********************************
+OSHIP    DC    CL1'0'
+         DC    CL26'NUMBER WITH FREE SHIPPING:'
+         DC    CL4' '
+TSHIP    DS    12C            VARABLE FOR TOTAL FREE SHIPPINGS
+         DC    CL94' '
+****************************************************************
+**LINE FOR GRAND TOTAL**
+************************
+OSALES   DC    CL1'0'
+         DC    CL17'SUM OF ALL SALES:'
+         DC    CL13' '
+TSALES   DS    12C           VARABLE FOR GRAND TOTAL OF ALL
+         DC    CL90' '
+****************************************************************
+**LINE TO PRINT AVERAGE**
+*************************
+OAVG     DC    CL1'0'
+         DC    CL19'AVERAGE SALE TOTAL:'
+         DC    CL11' '
+TAVG     DS    12C          VARABLE FOR AVERAGE
+         DC    CL90' '
+****************************************************************
+         END MAIN
+/*
+//FT05F001 DD DSN=KC02314.SPRING18.CSCI360.HW3DATA,DISP=SHR
+//

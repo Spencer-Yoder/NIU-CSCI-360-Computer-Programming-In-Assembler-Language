@@ -1,0 +1,40 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010000
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+***************************************************************         00051101
+* ASSIGMENT 1C                                                          00051202
+* NAME: SPENCER YODER                                                   00051301
+*                                                                       00051401
+* FUNCTION:                                                             00051501
+*     IT WILL TAKE THE VAR FIRST AND SUBTRACT IT FROM SECOND.           00051601
+*     THEN IT WILL ADD SECOND INTO FIRST. THEN DUMP THE DATA.           00051701
+*     IT THEN SAVES THE REUSLTS OF THE 2 CALC INTO RESULT1 AND RESULT2  00051801
+*                                                                       00051901
+* REGISTERS USED:                                                       00052001
+*     1    FIRST VALUE '113'                                            00052101
+*     2    SECOND VALUE '52'                                            00052201
+*     3    FIRST VALUE '113'                                            00052301
+*     4    SECOND VALUE '52'                                            00052401
+**************************************************************          00053001
+MAIN      CSECT                                                         00060000
+          USING MAIN,15                                                 00070000
+          L     1,40(15)                                                00080000
+          L     2,44(15)                                                00090000
+          L     3,40(15)                                                00100000
+          L     4,44(15)                                                00110000
+          SR    1,2                                                     00120000
+          AR    3,4                                                     00130000
+          ST    1,RESULT1                                               00131000
+          ST    3,RESULT2                                               00132000
+*         XDUMP                                                         00140000
+          XDUMP RESULT1,8                                               00141000
+          XDUMP RESULT2,8                                               00142000
+FIRST     DC  F'113'                                                    00150000
+SECOND    DC  F'52'                                                     00160000
+RESULT1   DS  F                                                         00161000
+RESULT2   DS  F                                                         00162000
+          END   MAIN                                                    00170000
+*/                                                                      00180000
+//                                                                      00190000

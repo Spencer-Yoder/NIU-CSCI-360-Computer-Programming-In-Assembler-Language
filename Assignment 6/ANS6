@@ -1,0 +1,520 @@
+//KC03P70A JOB ,'Spencer Yoder',MSGCLASS=H                              00010001
+//STEP1 EXEC PGM=ASSIST                                                 00020001
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030001
+//SYSPRINT DD SYSOUT=*                                                  00040001
+//SYSIN DD *                                                            00050001
+*************************************************                       00060001
+* PROGRAM: ASSIGNMENT 6                                                 00070018
+* PROGRAMMER: SPENCER YODER                                             00071018
+*                                                                       00072018
+* NAME: MAIN                                                            00073018
+*                                                                       00074018
+* FUNCTION:                                                             00075018
+*   CALLS THE BUILD FUNCITON TO READ CARDS INTO                         00080018
+*   A TABLE, AND THEN CALL THE PRINT FUNCTION TO                        00080118
+*   PRINT ALL CONTENTS OF THE TABLE. AFTER THAT                         00080218
+*   IT WILL CALL THE TRANSACTION FUNCTION TO                            00080318
+*   ADD OR REMOVE MONEY FROM THE ACCOUNT. LASTLEY                       00080418
+*   IT CALLS THE PRINT FUNCTION AGAIN                                   00080518
+*                                                                       00080618
+* REGUSTORS USED:                                                       00080718
+*  1  PRAMATOR LIST                                                     00080818
+*  14 ADDRESS TO NEXT INSTRUCTION                                       00080918
+*  15 ADDRESS TO ROUTINE                                                00081018
+*                                                                       00082018
+*************************************************                       00090001
+MAIN     CSECT                                                          00100001
+         STM   14,12,12(13)             ENTRY LINKAGE                   00101018
+         LR    12,15                                                    00102001
+         USING MAIN,12                                                  00103001
+         LA    14,MSAVE                                                 00104001
+         ST    13,4(0,14)                                               00105001
+         ST    14,8(0,13)                                               00106001
+         LR    13,14                                                    00107001
+*        *                                                              00108001
+         LA    R1,PARMS                 LOAD THE PARM LIST              00109018
+         L     15,=V(BUILD)             SAVE BUILD INTO REG15           00110018
+         BALR  14,15                    GOTO BUILD                      00120018
+*        *                                                              00121009
+         LA    R1,PRNTPARM              LOAD THE PARM LIST              00122018
+         L     15,=V(PRINT)             SAVE PRINT INTO REG15           00123018
+         BALR  14,15                    GOTO BUILD                      00124018
+*        *                                                              00130001
+         LA    R1,TRANPARM              LOAD THE PARM LIST              00130118
+         L     15,=V(TRANS)             SAVE TRANS INTO REG15           00130218
+         BALR  14,15                    GOTO BUILD                      00130318
+*        *                                                              00131009
+         LA    R1,PRNTPARM              LOAD THE PARM LIST              00133018
+         L     15,=V(PRINT)             SAVE PRINT INTO REG15           00134018
+         BALR  14,15                    GOTO BUILD                      00135018
+*        *                                                              00136009
+         L     13,4(0,13)               EXIT LINKAGE                    00140018
+         LM    14,12,12(13)                                             00150004
+         BR    14                                                       00160001
+         LTORG                                                          00170001
+*************************************************                       00180001
+MSAVE    DS    18F                      MAIN SAVE AREA                  00190018
+***TABLE INFORMATION*****************************                       00200018
+         ORG MAIN+((*-MAIN+31)/32)*32                                   00201002
+TABLE    DS    27CL32                   MAIN TABLE SAVE AREA            00210018
+EOT      DS    F                        EOT POINTER                     00220018
+PAGE     DS    F'1'                     PAGE COUNTER                    00220118
+HEADING1 DC    C'1'                     PAGE HEADING                    00221018
+         DC    CL22' '                                                  00221104
+         DC    CL27'Odds and Ends Customer Data'                        00222004
+         DC    CL22' '                                                  00223004
+         DC    CL4'Page'                                                00224004
+BUFFER   DS    CL80                     INPUT READ BUFFER               00225018
+***PARM LIST*************************************                       00230001
+PARMS    DC    A(TABLE)                 PARM LIST FOR BUILD             00240018
+         DC    A(EOT)                                                   00250001
+         DC    A(BUFFER)                                                00250105
+PRNTPARM DC    A(TABLE)                 PARM LIST FOR PRINT             00251018
+         DC    A(EOT)                                                   00252004
+         DC    A(PAGE)                                                  00253005
+         DC    A(HEADING1)                                              00254004
+TRANPARM DC    A(TABLE)                 PARM LIST FOR TRANS             00255018
+         DC    A(EOT)                                                   00256005
+         DC    A(BUFFER)                                                00257005
+         DC    A(PAGE)                                                  00258005
+***REGISTORS EQUATES*****************************                       00260018
+R0   EQU    0                                                           00270001
+R1   EQU    1                                                           00280001
+R2   EQU    2                                                           00290001
+R3   EQU    3                                                           00300001
+R4   EQU    4                                                           00310001
+R5   EQU    5                                                           00320001
+R6   EQU    6                                                           00330001
+R7   EQU    7                                                           00340001
+R8   EQU    8                                                           00350001
+R9   EQU    9                                                           00360001
+R10  EQU   10                                                           00370001
+R11  EQU   11                                                           00380001
+R12  EQU   12                                                           00390001
+R13  EQU   13                                                           00400001
+*************************************************                       00410001
+* NAME: BUILD                                                           00411018
+*                                                                       00411118
+* FUNCTION:                                                             00411218
+*   BUILD WILL READ THE CARDS UNTIL IT GETS TO THE                      00411318
+*   STOP LINE. IT WILL SAVE THE DATA INTO THE TABLE                     00411418
+*                                                                       00411518
+* PRAMATERS:                                                            00411618
+*   NEEDS PRAM LIST WIH                                                 00411718
+*     ADDRESS TO TABLE                                                  00411818
+*     ADDRESS TO EOT                                                    00411918
+*     ADDRESS TO THE INPUT BUFFER                                       00412018
+*                                                                       00412118
+* REGUISTORS USED:                                                      00412218
+*   1  ADDRESS OF PARM LIST                                             00412302
+*   2  ADDRESS OF TABLE                                                 00412402
+*   3  ADDRESS OF EOT                                                   00413002
+*   4  ADDRESS OF BUFFER                                                00414002
+*   5  INPUT STRING                                                     00414105
+*************************************************                       00415002
+BUILD    CSECT                                                          00420001
+         STM   14,12,12(13)              ENTRY LINKAGE                  00430018
+         LR    12,15                                                    00440001
+         USING BUILD,12                                                 00450001
+         LA    14,BSAVE                                                 00460001
+         ST    13,4(0,14)                                               00470001
+         ST    14,8(0,13)                                               00480001
+         LR    13,14                                                    00490001
+*        *                                                              00500001
+         LM    2,4,0(1)                 LOAD THE PARM LIST              00510018
+TOP      DS    0H                                                       00520001
+         USING TABLEY,R2                LOAD THE DSECT                  00530018
+         XREAD 0(4),80                  READ THE INPUT CARD             00541018
+         BC    B'0100',END              IF BAD FILE GOTO END            00550004
+         LA    R5,0(4)                  LOAD THE BUFFER ADDRESS         00560018
+         USING INPUTY,R5                USE THE  INPUT DSECT            00570018
+         CLI   FNAME,C'D'               IF AT STOP POINT                00571004
+         BC    B'1000',END              GOTO END                        00572004
+         MVC   FIRST,FNAME              SAVE FIRST NAME                 00580001
+         MVC   LAST,LNAME               SAVE LAST NAME                  00590001
+         MVC   ID,CLIENTID              SAVE ID NUMBER                  00600001
+         PACK  BALANCE,BALNREAD         SAVE THE BALANCE                00610006
+         CLI   SIGN,C'-'                IF THE SIGN IN NEG              00611018
+         BC    B'0111',POSSKIP          SKIP IF POSITIVE                00612018
+         MP    BALANCE,=P'-1'           MULT BY -1                      00613018
+POSSKIP  DS    0H                                                       00614004
+         A     2,=F'32'                 MOVE TABLE 1 ITEM               00630003
+         B     TOP                      GOTO READ NEXT CARD             00650018
+END      DS    0H                                                       00660005
+         ST    2,0(3)                   SAVE EOT                        00660205
+         DROP  R2                       STOP USING DSECTS               00662018
+         DROP  R5                                                       00663005
+*        *                                                              00670001
+         L     13,4(0,13)               EXIT LINKAGE                    00680018
+         LM    14,12,12(13)                                             00690001
+         BR    14                                                       00700001
+         LTORG                                                          00710001
+*************************************************                       00720001
+BSAVE    DS    18F                                                      00730001
+*************************************************                       00750004
+*                                                                       00750104
+* NAME: PRINT                                                           00750218
+*                                                                       00750318
+* FUNCTION:                                                             00750418
+*  PRINT ALL THE CONTENTS OF THE TABLE ONTO A LINE.                     00750518
+*  IT WILL ONLY PRINT 15 LINES PER PAGE.                                00750618
+*                                                                       00750718
+* REGISTORS USED:                                                       00750818
+*  1    ADDRESS OF CHAR BEFOR THE FIRST ZERO                            00750913
+*  2    ADDRESS OF TABLE                                                00751004
+*  3    ADDRESS OF EOT                                                  00751104
+*  4    ADDRESS OF PAGE COUNTER                                         00751204
+*  5    ADDRESS OF HEADING                                              00751304
+*  6    LINE NUMBER COUNTER                                             00751404
+*  7    ADDRESS OF OUTPUT LINE                                          00751504
+*  8    TOTAL CUSTOMERS COUNTER                                         00751606
+*  9    SUM OF ALL BALANCES                                             00751706
+*  10   AVERAGE OF BALANCES                                             00751806
+*************************************************                       00751904
+PRINT    CSECT                                                          00752004
+         STM   14,12,12(13)             ENTRY LINKAGE                   00752118
+         LR    12,15                                                    00752204
+         USING PRINT,12                                                 00752304
+         LA    14,PSAVE                                                 00752404
+         ST    13,4(0,14)                                               00752504
+         ST    14,8(0,13)                                               00752604
+         LR    13,14                                                    00752704
+*        *                                                              00752804
+         ZAP   LINECOUT,=P'0'                                           00752921
+         ZAP   SUMTOTAL,=P'0'                                           00753023
+         L     R6,=F'15'                SET LINE COUNTER TO 15          00753105
+*        SR    8,8                      ZERO THE CUSTOMER COUNTER       00753223
+         LM    2,5,0(1)                 LOAD THE PARM LIST              00753318
+LOOP     DS    0H                                                       00753404
+         USING TABLEY,R2                LOAD TABLE DSECT                00753504
+         LA    R7,OUTPUT                LOAD OUTPUT LINE ADDRESS        00753604
+         USING OUTPUTY,R7               USE OUTPUT LINE DSECT           00753718
+         CR    R3,R2                    LOOP UNTIL END OF TABLE         00753805
+         BC    B'1100',ENDLOOP                                          00753904
+         C     R6,=F'15'                ONLY PRINT 15 LINE PER PAG      00754005
+         BC    B'0100',NEXTLINE                                         00754105
+         XPRNT NEWLINE,1                PRINT NEW LINE CHAR             00754218
+         MVC   OUTPUT,0(5)              COPY HEADER                     00754305
+         XPRNT OUTPUT,76                PRINT THE HEADER                00754418
+         MVC   OUTPUT,DISCLINE          COPY THE COLUMN HEADERS         00754505
+         XPRNT OUTPUT,76                PRINT                           00754610
+         MVI   OUTPUT+1,C' '            CLEAR FIRST CHAR ON LINE        00754705
+         MVC   OUTPUT+2(131),OUTPUT+1   CLEAR OUTPUT LINE               00754805
+         MVI   OUTPUT,C'0'              SET FIRST CHAR TO 0             00754920
+         SR    R6,R6                    ZERO THE LINE COUNTER           00755018
+         A     R4,=F'1'                 MOVE THE TABLE 1 POS            00755118
+NEXTLINE DS    0H                                                       00755205
+         MVC   LNAMEO,FIRST             COPY FIRST NAME TO LINE         00755318
+         MVC   FNAMEO,LAST              COPY LAST NAME TO LINE          00755418
+         MVC   IDNUMO,ID                COPY ID TO THE LINE             00755518
+         LA    R1,BALNOUT+5             SET REG 1 TO FIRST CHAR         00755618
+         MVC   BALNOUT,=X'4020202021204B2020'    EDIT PATTERN           00755718
+         EDMK  BALNOUT,BALANCE          COPY PACKED TO LINE             00755818
+         BCTR  R1,0                     GOTO 1 BEFORE FIRST CHAR        00755918
+         MVI   0(R1),C'$'               ADD $ SIGN                      00756018
+         CP    BALANCE,=P'0'            IF IT IS NEGTIVIE               00756118
+         BC    B'0010',SKIPCR           SKIP IF POS                     00756218
+         MVC   CRSIGN,CR                ADD 'CR'                        00756318
+SKIPCR   DS    0H                                                       00756418
+         XPRNT OUTPUT,132               PRINT ALL DATA ON LINE          00756518
+         MVI   OUTPUT+1,C' '            CLEAR FIRST CHAR                00756618
+         MVC   OUTPUT+2(131),OUTPUT+1   CLEAR LINE                      00756718
+         AP    SUMTOTAL,BALANCE                                         00756823
+         A     2,=F'32'                 MOVE TABLE 1 POSITON            00756905
+         A     6,=F'1'                  ADD 1 TO THE LINE COUNTER       00757005
+*        A     8,=F'1'                  ADD 1 TO THE TOAL CUSTOMR       00757123
+*        A     9,BALANCE                ADD TO TOTAL BALANCE            00757223
+         AP    LINECOUT,=P'1'                                           00757421
+         B     LOOP                                                     00757505
+ENDLOOP  DS    0H                                                       00757604
+         MVC   OUTPUT,NUMCUST           COPY TOTAL NUBMER CUSTOMER      00757718
+         MVC   TEMP,=X'40202020202020'                                  00757823
+         ED    TEMP(4),LINECOUT                                         00757923
+         MVC   OUTPUT+23,TEMP                                           00758023
+         XPRNT OUTPUT,30                PRINT TOTAL                     00758123
+         MVI   OUTPUT+1,C' '            CLEAR FIRST CHAR                00758218
+         MVC   OUTPUT+2(131),OUTPUT+1   CLAR LINE                       00758318
+         MVC   OUTPUT,SUMBAL            COPY SUM OF ALL CUSTOMERS       00758418
+         LA    R1,OUTPUT+23             SET REG 1 TO FIRST CHAR         00758523
+         MVC   OUTPUT+23,=X'40202020206B2021204B2020'                   00758624
+         EDMK  OUTPUT+23(12),SUMTOTAL       COPY PACKED TO LINE         00758724
+         BCTR  R1,0                     GOTO 1 BEFORE FIRST CHAR        00758823
+         MVI   0(R1),C'$'               ADD $ SIGN                      00758923
+         XPRNT OUTPUT,35                PRINT LINE                      00759024
+         MVI   OUTPUT+1,C' '            CLEAR FIRST CHAR                00759218
+         MVC   OUTPUT+2(131),OUTPUT+1   CLAR LINE                       00759318
+         DP    SUMTOTAL,LINECOUT                                        00759424
+         MVC   OUTPUT,AVGBAL            COPY OF AVERAGE BALANCE         00759518
+         MVC   OUTPUT+19,=X'402021204B2020'                             00759624
+         EDMK  OUTPUT+19(7),SUMTOTAL                                    00759724
+         BCTR  R1,0                                                     00759824
+         MVI   0(R1),C'$'                                               00759924
+         XPRNT OUTPUT,26                PRITN LINE                      00760024
+         MVI   OUTPUT+1,C' '            CLEAR FIRST CHAR                00760118
+         MVC   OUTPUT+2(131),OUTPUT+1   CLAR LINE                       00760218
+*        *                                                              00760304
+         L     13,4(0,13)               EXIT LINKAGE                    00760418
+         LM    14,12,12(13)                                             00760504
+         BR    14                                                       00760604
+         LTORG                                                          00760704
+*************************************************                       00760804
+PSAVE    DS    18F                      PARINT SAVE AREA                00760918
+DISCLINE DC    C'-'                     COLUMN HEADERS                  00761018
+         DC    CL10'First Name'                                         00761104
+         DC    CL10' '                                                  00761204
+         DC    CL9'Last Name'                                           00761304
+         DC    CL13' '                                                  00761404
+         DC    CL9'ID Number'                                           00761504
+         DC    CL17' '                                                  00761604
+         DC    CL7'Balance'                                             00761704
+OUTPUT   DS    CL132                    OUTPUT LINE                     00761818
+NEWLINE  DC    C'1'                     NEW LINE CHAR                   00761918
+TEST     DS    CL132                                                    00762014
+NUMCUST  DC    C'-'                     LINE FOR TOTAL INFORMATION      00762118
+         DC    CL22'Number of customers = '                             00762218
+SUMBAL   DC    C'0'                                                     00762318
+         DC    CL22'Sum of all balances = '                             00762418
+AVGBAL   DC    C'0'                                                     00762518
+         DC    CL18'Average balance = '                                 00762618
+DWORD1   DS    D                                                        00762716
+TEMP     DS    CL8                                                      00762817
+CR       DC    CL2'CR'                                                  00762918
+LINECOUT DS    PL2                                                      00763021
+SUMTOTAL DS    PL5                                                      00763123
+*************************************************                       00763205
+* NAME: TRANS                                                           00763318
+*                                                                       00763418
+* FUNCTION:                                                             00763518
+*  READ CARD WITH INSTRUCTION ON TO PRINT, ADD,                         00763618
+*  OR SUBTRACT FROM THE BALANCE IN THE TABLE.                           00763718
+*                                                                       00763818
+* PRAMATERS:                                                            00763918
+*  PARM LIST WITH                                                       00764018
+*    ADDRESS OF THE TABLE                                               00764118
+*    ADDRESS OF EOT                                                     00764218
+*    ADDRESS OF THE BUFFER                                              00764318
+*    ADDERSS OF THE PAGE COUTNER                                        00764418
+*                                                                       00764505
+* REGISTORS USED:                                                       00764618
+*  2   ADDRESS OF THE TABLE                                             00764705
+*  3   ADDRESS OF EOT                                                   00764805
+*  4   ADDRESS OF THE BUFFER                                            00764905
+*  5   ADDRESS OF THE PAGE COUNTER                                      00765005
+*  6   TEMP TABLE POINTER                                               00765105
+*  7   LINE NUMBER COUNTER                                              00765206
+*  8   ADDRESS OF THE OUTPUT LINE                                       00765306
+*************************************************                       00765405
+TRANS    CSECT                                                          00765505
+         STM   14,12,12(13)             ENTRY LINKAGE                   00765618
+         LR    12,15                                                    00765705
+         USING TRANS,12                                                 00765805
+         LA    14,TSAVE                                                 00765905
+         ST    13,4(0,14)                                               00766005
+         ST    14,8(0,13)                                               00766105
+         LR    13,14                                                    00766205
+*        *                                                              00766305
+         LM    2,5,0(1)                 LOAD PRAM LIST                  00766418
+         LR    6,2                      SAVE A TEMP TABLE PTR           00766505
+         LA    8,OUTLINE                LOAD ADDRESS TO OUTLINE         00766618
+         L     R7,=F'15'                SER LINE COUNTER TO 15          00766718
+         USING TINPUTY,4                USE TRANINPUT DSECT             00766818
+         USING TABLEY,6                 USE TABLE DSECT                 00766918
+         USING TOUTPUTY,8               USE TRANS OUTPUT DSECT          00767018
+START    XREAD TINPUTY,80               READ NEXT CARD                  00767105
+         BC    B'0100',ENDFILE          CHECK TO SEE IF EOF             00767205
+         LR    6,2                      LOAD TEMP REG WITH TABLE        00767305
+         C     R7,=F'15'                IF LINE COUNTER IS MORE 15      00767418
+         BC    B'0100',SEARCH           PRINT NEW PAGE                  00767518
+         XPRNT OUTLINE,1                PRINT NEW LINE                  00767618
+         MVC   OUTLINE,THEADING         COPY HEADER                     00767706
+         XPRNT OUTLINE,76               PRINT                           00767818
+         MVC   OUTLINE,COLLINE          COPY THE COLUMN HEADERS         00767906
+         XPRNT OUTLINE,83               PRINT                           00768006
+         MVI   OUTLINE+1,C' '           CLEAR FIRST CHAR ON LINE        00768106
+         MVC   OUTLINE+2(131),OUTLINE+1 CLEAR OUTPUT LINE               00768218
+         MVI   OUTLINE,C'0'              SET FIRST CHAR TO 0            00768320
+         SR    R7,R7                    ZERO COUTNER                    00768418
+         A     R5,=F'1'                 MOVE TABLE                      00768518
+SEARCH   CLC   ACCOUNT,ID               CHECK TO SEE IF IN TABLE        00768605
+         BC    B'1000',FOUND                                            00768705
+         CR    R6,R3                    STOP AT END OF TABLE            00768805
+         BC    B'1000',NOTFOUND                                         00768905
+         A     R6,=F'32'                MOVE TABLE 1 POS                00769005
+         B     SEARCH                   KEEP LOOING                     00769105
+NOTFOUND DS    0H                       IF ID NOT FOUND                 00769218
+         MVC   OUTLINE+4,=CL11'Error! ID: '   COPY ERROR                00769318
+         MVC   OUTLINE+15,ACCOUNT             COPY ACCOUNT NUM          00769418
+         MVC   OUTLINE+22,=CL20' NOT FOUND IN SYSTEM'                   00769506
+         XPRNT OUTLINE,42               PRINT                           00769618
+         MVI   OUTLINE+1,C' '           CLEAR THE OUTLINE               00769706
+         MVC   OUTLINE+2(131),OUTLINE+1                                 00769806
+         A     R7,=F'1'                 ZERO LINE COUNTER               00769918
+         B     START                                                    00770005
+FOUND    DS    0H                       IF THE ID IS FOUND IN TABLE     00770118
+         A     R7,=F'1'                 ADD 1 TO THE LINE COUTNER       00770218
+         CLI   TYPE,C'D'                CHECK THE TYPE                  00770305
+         BC    B'1000',DEPOSIT          IF DEPOSIT                      00770405
+         CLI   TYPE,C'W'                                                00770505
+         BC    B'1000',WITHDRAL         IF WITHDRAWAL                   00770605
+         MVC   CUSTID,ID                                                00770706
+         MVC   ACTION,=CL13'Balance Query'  COPY MESSAGE                00770818
+         MVC   AMOUNTOF,=CL7' '         COPY AMOUND                     00770918
+         PACK  TEMP1,DATE               PACK THE DATE                   00771018
+         MVC   DATEOF,=X'2020206120206120202020'  CHANGE DATE FORMAT    00771118
+         ED    DATEOF,TEMP1             COPY DATE                       00771218
+         LA    R1,TOTAL+5               LOAD ADDRESS OF FIRST CHAR      00771318
+         MVC   TOTAL,=X'4020202021204B2020'      CHANGE THE FORMAT      00771418
+         EDMK  TOTAL,BALANCE            COPY THE BLALANCE               00771518
+         BCTR  R1,0                     GOTO FIRST CHAR -1              00771618
+         MVI   0(R1),C'$'               SET $ SIGN                      00771718
+         CP    BALANCE,=P'0'            IF BALANCE > 0                  00771818
+         BC    B'0010',NEGSKIP1         SKIP IS NOT NEGITIVE            00771918
+         MVC   NEGSIGN,NEGCR            COPY 'CR'                       00772018
+NEGSKIP1 DS    0H                                                       00772118
+         XPRNT OUTLINE,132              PRINT LINE                      00772218
+         MVI   OUTLINE+1,C' '           CLEAR THE OUTLINE               00772306
+         MVC   OUTLINE+2(131),OUTLINE+1                                 00772406
+         B     START                                                    00772506
+DEPOSIT  DS    0H                       IF THE ACITON IS DEPOSIT        00772618
+         PACK  TEMP2,AMOUNT             PACK THE AMOUNT                 00772718
+         SP    BALANCE,TEMP2            SUBTRACT FROM BALACNE           00772818
+         MVC   CUSTID,ID                COPY ID NUM                     00772918
+         MVC   ACTION,=CL13'Deposit      '  PRINT ACTION TYPE           00773018
+         LA    R1,AMOUNTOF+5            LOAD FIRST CHAR                 00773118
+         MVC   AMOUNTOF,=X'4020202021204B2020'                          00773213
+         EDMK  AMOUNTOF,TEMP2           CONVERT FORMAT                  00773318
+         BCTR  R1,0                     MOVE TO FIRST - 1               00773418
+         MVI   0(R1),C'$'               COPY $ SIGN                     00773518
+         PACK  TEMP1,DATE               PACK DATE                       00773618
+         MVC   DATEOF,=X'2020206120206120202020'  CHANGE FORMAT         00773718
+         ED    DATEOF,TEMP1             COPY DATE                       00773818
+         LA    R1,TOTAL+5               LOAD BALANCE FIRST CHAR         00773918
+         MVC   TOTAL,=X'4020202021204B2020'  CHANGE FORMAT              00774018
+         EDMK  TOTAL,BALANCE            COPY BALANCE                    00774118
+         BCTR  R1,0                     MOVE -1                         00774218
+         MVI   0(R1),C'$'               COPY $ SIGN                     00774318
+         CP    BALANCE,=P'0'            CHECK IF NEGITIVE               00774418
+         BC    B'0010',NEGSKIP2                                         00774518
+         MVC   NEGSIGN,NEGCR            COPY 'CR'                       00774618
+NEGSKIP2 DS    0H                                                       00774718
+         XPRNT OUTLINE,132              PRINT LINE                      00774818
+         MVI   OUTLINE+1,C' '           CLEAR THE OUTLINE               00774906
+         MVC   OUTLINE+2(131),OUTLINE+1                                 00775006
+         B     START                                                    00775106
+WITHDRAL DS    0H                                                       00775205
+         PACK  TEMP2,AMOUNT             PACK THE AMOUNT                 00775319
+         AP    BALANCE,TEMP2            ADD IT TO BALANCE               00775419
+         MVC   CUSTID,ID                COPY ID NUMBER                  00775519
+         MVC   ACTION,=CL13'Withdrawal   '   COPY ACITON TYPE           00775619
+         LA    R1,AMOUNTOF+5                                            00775713
+         MVC   AMOUNTOF,=X'4020202021204B2020' CHANGE FORMAT            00775819
+         EDMK  AMOUNTOF,TEMP2           COPY AMOUNT                     00775919
+         BCTR  R1,0                     MOVE - 1                        00776019
+         MVI   0(R1),C'$'               ADD $ SIGN                      00776119
+         PACK  TEMP1,DATE               PACK THE DATE                   00776219
+         MVC   DATEOF,=X'2020206120206120202020'  CHANGE THE FORMAT     00776319
+         ED    DATEOF,TEMP1             COPY THE DATE                   00776419
+         LA    R1,TOTAL+5                                               00776513
+         MVC   TOTAL,=X'4020202021204B2020' CHANGE FORMAT OF BALANC     00776619
+         EDMK  TOTAL,BALANCE            COPY THE BALANCE                00776719
+         BCTR  R1,0                     MOVE - 1                        00776819
+         MVI   0(R1),C'$'               COPY $ SIGN                     00776919
+         CP    BALANCE,=P'0'            IF BALANCE IS NEG               00777019
+         BC    B'0010',NEGSKIP3                                         00777118
+         MVC   NEGSIGN,NEGCR            ADD 'CR'                        00777219
+NEGSKIP3 DS    0H                                                       00777318
+         XPRNT OUTLINE,132              PRINT LINE                      00777419
+         MVI   OUTLINE+1,C' '           CLEAR THE OUTLINE               00777506
+         MVC   OUTLINE+2(131),OUTLINE+1                                 00777606
+         B     START                                                    00777706
+ENDFILE  DS    0H                                                       00777805
+*        *                                                              00777905
+         L     13,4(0,13)               EXIT LINKAGE                    00778019
+         LM    14,12,12(13)                                             00778105
+         BR    14                                                       00778205
+         LTORG                                                          00778305
+*************************************************                       00778405
+TEMP1    DS    PL5                      TEMP PACK FOR DATE              00778519
+TEMP2    DS    PL4                      TEMP PACK FOR AMOUNT            00778619
+TSAVE    DS    18F                      TRANS SAVE AREA                 00778719
+OUTLINE  DS    CL132                    OUTPUT LINE                     00778819
+CHECK    DS    CL50                                                     00778906
+THEADING DC    C'1'                     HEADING                         00779019
+         DC    CL30' '                                                  00779106
+         DC    CL18'Transaction Report'                                 00779206
+         DC    CL23' '                                                  00779306
+         DC    CL4'Page'                                                00779406
+COLLINE  DC    C'-'                     COLUMN HEADDER                  00779519
+         DC    CL3' '                                                   00779606
+         DC    CL11'Customer ID'                                        00779706
+         DC    CL5' '                                                   00779806
+         DC    CL11'Transaction'                                        00779906
+         DC    CL7' '                                                   00780006
+         DC    CL6'Amount'                                              00780106
+         DC    CL10' '                                                  00780206
+         DC    CL4'Date'                                                00780306
+         DC    CL11' '                                                  00780406
+         DC    CL7'Balance'                                             00780506
+         DC    CL20' '                                                  00780606
+A        DS    CL50' '                                                  00780718
+NEGCR    DC    CL2'CR'                  NEGITIVE SIGN                   00780819
+***DUMMIE SECTIONS*******************************                       00780904
+***TABLE DUMMIE SECTION                                                 00781006
+TABLEY   DSECT                                                          00781101
+FIRST    DS    CL10                                                     00781201
+LAST     DS    CL10                                                     00782001
+ID       DS    CL8                                                      00790001
+BALANCE  DS    PL4                                                      00800006
+*************************************************                       00810004
+***BUILD INPUT LINE DUMMIE SECTION                                      00811006
+INPUTY   DSECT                                                          00820001
+FNAME    DS    CL10                                                     00830001
+         DS    CL2                                                      00840001
+LNAME    DS    CL10                                                     00850001
+         DS    CL2                                                      00860001
+CLIENTID DS    CL8                                                      00870001
+         DS    CL2                                                      00880019
+BALNREAD DS    CL7                                                      00890019
+SIGN     DS    C                                                        00900006
+*************************************************                       00901004
+***TRANS INPUT LINE DUMMIE SECTION                                      00901106
+TINPUTY  DSECT                                                          00901205
+ACCOUNT  DS    CL8                                                      00901305
+         DS    CL2                                                      00901405
+TYPE     DS    C                                                        00901505
+         DS    CL2                                                      00901605
+AMOUNT   DS    CL7                                                      00901705
+         DS    CL2                                                      00901805
+DATE     DS    CL8                                                      00901905
+*************************************************                       00902005
+***PRINT OUTPUT LINE DUMMIE SECTION                                     00902106
+OUTPUTY  DSECT                                                          00902204
+         DS    CL1                                                      00902305
+FNAMEO   DS    CL10                                                     00903004
+         DS    CL11                                                     00904004
+LNAMEO   DS    CL10                                                     00905004
+         DS    CL12                                                     00906004
+IDNUMO   DS    CL8                                                      00907004
+         DS    CL15                                                     00908004
+BALNOUT  DS    CL9                                                      00909019
+         DS    C                                                        00910018
+CRSIGN   DS    CL2                                                      00910118
+*************************************************                       00911006
+***TRANS OUTPUT LINE DUMMIE SECTION                                     00912006
+TOUTPUTY DSECT                                                          00913006
+         DS    CL4                                                      00914006
+CUSTID   DS    CL8                                                      00915006
+         DS    CL8                                                      00916013
+ACTION   DS    CL13                                                     00917006
+         DS    CL2                                                      00918013
+AMOUNTOF DS    CL9                                                      00918113
+         DS    CL5                                                      00918206
+DATEOF   DS    CL11                                                     00919019
+         DS    CL7                                                      00919109
+TOTAL    DS    CL9                                                      00919213
+         DS    C                                                        00919318
+NEGSIGN  DS    CL2                                                      00919418
+         END   MAIN                                                     00919506
+/*                                                                      00920001
+//FT05F001  DD  DSN=KC02314.SPRING18.CSCI360.HW6DATA,DISP=SHR           00930001
+//                                                                      00940001
